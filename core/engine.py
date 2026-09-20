@@ -4,11 +4,14 @@ from tools.tool_manager import ToolManager
 from security.security_manager import SecurityManager
 from core.hermes_bridge import HermesBridge
 from core.logger import KazenLogger
+from config.config_manager import ConfigManager
 
 
 class KazenEngine:
     def __init__(self):
-        self.name = "Kazen"
+        self.config = ConfigManager()
+
+        self.name = self.config.get("app", "name", "Kazen AI")
 
         self.logger = KazenLogger()
         self.model_manager = ModelManager()
@@ -17,7 +20,11 @@ class KazenEngine:
         self.tool_manager = ToolManager()
         self.hermes = HermesBridge()
 
-        self.logger.info("Kazen Engine baslatildi.")
+        self.logger.info(
+            f"Kazen Engine baslatildi. "
+            f"Local First={self.config.local_first()} | "
+            f"Cloud Allowed={self.config.cloud_allowed()}"
+        )
 
     def cevap_ver(self, mesaj):
         if not mesaj.strip():

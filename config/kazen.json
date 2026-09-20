@@ -1,0 +1,21 @@
+{
+    "app": {
+        "name": "Kazen AI",
+        "language": "tr"
+    },
+    "runtime": {
+        "local_first": true,
+        "cloud_allowed": false
+    },
+    "model": {
+        "provider": "not_configured",
+        "model_name": "",
+        "base_url": ""
+    },
+    "security": {
+        "require_approval_for_protected_actions": true
+    },
+    "logging": {
+        "enabled": true
+    }
+}
