@@ -15,7 +15,31 @@ def test_dev_manager():
 
     assert original.read_bytes() == dev_copy.read_bytes()
 
-    print("KAZEN DEV TEST: BASARILI")
+    # Onaysiz PROD aktarimi engellenmeli.
+    success, message = dev.promote_to_prod(
+        "engine.py",
+        "dev/test_prod.py",
+        approved=False
+    )
+
+    assert success is False
+
+    # Onayli aktarim calismali.
+    success, target = dev.promote_to_prod(
+        "engine.py",
+        "dev/test_prod.py",
+        approved=True
+    )
+
+    assert success is True
+
+    test_prod = dev.project_dir / "dev" / "test_prod.py"
+    assert test_prod.exists()
+
+    # Test dosyasini temizle.
+    test_prod.unlink()
+
+    print("KAZEN DEV GUVENLIK TESTI: BASARILI")
 
 
 if __name__ == "__main__":
