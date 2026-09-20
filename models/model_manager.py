@@ -21,15 +21,15 @@ class ModelManager:
         provider = provider.lower()
 
         if provider in cloud_providers and not self.config.cloud_allowed():
-            return False, f"Kazen: Bulut modeli engellendi: {provider}"
+            return False, f"Kaizen: Bulut modeli engellendi: {provider}"
 
         self.model = model
         self.provider = provider
 
-        return True, f"Kazen: Model baglandi: {provider}"
+        return True, f"Kaizen: Model baglandi: {provider}"
 
     def cevap_ver(self, mesaj):
         if self.model is None:
-            return "Kazen: Henuz yerel yapay zeka modeli yuklenmedi."
+            return "Kaizen: Henuz yerel yapay zeka modeli yuklenmedi."
 
         return self.model.cevap_ver(mesaj)

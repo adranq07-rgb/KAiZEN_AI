@@ -1,10 +1,10 @@
-from core.engine import KazenEngine
+from core.engine import KaizenEngine
 
 
 def main():
-    kazen = KazenEngine()
+    Kaizen = KaizenEngine()
 
-    print("Kazen AI baslatildi.")
+    print("Kaizen AI baslatildi.")
     print("Cikmak icin 'cikis' yaz.")
 
     while True:
@@ -12,24 +12,24 @@ def main():
             mesaj = input("\nSen: ").strip()
 
             if mesaj.lower() == "cikis":
-                print("Kazen: Gorusuruz.")
+                print("Kaizen: Gorusuruz.")
                 break
 
             if not mesaj:
                 continue
 
-            cevap = kazen.cevap_ver(mesaj)
+            cevap = Kaizen.cevap_ver(mesaj)
             print(f"\n{cevap}")
 
         except KeyboardInterrupt:
-            print("\nKazen: Gorusuruz.")
+            print("\nKaizen: Gorusuruz.")
             break
 
         except Exception as error:
-            kazen.logger.error(
+            Kaizen.logger.error(
                 f"Ana dongu hatasi: {type(error).__name__}: {error}"
             )
-            print(f"Kazen: Beklenmeyen bir hata olustu: {error}")
+            print(f"Kaizen: Beklenmeyen bir hata olustu: {error}")
 
 
 if __name__ == "__main__":

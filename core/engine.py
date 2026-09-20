@@ -3,17 +3,17 @@ from memory.memory_manager import MemoryManager
 from tools.tool_manager import ToolManager
 from security.security_manager import SecurityManager
 from core.hermes_bridge import HermesBridge
-from core.logger import KazenLogger
+from core.logger import KaizenLogger
 from config.config_manager import ConfigManager
 
 
-class KazenEngine:
+class KaizenEngine:
     def __init__(self):
         self.config = ConfigManager()
 
-        self.name = self.config.get("app", "name", "Kazen AI")
+        self.name = self.config.get("app", "name", "Kaizen AI")
 
-        self.logger = KazenLogger()
+        self.logger = KaizenLogger()
         self.model_manager = ModelManager()
         self.memory_manager = MemoryManager()
         self.security_manager = SecurityManager()
@@ -21,7 +21,7 @@ class KazenEngine:
         self.hermes = HermesBridge()
 
         self.logger.info(
-            f"Kazen Engine baslatildi. "
+            f"Kaizen Engine baslatildi. "
             f"Local First={self.config.local_first()} | "
             f"Cloud Allowed={self.config.cloud_allowed()}"
         )

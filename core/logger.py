@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 
 
-class KazenLogger:
+class KaizenLogger:
     def __init__(self):
         self.project_dir = Path(__file__).resolve().parent.parent
         self.log_dir = self.project_dir / "logs"

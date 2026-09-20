@@ -1,8 +1,8 @@
-from core.logger import KazenLogger
+from core.logger import KaizenLogger
 
 
 def test_logger():
-    logger = KazenLogger()
+    logger = KaizenLogger()
 
     logger.info("Otomatik logger testi")
 

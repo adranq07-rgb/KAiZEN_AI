@@ -5,12 +5,12 @@ from pathlib import Path
 class ConfigManager:
     def __init__(self):
         self.project_dir = Path(__file__).resolve().parent.parent
-        self.config_file = self.project_dir / "config" / "kazen.json"
+        self.config_file = self.project_dir / "config" / "Kaizen.json"
         self.config = self._load()
 
     def _load(self):
         if not self.config_file.exists():
-            raise FileNotFoundError("Kazen config dosyasi bulunamadi.")
+            raise FileNotFoundError("Kaizen config dosyasi bulunamadi.")
 
         with open(self.config_file, "r", encoding="utf-8") as file:
             return json.load(file)

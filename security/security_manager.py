@@ -13,6 +13,6 @@ class SecurityManager:
 
     def check_action(self, action, approved=False):
         if self.requires_approval(action) and not approved:
-            return False, "Kazen: Bu islem kullanici onayi gerektiriyor."
+            return False, "Kaizen: Bu islem kullanici onayi gerektiriyor."
 
-        return True, "Kazen: Isleme izin verildi."
+        return True, "Kaizen: Isleme izin verildi."

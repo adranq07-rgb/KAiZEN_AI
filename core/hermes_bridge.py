@@ -2,14 +2,14 @@ import subprocess
 from pathlib import Path
 
 from config.config_manager import ConfigManager
-from core.logger import KazenLogger
+from core.logger import KaizenLogger
 
 
 class HermesBridge:
     def __init__(self):
         self.project_dir = Path(__file__).resolve().parent.parent
         self.config = ConfigManager()
-        self.logger = KazenLogger()
+        self.logger = KaizenLogger()
 
     def is_ready(self):
         provider = self.config.get("model", "provider", "not_configured")
@@ -28,7 +28,7 @@ class HermesBridge:
                 "Hermes cagrisi engellendi: yerel model hazir degil."
             )
             return (
-                "Kazen: Hermes su anda calistirilmadi. "
+                "Kaizen: Hermes su anda calistirilmadi. "
                 "Yerel yapay zeka modeli henuz yapilandirilmadi."
             )
 
@@ -60,15 +60,16 @@ class HermesBridge:
                 self.logger.error(
                     f"Hermes hata kodu: {result.returncode}"
                 )
-                return f"Kazen: Hermes hatasi -> {result.stderr.strip()}"
+                return f"Kaizen: Hermes hatasi -> {result.stderr.strip()}"
 
             self.logger.info("Hermes cagrisi tamamlandi.")
             return result.stdout.strip()
 
         except subprocess.TimeoutExpired:
             self.logger.error("Hermes zaman asimina ugradi.")
-            return "Kazen: Hermes zaman asimina ugradi."
+            return "Kaizen: Hermes zaman asimina ugradi."
 
         except FileNotFoundError:
             self.logger.error("Hermes bilgisayarda bulunamadi.")
-            return "Kazen: Hermes bilgisayarda bulunamadi."
+            return "Kaizen: Hermes bilgisayarda bulunamadi."
+

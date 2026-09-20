@@ -1,12 +1,12 @@
 from security.security_manager import SecurityManager
-from core.logger import KazenLogger
+from core.logger import KaizenLogger
 
 
 class ToolManager:
     def __init__(self):
         self.tools = {}
         self.security = SecurityManager()
-        self.logger = KazenLogger()
+        self.logger = KaizenLogger()
 
     def register_tool(self, name, function, action="normal"):
         self.tools[name] = {
@@ -22,7 +22,7 @@ class ToolManager:
     def run_tool(self, name, *args, approved=False, **kwargs):
         if name not in self.tools:
             self.logger.warning(f"Arac bulunamadi: {name}")
-            return f"Kazen: '{name}' araci bulunamadi."
+            return f"Kaizen: '{name}' araci bulunamadi."
 
         tool = self.tools[name]
 
@@ -51,7 +51,8 @@ class ToolManager:
             self.logger.error(
                 f"Arac hatasi: {name} | {type(error).__name__}: {error}"
             )
-            return f"Kazen: Arac calistirilirken hata olustu: {error}"
+            return f"Kaizen: Arac calistirilirken hata olustu: {error}"
 
     def list_tools(self):
         return list(self.tools.keys())
+

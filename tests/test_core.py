@@ -1,16 +1,16 @@
-from core.engine import KazenEngine
+from core.engine import KaizenEngine
 
 
 def test_core():
-    kazen = KazenEngine()
+    kaizen = KaizenEngine()
 
-    assert kazen.model_manager is not None
-    assert kazen.memory_manager is not None
-    assert kazen.tool_manager is not None
-    assert kazen.security_manager is not None
-    assert kazen.hermes is not None
+    assert kaizen.model_manager is not None
+    assert kaizen.memory_manager is not None
+    assert kaizen.tool_manager is not None
+    assert kaizen.security_manager is not None
+    assert kaizen.hermes is not None
 
-    print("KAZEN CORE TEST: BASARILI")
+    print("kaizen CORE TEST: BASARILI")
 
 
 if __name__ == "__main__":
