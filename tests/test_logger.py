@@ -12,7 +12,7 @@ def test_logger():
 
     assert "Otomatik logger testi" in content
 
-    print("KAZEN LOGGER TEST: BASARILI")
+    print("KAIZEN LOGGER TEST: BASARILI")
 
 
 if __name__ == "__main__":

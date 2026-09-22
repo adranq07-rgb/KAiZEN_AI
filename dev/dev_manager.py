@@ -11,10 +11,17 @@ class DevManager:
         self.workspace.mkdir(parents=True, exist_ok=True)
         return self.workspace
 
+    @staticmethod
+    def _inside(path, root):
+        return path.resolve().is_relative_to(root.resolve())
+
     def copy_for_testing(self, source):
         source_path = self.project_dir / source
 
-        if not source_path.exists():
+        if not self._inside(source_path, self.project_dir):
+            return False, "Kaynak proje klasoru disinda."
+
+        if not source_path.is_file():
             return False, "Kaynak dosya bulunamadi."
 
         self.prepare_workspace()
@@ -31,7 +38,13 @@ class DevManager:
         dev_path = self.workspace / dev_file
         destination_path = self.project_dir / destination
 
-        if not dev_path.exists():
+        if not self._inside(dev_path, self.workspace):
+            return False, "DEV dosyasi calisma alani disinda."
+
+        if not self._inside(destination_path, self.project_dir):
+            return False, "Hedef proje klasoru disinda."
+
+        if not dev_path.is_file():
             return False, "DEV dosyasi bulunamadi."
 
         destination_path.parent.mkdir(parents=True, exist_ok=True)
@@ -39,8 +52,15 @@ class DevManager:
 
         return True, str(destination_path)
 
-    def clear_workspace(self):
+    def clear_workspace(self, approved=False):
+        if not approved:
+            return False, "DEV calisma alanini temizlemek kullanici onayi gerektiriyor."
+
+        if not self._inside(self.workspace, self.project_dir):
+            return False, "DEV calisma alani proje klasoru disinda."
+
         if self.workspace.exists():
             shutil.rmtree(self.workspace)
 
         self.prepare_workspace()
+        return True, str(self.workspace)

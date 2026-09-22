@@ -1,7 +1,13 @@
+import sys
+
 from core.engine import KaizenEngine
 
 
 def main():
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")  # Windows konsolunda Türkçe karakterler bozulmasın
+
     Kaizen = KaizenEngine()
 
     print("Kaizen AI baslatildi.")

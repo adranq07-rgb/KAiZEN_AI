@@ -1,0 +1,26 @@
+[
+ {
+  "domain": "kaizen",
+  "subject": "Kaizen yetenekleri",
+  "section": "Müşavirler Kulübü araçlarından Kaizen'de hazır olanlar",
+  "text": "Müşavirler Kulübü'nün araçlar sayfasındaki 54 aracın Kaizen'de şu an çalışanlar: KDV dahil/hariç ve tevkifatlı KDV [HAZIR (ÖTV ve tevkifat oranı listesi: oran soruda verilir; güncel liste sitelerden öğrenilecek)]; Stopaj (brütten nete, netten brüte) [HAZIR (oran soruda verilir; kira/serbest meslek/temettü oranları güncel kaynaktan öğrenilecek)]; Damga vergisi [HAZIR (binde oranı soruda verilir)]; Gecikme zammı [HAZIR: gecikme zammı; tecil faizi sonraki aşama]; Amortisman (normal ve azalan bakiyeler) [HAZIR: normal ve azalan; kıst amortisman altyapısı var, soru dilinden yönlendirme sonraki aşama]; Serbest meslek makbuzu [HAZIR (brütten nete ve netten brüte)]; NPV / IRR [HAZIR]; Kredi ödeme tablosu (eşit taksit ve eşit anapara) [HAZIR]; Başabaş analizi [HAZIR]; IBAN doğrulama [HAZIR (mod 97 doğrulama; banka adı uydurulmaz)]; Finansal oranlar (cari, asit-test, nakit, kaldıraç, borç/özkaynak, ROE, ROA, marjlar) [HAZIR: 9 temel oran; 25+ oranlık tam analiz sonraki aşama]; Excel dosyası okuma ve yazma [HAZIR (yeni dosya açar; var olanın üzerine yazmaz)]; Word belgesi okuma ve yazma [HAZIR]; PDF birleştirme ve bölme [HAZIR]; Görselden PDF [HAZIR (JPG/PNG)]; Yıllık parametre defteri [HAZIR: siteler taranıp süzgeçten geçen değerler 'parametreler' komutuyla listelenir; yıllara göre geçmiş 'parametre <konu>' ile görülür]; Günlük tarama ve özet [KISMEN: 'güncelle' komutu/günlük görev siteleri tarar; yapay zekâ özeti model bağlanınca eklenecek]. Bu araçların hepsi model gerektirmez; kuruşu kuruşuna Decimal ile hesaplanır ve oranlar uydurulmaz (oran/dönem soruda yoksa Kaizen sorar)."
+ },
+ {
+  "domain": "kaizen",
+  "subject": "Kaizen yetenekleri",
+  "section": "Güncel parametre gerektiren araçlar",
+  "text": "Şu araçlar güncel oran, tavan veya tarife ister; bu değerleri Kaizen kodun içine sabit yazmaz, güvenilir sitelerden toplayıp süzgeçten geçirdiği yıllık parametre defterinden alır (en az iki bağımsız kaynakta aynı değer veya resmî kaynak = doğrulanmış): SGK & Maaş Hesaplama (brüt-net, SGK primi, işveren maliyeti, AGİ); Gelir Vergisi Dilim Simülatörü; Kıdem ve İhbar Tazminatı (tavan); Fazla Mesai Hesaplama; İşten Çıkış Hesaplama; MTV Hesaplama; Emlak Vergisi Hesaplama; Kira Artış Oranı (TÜFE); Yemek Ücreti İstisnası; Asgari Kurumlar Vergisi (KVK 32/C); Engelli Vergi İndirimi; Bağkur Prim Hesaplama; Yeniden Değerleme Oranı; Adil Maaş Artışı (Zam) Hesaplama. Parametre defterine ilgili konu eklendikçe (config/fact_topics.json) bu araçların hesabı otomatik açılır."
+ },
+ {
+  "domain": "kaizen",
+  "subject": "Kaizen yetenekleri",
+  "section": "Sonraki aşamadaki araçlar",
+  "text": "Yol haritasında olan ama henüz yapılmamış araçlar: Gümrük Vergisi Hesaplama; İthalat Maliyet Hesaplama; GTİP Kodu Sorgulama; Incoterms 2020 Rehberi; Leasing vs Kredi Karşılaştırıcı; Nakit Akış Simülatörü (12 aylık); Defter Tutma Usulü Tespiti; Vergi Risk Analizi; KDV Risk Analizi; Vergi İnceleme Checklist; Mükellef Profil Analizi; Kâr Dağıtım Simülatörü; Vergi Borcu Yapılandırma; Tahsilat Tebliği (B20) Taksitlendirme; Poliçe Gider Dağılımı; Apartman Aidat Hesaplama; Beyanname Takvimi; AI Resmî Yazı ve Dilekçe Oluşturucu; QR Kod Oluşturucu; XML e-Defter Görüntüleyici; Word → PDF Çevirici (LibreOffice gerekir)."
+ },
+ {
+  "domain": "kaizen",
+  "subject": "Kaizen yetenekleri",
+  "section": "Kaizen komutları ve çalışma şekli",
+  "text": "Kaizen bir mali müşavir yardımcısıdır: önce kesin araçlar (matematik, KDV/stopaj/faiz/amortisman/kredi hesapları, yevmiye kaydı, Tek Düzen Hesap Planı), sonra süzgeçten geçmiş yıllık parametreler, sonra yerel hafıza (ders notları ve taranan siteler), en son araştırma zinciri denenir. Hermes geçicidir; model kapalıyken de hesap, kayıt, hesap planı ve kayıtlı parametre sorularına cevap verir. Komutlar: yardım, durum, kaynaklar, parametreler, parametre <konu>, güncelle [sayfa], yetenekler, düzelt: soru => doğru cevap."
+ }
+]

@@ -1,0 +1,56 @@
+[
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Word: stiller ve içindekiler",
+  "text": "Word'de başlıklar Giriş > Stiller ile (Başlık 1, Başlık 2) biçimlendirilirse Başvurular > İçindekiler otomatik oluşturulur ve sayfa numaraları güncellenir (F9 ile yenilenir). Elle numaralandırma yerine stil kullanmak uzun raporlarda (denetim raporu, sirküler, sözleşme) tutarlılığı sağlar."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Word: üstbilgi, altbilgi, sayfa numarası",
+  "text": "Ekle > Üstbilgi/Altbilgi/Sayfa Numarası ile eklenir. Farklı ilk sayfa veya bölüm bazında farklı üstbilgi için Bölüm Sonu (Sayfa Düzeni > Kesmeler) ve 'Öncekine Bağla' seçeneği kullanılır. Kurumsal yazışmada logo ve unvan üstbilgiye konur."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Word: posta birleştirme",
+  "text": "Toplu mektup, borç bildirimi veya mutabakat yazısı için Postalar > Posta Birleştirmeyi Başlat kullanılır; alıcı listesi Excel dosyasından bağlanır, <<Ünvan>>, <<Tutar>> gibi alanlar eklenir, Sonuçları Önizle ile kontrol edilip tek tek veya PDF olarak çıktı alınır."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Word: değişiklik izleme ve karşılaştırma",
+  "text": "Gözden Geçir > Değişiklikleri İzle açıkken yapılan her düzenleme işaretlenir; Kabul Et/Reddet ile sonuçlandırılır. İki sürümü karşılaştırmak için Gözden Geçir > Karşılaştır. Müşteriye giden belgelerde yorumları ve izlenen değişiklikleri Belgeyi Denetle ile temizlemeyi unutmayın."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "PDF: temel işlemler",
+  "text": "PDF birleştirme, sayfa ayırma, döndürme ve metin çıkarma en sık ihtiyaçlardır. Kaizen okunabilir (metin içeren) PDF'lerden sayfa sayfa metin çıkarabilir; taranmış (görüntü) PDF'lerde önce OCR gerekir. Bir PDF'in metin içerip içermediğini seçip kopyalanabilmesinden anlayabilirsiniz."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "PDF: OCR ve taranmış belgeler",
+  "text": "Taranmış fatura, makbuz veya eski ders notu PDF'lerinde metin yoktur; OCR (optik karakter tanıma) ile aranabilir hale getirilir. Türkçe karakterler (ı, ş, ğ) için Türkçe dil paketi seçilmelidir. OCR sonucu hatalı olabilir; tutar ve vergi numarası gibi alanlar mutlaka gözle doğrulanmalıdır."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "PDF/A ve saklama",
+  "text": "Belgeleri uzun süre saklamak için PDF/A biçimi tercih edilir. Elektronik fatura ve e-defter gibi belgelerde asıl kayıt XML/UBL biçimindedir; PDF görsel kopyadır. Saklama ve ibraz sürelerinde Vergi Usul Kanunu hükümleri esas alınır."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Ofis belgelerinde dönüştürme",
+  "text": "Word'den PDF'e: Dosya > Farklı Kaydet > PDF. Excel tablosunu PDF yaparken Sayfa Düzeni'nde yazdırma alanı ve sığdırma ayarı yapılmazsa tablo sayfalara bölünür. Excel'den Word'e tablo aktarırken 'Bağlantılı yapıştır' kaynak değişince otomatik güncellenir; 'Resim olarak yapıştır' sabit kalır."
+ },
+ {
+  "domain": "office",
+  "subject": "Word ve PDF",
+  "section": "Kaizen'in dosya araçları",
+  "text": "Kaizen yerelde Excel (.xlsx) okuyup özetleyebilir, tablo ve formül içeren yeni Excel dosyası yazabilir; PDF'den metin çıkarabilir; Word (.docx) okuyup yeni belge oluşturabilir. Var olan bir dosyanın üzerine yazmaz (kritik işlem sayılır); yeni ad ile kaydeder. Silme ve taşıma işlemleri kullanıcı onayı gerektirir."
+ }
+]

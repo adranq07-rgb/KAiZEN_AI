@@ -5,17 +5,49 @@
     },
     "runtime": {
         "local_first": true,
-        "cloud_allowed": false
+        "cloud_allowed": true
     },
     "model": {
-        "provider": "not_configured",
-        "model_name": "",
-        "base_url": ""
+        "provider": "hermes",
+        "model_name": "upstage/solar-pro4:free",
+        "base_url": "",
+        "fallback": [
+            "offline"
+        ],
+        "local": {
+            "base_url": "http://localhost:11434/v1",
+            "model_name": "",
+            "timeout": 180
+        },
+        "_not": "provider: hermes|local|offline. Hermes gecici. Yerel model kurulunca provider='local', fallback=['offline'] yap; model.local.model_name doldur."
     },
     "security": {
         "require_approval_for_protected_actions": true
     },
     "logging": {
         "enabled": true
+    },
+    "crawler": {
+        "daily_max_pages_per_source": 60,
+        "since_years": 2,
+        "min_delay_seconds": 1.5,
+        "hermes_fallback": false
+    },
+    "memory": {
+        "cognee": {
+            "enabled": true,
+            "dataset": "kaizen",
+            "llm_model": "llama3.2:3b",
+            "llm_endpoint": "http://localhost:11434",
+            "embedding_model": "bge-m3",
+            "embedding_endpoint": "http://localhost:11434/api/embed",
+            "embedding_dimensions": 1024,
+            "huggingface_tokenizer": "BAAI/bge-m3",
+            "embedding_batch_size": 5,
+            "recall_type": "CHUNKS",
+            "top_k": 10,
+            "self_improvement": false,
+            "_not": "LLM saglayicisi daima yerel Ollama (Hermes degil). Acmak icin: Ollama kur, 'ollama pull llama3.2:3b' ve 'ollama pull bge-m3', '.venv pip install cognee==1.6.0', sonra enabled=true. Gerekce: memory/COGNEE.md"
+        }
     }
 }

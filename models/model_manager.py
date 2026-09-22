@@ -9,18 +9,9 @@ class ModelManager:
         self.provider = None
 
     def model_bagla(self, model: BaseModel, provider="local"):
-        cloud_providers = {
-            "openai",
-            "anthropic",
-            "claude",
-            "openrouter",
-            "gemini",
-            "mistral_api",
-        }
+        provider = provider.strip().lower()
 
-        provider = provider.lower()
-
-        if provider in cloud_providers and not self.config.cloud_allowed():
+        if provider != "local" and not self.config.cloud_allowed():
             return False, f"Kaizen: Bulut modeli engellendi: {provider}"
 
         self.model = model

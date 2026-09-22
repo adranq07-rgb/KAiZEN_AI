@@ -1,0 +1,406 @@
+{
+  "note": "Yalnız ÇIKARIM KURALLARI içerir; hiçbir tutar/oran burada sabit değildir. Değerler sitelerden toplanır, en az iki bağımsız kaynakta (veya resmî kaynakta) aynı bulunursa 'doğrulanmış' sayılır. Yeni yıllık parametre eklemek için bu listeye bir konu eklemek yeterlidir.",
+  "topics": [
+    {
+      "id": "kurumlar_vergisi_orani",
+      "title": "Kurumlar vergisi genel oranı",
+      "unit": "percent",
+      "anchors": [
+        "kurumlar vergisi orani",
+        "kurumlar vergisi oranı"
+      ],
+      "avoid": [
+        "gecici vergi",
+        "asgari",
+        "indirim",
+        "istisna"
+      ],
+      "question_terms": [
+        "kurumlar vergisi orani",
+        "kurumlar vergisi oranı kaç"
+      ]
+    },
+    {
+      "id": "kdv_genel_orani",
+      "title": "Genel KDV oranı",
+      "unit": "percent",
+      "anchors": [
+        "genel kdv orani",
+        "kdv genel orani",
+        "genel oran"
+      ],
+      "require_any": [
+        "kdv",
+        "katma deger"
+      ],
+      "avoid": [
+        "indirimli",
+        "tevkifat"
+      ],
+      "question_terms": [
+        "genel kdv orani",
+        "kdv orani kac"
+      ]
+    },
+    {
+      "id": "fatura_duzenleme_siniri",
+      "title": "Fatura düzenleme sınırı (perakende satışlarda fatura/fiş)",
+      "unit": "tl",
+      "anchors": [
+        "fatura duzenleme siniri",
+        "fatura duzenleme haddi",
+        "fatura duzenleme mecburiyeti",
+        "fatura duzenleme zorunlulugu",
+        "fatura verme siniri",
+        "fatura duzenleme had"
+      ],
+      "avoid": [
+        "e-arsiv",
+        "elektronik"
+      ],
+      "question_terms": [
+        "fatura duzenleme siniri",
+        "fatura kesme siniri",
+        "fis fatura siniri",
+        "fatura duzenleme haddi",
+        "fis kesme siniri"
+      ]
+    },
+    {
+      "id": "vuk_313_amortisman_siniri",
+      "title": "Doğrudan gider yazılabilecek iktisadi kıymet sınırı (VUK 313)",
+      "unit": "tl",
+      "anchors": [
+        "amortisman siniri",
+        "amortisman haddi",
+        "amortisman had",
+        "vuk 313",
+        "313 uncu",
+        "313 üncü",
+        "gider yazilabilecek",
+        "doğrudan gider"
+      ],
+      "require_any": [
+        "amortisman",
+        "iktisadi kiymet",
+        "demirbas",
+        "gider yaz"
+      ],
+      "avoid": [
+        "binek"
+      ],
+      "question_terms": [
+        "amortisman siniri",
+        "amortisman haddi",
+        "demirbas siniri",
+        "vuk 313 siniri",
+        "dogrudan gider yazilabilecek"
+      ]
+    },
+    {
+      "id": "binek_arac_gider_kisitlamasi",
+      "title": "Binek otomobil gider kısıtlaması oranı",
+      "unit": "percent",
+      "anchors": [
+        "gider kisitlamasi",
+        "gider kisitlama"
+      ],
+      "require": [
+        "binek"
+      ],
+      "question_terms": [
+        "binek arac gider kisitlamasi",
+        "binek otomobil gider kisitlamasi",
+        "binek arac gider kisitlama orani"
+      ]
+    },
+    {
+      "id": "binek_arac_kira_gider_siniri",
+      "title": "Binek otomobil aylık kiralama gider sınırı",
+      "unit": "tl",
+      "anchors": [
+        "kiralama",
+        "kira gider",
+        "kira bedeli"
+      ],
+      "require": [
+        "binek"
+      ],
+      "require_any": [
+        "aylik",
+        "ayligi",
+        "ay icin"
+      ],
+      "question_terms": [
+        "binek arac kira siniri",
+        "binek otomobil kiralama gider siniri",
+        "binek arac aylik kira siniri"
+      ]
+    },
+    {
+      "id": "binek_arac_amortisman_siniri",
+      "title": "Binek otomobil amortisman/KDV indirim değer sınırı",
+      "unit": "tl",
+      "anchors": [
+        "amortisman",
+        "kdv indirimi",
+        "kdv indirim"
+      ],
+      "require": [
+        "binek"
+      ],
+      "require_any": [
+        "siniri",
+        "haddi",
+        "tutarini",
+        "tutari asan"
+      ],
+      "avoid": [
+        "kira"
+      ],
+      "question_terms": [
+        "binek arac amortisman siniri",
+        "binek otomobil amortisman siniri",
+        "binek arac kdv indirim siniri"
+      ]
+    },
+    {
+      "id": "asgari_ucret_brut",
+      "title": "Asgari ücret (brüt)",
+      "unit": "tl",
+      "anchors": [
+        "brut asgari ucret",
+        "asgari ucret brut",
+        "asgari ucret brutu",
+        "brut tutari"
+      ],
+      "require": [
+        "asgari"
+      ],
+      "question_terms": [
+        "brut asgari ucret",
+        "asgari ucret brut",
+        "asgari ucret"
+      ]
+    },
+    {
+      "id": "asgari_ucret_net",
+      "title": "Asgari ücret (net)",
+      "unit": "tl",
+      "anchors": [
+        "net asgari ucret",
+        "asgari ucret net",
+        "asgari ucret neti",
+        "net tutari"
+      ],
+      "require": [
+        "asgari"
+      ],
+      "question_terms": [
+        "net asgari ucret",
+        "asgari ucret net",
+        "asgari ucret"
+      ]
+    },
+    {
+      "id": "sgk_prim_tavani",
+      "title": "SGK prime esas kazanç üst sınırı (tavan)",
+      "unit": "tl",
+      "anchors": [
+        "prim tavani",
+        "prime esas kazanc ust siniri",
+        "prime esas kazanc tavani",
+        "tavan ucret",
+        "sgk tavan",
+        "ust sinir"
+      ],
+      "require_any": [
+        "prim",
+        "prime esas",
+        "sgk"
+      ],
+      "question_terms": [
+        "sgk tavan",
+        "prim tavani",
+        "prime esas kazanc ust siniri",
+        "sgk tavan ucreti"
+      ]
+    },
+    {
+      "id": "sgk_prim_tabani",
+      "title": "SGK prime esas kazanç alt sınırı (taban)",
+      "unit": "tl",
+      "anchors": [
+        "prim tabani",
+        "prime esas kazanc alt siniri",
+        "taban ucret",
+        "sgk taban",
+        "alt sinir"
+      ],
+      "require_any": [
+        "prim",
+        "prime esas",
+        "sgk"
+      ],
+      "question_terms": [
+        "sgk taban",
+        "prim tabani",
+        "prime esas kazanc alt siniri"
+      ]
+    },
+    {
+      "id": "damga_vergisi_orani",
+      "title": "Damga vergisi oranı (sözleşme, binde)",
+      "unit": "per_mille",
+      "anchors": [
+        "damga vergisi orani",
+        "damga vergisi"
+      ],
+      "require_any": [
+        "binde"
+      ],
+      "question_terms": [
+        "damga vergisi orani",
+        "damga vergisi binde kac"
+      ]
+    },
+    {
+      "id": "yeniden_degerleme_orani",
+      "title": "Yeniden değerleme oranı",
+      "unit": "percent",
+      "anchors": [
+        "yeniden degerleme orani"
+      ],
+      "question_terms": [
+        "yeniden degerleme orani"
+      ]
+    },
+    {
+      "id": "kidem_tazminati_tavani",
+      "title": "Kıdem tazminatı tavanı",
+      "unit": "tl",
+      "anchors": [
+        "kidem tazminati tavani",
+        "kidem tazminati tavan",
+        "kidem tavani"
+      ],
+      "question_terms": [
+        "kidem tazminati tavani",
+        "kidem tavani"
+      ]
+    },
+    {
+      "id": "gecikme_zammi_orani",
+      "title": "Gecikme zammı oranı (aylık)",
+      "unit": "percent",
+      "anchors": [
+        "gecikme zammi orani",
+        "aylik gecikme zammi",
+        "gecikme zammi"
+      ],
+      "require_any": [
+        "aylik",
+        "her ay",
+        "orani"
+      ],
+      "question_terms": [
+        "gecikme zammi orani",
+        "aylik gecikme zammi"
+      ]
+    },
+    {
+      "id": "e_fatura_zorunlulugu_hasilat",
+      "title": "e-Fatura zorunluluğu brüt satış hasılatı sınırı",
+      "unit": "tl",
+      "anchors": [
+        "e-fatura",
+        "e fatura",
+        "efatura"
+      ],
+      "require_any": [
+        "hasilat",
+        "brut satis"
+      ],
+      "question_terms": [
+        "e fatura zorunlulugu hasilat",
+        "e-fatura zorunlulugu siniri",
+        "e fatura zorunluluk siniri"
+      ]
+    },
+    {
+      "id": "yemek_istisnasi_gunluk",
+      "title": "Yemek ücreti istisnası (günlük)",
+      "unit": "tl",
+      "anchors": [
+        "yemek istisnasi",
+        "yemek ucreti istisna",
+        "yemek bedeli istisna"
+      ],
+      "require_any": [
+        "gunluk",
+        "gun"
+      ],
+      "question_terms": [
+        "yemek istisnasi",
+        "yemek ucreti istisnasi"
+      ]
+    },
+    {
+      "id": "sgk_isci_prim_orani",
+      "title": "SGK primi işçi (sigortalı) payı oranı",
+      "unit": "percent",
+      "anchors": [
+        "isci prim orani",
+        "sigortali hissesi",
+        "isci payi",
+        "isci hissesi sgk"
+      ],
+      "require_any": [
+        "sgk",
+        "prim",
+        "sigortali"
+      ],
+      "question_terms": [
+        "sgk isci prim orani",
+        "isci sgk payi",
+        "sigortali hissesi orani"
+      ]
+    },
+    {
+      "id": "sgk_isveren_prim_orani",
+      "title": "SGK primi işveren payı oranı",
+      "unit": "percent",
+      "anchors": [
+        "isveren prim orani",
+        "isveren hissesi",
+        "isveren payi sgk"
+      ],
+      "require_any": [
+        "sgk",
+        "prim",
+        "isveren"
+      ],
+      "question_terms": [
+        "sgk isveren prim orani",
+        "isveren sgk payi",
+        "isveren hissesi orani"
+      ]
+    },
+    {
+      "id": "issizlik_sigortasi_orani",
+      "title": "İşsizlik sigortası prim oranı (işçi/işveren)",
+      "unit": "percent",
+      "anchors": [
+        "issizlik sigortasi primi",
+        "issizlik sigortasi orani"
+      ],
+      "require_any": [
+        "issizlik"
+      ],
+      "question_terms": [
+        "issizlik sigortasi orani",
+        "issizlik sigortasi primi yuzde kac"
+      ]
+    }
+  ]
+}

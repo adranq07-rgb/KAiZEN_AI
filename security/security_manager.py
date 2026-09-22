@@ -12,6 +12,9 @@ class SecurityManager:
         return action in self.protected_actions
 
     def check_action(self, action, approved=False):
+        if action != "normal" and action not in self.protected_actions:
+            return False, "Kaizen: Bilinmeyen islem turu engellendi."
+
         if self.requires_approval(action) and not approved:
             return False, "Kaizen: Bu islem kullanici onayi gerektiriyor."
 

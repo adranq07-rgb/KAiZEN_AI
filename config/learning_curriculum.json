@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "goal": "Kaizen'in kaynaklı, güncel ve uygulamaya dönük mali müşavir yardımcısı olması",
+  "modules": [
+    {
+      "order": 1,
+      "id": "mathematics",
+      "name": "Matematik ve kesin hesaplama",
+      "status": "foundation_loaded",
+      "gate": "Kesin ondalık, yüzde, oran, yuvarlama ve problem testleri"
+    },
+    {
+      "order": 2,
+      "id": "accounting_foundation",
+      "name": "Temel muhasebe (değişmeyen çekirdek)",
+      "status": "foundation_loaded",
+      "gate": "13 temel kavram, çift taraflı kayıt, TDHP 1-9 sınıf mantığı, yevmiye-kebir-mizan akışı, dönem sonu (envanter/amortisman/reeskont/karşılık/kur farkı), maliyet 7/A-7/B, mali tablolar (bilanço/gelir/nakit akış/özkaynak), VUK defter-belge düzeni, stok değerleme, tashih kaydı — knowledge/muhasebe_temel_taslari.json, tests/test_golden_exam.py"
+    },
+    {
+      "order": 3,
+      "id": "advisor_reasoning",
+      "name": "Mali müşavir bakışı",
+      "status": "in_progress",
+      "gate": "Sonuç, risk, uygulama ve dayanak içeren vaka cevapları"
+    },
+    {
+      "order": 4,
+      "id": "spreadsheets",
+      "name": "Excel ve elektronik tablolar",
+      "status": "foundation_loaded",
+      "gate": "Formül, tablo, mutabakat, pivot, içe/dışa aktarma uygulamaları"
+    },
+    {
+      "order": 5,
+      "id": "office_documents",
+      "name": "PDF, Word ve ofis belgeleri",
+      "status": "foundation_loaded",
+      "gate": "Okuma, oluşturma, doğrulama ve belge dönüşüm uygulamaları"
+    },
+    {
+      "order": 6,
+      "id": "chart_and_legislation",
+      "name": "Tek düzen hesap planı ve güncel mevzuat",
+      "status": "in_progress",
+      "gate": "Hesap seçimi ve resmî/iki bağımsız kaynakla güncellik doğrulaması"
+    },
+    {
+      "order": 7,
+      "id": "accounting_lifecycle",
+      "name": "Faturadan kapanışa muhasebe süreci",
+      "status": "in_progress",
+      "gate": "Açılış, belge, KDV, stok, maliyet, dönem sonu ve kapanış vakası"
+    },
+    {
+      "order": 8,
+      "id": "independence",
+      "name": "Bağımsız çalışma (Hermes'siz)",
+      "status": "in_progress",
+      "gate": "Model kapalıyken hesap, kayıt, hesap planı, parametre ve hafıza cevapları; sağlayıcı zinciri Hermes -> yerel model -> çevrimdışı"
+    },
+    {
+      "order": 9,
+      "id": "site_learning",
+      "name": "Güvenilir siteleri kendi başına öğrenme ve süzgeç",
+      "status": "in_progress",
+      "gate": "Robots.txt'e uyan tarama, son iki yıl önceliği, yıllık parametre defteri ve iki kaynakla doğrulama, günlük güncelleme"
+    },
+    {
+      "order": 10,
+      "id": "self_learning_brain",
+      "name": "Kendi kendini geliştiren öğrenen beyin",
+      "status": "foundation_loaded",
+      "gate": "Araştırma sonucu (beklemede olsa bile) HEMEN kalıcı hafızaya yazılır (memory/learning_store.py, source_type=learned); aynı soru tekrar sorulunca araştırmaya gitmiyor; parametre defteriyle çapraz kontrol ediliyor (çelişki uyarısı); mali müşavir 'onayla:' komutuyla güven etiketini yükseltiyor (uyarı kalkar); doğrulanan konular data/auto_exam_candidates.jsonl'a öneri olarak düşüyor. Hermes yalnızca işçi olarak görülür, sağlayıcıdan bağımsız tasarlandı. Test: tests/test_self_learning.py."
+    },
+    {
+      "order": 11,
+      "id": "sgk_foundation",
+      "name": "SGK: temel yapı",
+      "status": "planned",
+      "gate": "Sigortalılık halleri, prim gün sayısı mantığı, prime esas kazanç, kısa/uzun vadeli sigorta kolları, işveren/işçi pay mantığı, bildirge süreci, teşvik mantığı — değişmeyen çekirdek olarak knowledge/*.json'a yazılacak"
+    },
+    {
+      "order": 12,
+      "id": "sgk_parameters",
+      "name": "SGK: değişen parametreler",
+      "status": "planned",
+      "gate": "Taban/tavan, prim oranları, teşvik tutarları — config/fact_topics.json parametre defterine, siteden süzgeçle beslenir, en yeni yıl önce"
+    },
+    {
+      "order": 13,
+      "id": "whatsapp_invoice",
+      "name": "WhatsApp ve ofis yardımcılığı otomasyonu",
+      "status": "later",
+      "gate": "Kullanıcı istediğinde başlanır; önce temel muhasebe, SGK ve site öğrenme olgunlaşacak"
+    }
+  ]
+}

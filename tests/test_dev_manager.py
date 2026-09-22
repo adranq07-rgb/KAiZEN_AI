@@ -4,6 +4,11 @@ from dev.dev_manager import DevManager
 def test_dev_manager():
     dev = DevManager()
 
+    assert dev.copy_for_testing("../AGENTS.md")[0] is False
+    assert dev.promote_to_prod("../core/engine.py", "dev/test_prod.py", approved=True)[0] is False
+    assert dev.promote_to_prod("engine.py", "../outside.py", approved=True)[0] is False
+    assert dev.clear_workspace()[0] is False
+
     success, target = dev.copy_for_testing("core/engine.py")
 
     assert success is True
@@ -39,7 +44,7 @@ def test_dev_manager():
     # Test dosyasini temizle.
     test_prod.unlink()
 
-    print("KAZEN DEV GUVENLIK TESTI: BASARILI")
+    print("KAIZEN DEV GUVENLIK TESTI: BASARILI")
 
 
 if __name__ == "__main__":

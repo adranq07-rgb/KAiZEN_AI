@@ -1,0 +1,13 @@
+# Kaizen AI bağımlılıkları (Python 3.13 ile test edildi)
+# Kurulum: .venv\Scripts\python.exe -m pip install -r requirements.txt
+# Sürümler, tüm testlerin geçtiği ortamdan (tests/run_all.py) sabitlendi.
+
+# Ofis ve belge okuma (tools/office_tools.py, accounting/crawler.py, accounting/course_ingestor.py)
+openpyxl==3.1.5
+python-docx==1.2.0
+pypdf==6.19.0
+pillow==12.3.0
+
+# Graf hafızası (memory/cognee_memory.py). Ayrıca yerel Ollama gerekir:
+# 'ollama pull llama3.2:3b' ve 'ollama pull bge-m3' (bkz. memory/COGNEE.md)
+cognee==1.6.0

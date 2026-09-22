@@ -1,0 +1,80 @@
+[
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "SGK nedir ve sigortalılık halleri (4/a, 4/b, 4/c)",
+  "text": "5510 sayılı Kanun'a göre Sosyal Güvenlik Kurumu (SGK), Türkiye'de sosyal güvenlik sistemini yürüten kamu kurumudur. Sigortalılar, çalışma biçimlerine göre üç statüde sınıflandırılır: 4/1-a (kısaca 4/a, eski adıyla SSK) bir hizmet akdiyle (iş sözleşmesiyle) bir veya birden fazla işveren yanında çalışan işçileri kapsar; 4/1-b (4/b, eski adıyla Bağ-Kur) kendi adına ve hesabına bağımsız çalışan esnaf, tacir, çiftçi ve serbest meslek erbabını (mali müşavir dahil) kapsar; 4/1-c (4/c, eski adıyla Emekli Sandığı) kamu görevlilerini (memurları) kapsar. Aynı kişi aynı anda birden fazla statüde sigortalı olabilir; öncelik sırası kanunda belirlenmiştir. Anahtar sözcükler: SGK, sigortalılık halleri, 4/a, 4/b, 4/c, SSK, Bağ-Kur, Emekli Sandığı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Sigorta kolları: kısa vadeli ve uzun vadeli",
+  "text": "SGK primi, farklı risklere karşı ayrı ayrı toplanan sigorta kollarından oluşur. Kısa vadeli sigorta kolları: iş kazası ve meslek hastalığı (işle ilgili kaza/hastalık halinde geçici iş göremezlik ödeneği ve sürekli iş göremezlik geliri sağlar), hastalık ve analık (4/a için; hastalık halinde geçici iş göremezlik ödeneği, analıkta doğum öncesi/sonrası ödenek). Uzun vadeli sigorta kolları: malullük (çalışma gücünü önemli ölçüde kaybedenlere), yaşlılık (emeklilik aylığı), ölüm (sigortalının vefatında hak sahiplerine aylık/toptan ödeme) sigortalarıdır. Bunların dışında Genel Sağlık Sigortası (GSS, sağlık hizmetlerinin finansmanı) ve işsizlik sigortası (ayrı bir fondan, işsizlik ödeneği için) uygulanır. Anahtar sözcükler: sigorta kolları, kısa vadeli sigorta, uzun vadeli sigorta, iş kazası meslek hastalığı, malullük yaşlılık ölüm, genel sağlık sigortası, işsizlik sigortası."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Prime esas kazanç (PEK) mantığı",
+  "text": "Prime esas kazanç, sigortalının prim ve ödeneklerinin hesaplanmasına temel oluşturan kazanç tutarıdır; brüt ücret esas alınır ancak kanunda sayılan bazı ödemeler (belirli sınırlar dahilindeki yemek, yol, çocuk/aile yardımı gibi) prime esas kazanca dahil edilmeyebilir. Prime esas kazancın bir alt sınırı (taban) ve bir üst sınırı (tavan) vardır; taban brüt asgari ücrete, tavan ise taban ücretin kanunda belirlenen katına bağlıdır ve ikisi de dönemsel olarak (genellikle asgari ücret değiştiğinde) güncellenir — bu yüzden güncel taban/tavan tutarları sabit yazılmaz, süzgeçten geçmiş parametre defterinden sorulur. Kazanç tabanın altındaysa taban, tavanın üstündeyse tavan üzerinden prim hesaplanır. Anahtar sözcükler: prime esas kazanç, PEK, taban, tavan, alt sınır, üst sınır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Prim gün sayısı ve eksik gün bildirimi",
+  "text": "Bir ayda bildirilecek azami prim gün sayısı otuzdur (30 gün, bordro ayı 28/29/31 çekse de). Sigortalı ay içinde 30 günden az çalıştıysa (işe giriş/çıkış, ücretsiz izin, rapor, grev gibi nedenlerle) işveren 'eksik gün bildirimi' yaparak eksik günün nedenini, bugün Muhtasar ve Prim Hizmet Beyannamesi (MUHSGK) içinde yer alan bildirimde kanunda sayılan eksik gün nedeni kodlarından biriyle açıklamak zorundadır; aksi halde SGK denetiminde usulsüzlük cezasına yol açabilir. Anahtar sözcükler: prim gün sayısı, eksik gün bildirimi, otuz gün, MUHSGK, aylık prim hizmet belgesi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "İşveren ve sigortalı prim payı mantığı",
+  "text": "SGK primi, sigorta kollarına göre işveren ve sigortalı (işçi) arasında kanunda belirlenen oranlarda paylaşılır; toplam prim oranı, malullük-yaşlılık-ölüm, kısa vadeli sigorta kolları, genel sağlık sigortası ve (varsa) işsizlik sigortası primlerinin toplamıdır. Genel kural olarak işveren payı işçi payından yüksektir; kısa vadeli sigorta kolları (iş kazası/meslek hastalığı) primini yalnızca işveren öder, işçiden kesinti yapılmaz. İşsizlik sigortası primi işçi, işveren ve Devlet olmak üzere üç taraflıdır. Güncel prim oranları kanun değişikliğine tabi olduğundan sabit yazılmaz; parametre defterinden sorulur. Anahtar sözcükler: işveren prim payı, işçi prim payı, kısa vadeli sigorta primi işveren öder, işsizlik sigortası üç taraflı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "İşe giriş ve işten ayrılış bildirgeleri",
+  "text": "İşveren, sigortalı çalıştırmaya başladığında bunu sigortalının çalışmaya başladığı tarihten önce SGK'ya 'İşe Giriş Bildirgesi' ile bildirmek zorundadır (kanunda sayılan kısa bir süre ve istisnai haller saklı kalmak üzere). Hizmet akdi sona erdiğinde de 'İşten Ayrılış Bildirgesi' kanunda belirlenen süre içinde verilir. Süresinde yapılmayan bildirimler idari para cezasına tabidir. Anahtar sözcükler: işe giriş bildirgesi, işten ayrılış bildirgesi, sigortalı işe giriş bildirimi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Muhtasar ve Prim Hizmet Beyannamesi (MUHSGK)",
+  "text": "2020 yılından itibaren işverenlerin aylık olarak vermesi gereken gelir vergisi stopajı (muhtasar) beyannamesi ile SGK'ya verilen Aylık Prim ve Hizmet Belgesi, Muhtasar ve Prim Hizmet Beyannamesi (MUHSGK) adı altında birleştirilmiştir; işverenler tek bir beyanname ile hem stopaj hem prim bildirimini Gelir İdaresi Başkanlığı'nın sistemi üzerinden yapar. Beyanname, ilgili ayı takip eden ayın belirli bir gününe kadar verilir ve tahakkuk eden tutar aynı süre içinde ödenir; kesin gün mevzuattan teyit edilmelidir. Anahtar sözcükler: MUHSGK, muhtasar prim hizmet beyannamesi, aylık prim hizmet belgesi birleşmesi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "SGK teşvikleri: genel mantık",
+  "text": "SGK teşvikleri, belirli şartları taşıyan işverenlerin sigortalılar için ödeyecekleri primin bir kısmının (veya tamamının) Hazine tarafından karşılanmasıdır; amaç istihdamı teşvik etmektir. Başlıca teşvik türleri: 5510 sayılı Kanun'un ilgili maddelerine göre genel prim teşviki, genç/kadın/engelli istihdamı teşviki, ilave istihdam teşvikleri (yeni işe alınan ve işsizlik ödeneği alan sigortalılar için), Ar-Ge ve teknoloji geliştirme bölgeleri teşviki, engelli çalıştırma teşviki gibi düzenlemelerdir. Her teşvikin kendi şartları (sigortalı sayısı, borç durumu, bildirim süresi vb.) vardır ve bir sigortalı için genelde yalnızca en avantajlı teşviklerden biri uygulanabilir. Teşvik oranı ve tutarları değişebildiğinden güncel uygulama parametre defterinden veya güncel mevzuattan teyit edilmelidir. Anahtar sözcükler: SGK teşviki, istihdam teşviki, teşvik şartları, prim teşviki."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Genel Sağlık Sigortası (GSS)",
+  "text": "Genel Sağlık Sigortası, Türkiye'de ikamet eden ve başka bir kapsamda (4/a, 4/b, 4/c sigortalısı veya bunların bakmakla yükümlü olduğu kişi gibi) sağlık güvencesi bulunmayan herkesi kapsayan zorunlu bir sigorta koludur. Geliri belirli bir düzeyin altında kalanlar için prim Devlet tarafından karşılanır (gelir testi ile tespit edilir); geliri üzerinde olanlar kendi GSS primini öder. GSS kapsamındaki kişi sağlık hizmetlerinden (muayene, tedavi, ilaç, rapor) yararlanabilir; primini ödemeyenlerin sağlık hizmetinden yararlanması, prim borcu birikimine bağlı olarak kısıtlanabilir. Anahtar sözcükler: genel sağlık sigortası, GSS, gelir testi, sağlık hizmetlerinden yararlanma."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Sigortalılığın başlangıcı ve sona ermesi",
+  "text": "4/a sigortalılığı, hizmet akdine tabi çalışmaya başlanılan gün başlar ve hizmet akdinin sona erdiği gün sona erer. 4/b sigortalılığı, esnaf/tacir/çiftçi faaliyetine başlanılan tarihte (vergi mükellefiyeti, oda/birlik kaydı gibi) başlar. 4/c sigortalılığı, memuriyete atanma ile başlar. Sigortalılığın sona ermesi prim ödeme yükümlülüğünün de sona ermesi anlamına gelir, ancak kazanılan hizmet süreleri (prim gün sayısı) saklı kalır ve ileride emeklilik hesabında birleştirilir. Anahtar sözcükler: sigortalılığın başlangıcı, sigortalılığın sona ermesi, hizmet akdi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "Hizmet birleştirme ve emeklilik hakkı mantığı",
+  "text": "Emeklilik (yaşlılık aylığı) hakkı, üç unsurun birlikte sağlanmasına bağlıdır: belirli bir yaş, belirli bir sigortalılık süresi (ilk işe giriş tarihinden itibaren geçen yıl) ve belirli bir prim gün sayısı. Bu üç şart kanunda (ve sigortalının ilk işe giriş tarihine göre kademeli geçiş hükümlerinde) ayrı ayrı belirlenir ve zamanla değişebilir; bu yüzden güncel yaş/gün/süre şartları sabit yazılmaz, güncel mevzuattan teyit edilir. Farklı statülerde (4/a, 4/b, 4/c) veya farklı ülkelerde (uluslararası sosyal güvenlik sözleşmeleri kapsamında) geçen hizmet süreleri, hizmet birleştirmesi yoluyla tek bir emeklilik hesabında toplanabilir. Anahtar sözcükler: emeklilik şartları, yaşlılık aylığı, hizmet birleştirme, sigortalılık süresi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "İş kazası ve meslek hastalığı bildirimi",
+  "text": "İşveren, işyerinde meydana gelen bir iş kazasını kanunda belirlenen kısa bir süre içinde (kolluğa derhal, SGK'ya belirlenen gün içinde) bildirmekle yükümlüdür. Meslek hastalığı tanısı konulduğunda da benzer bir bildirim yükümlülüğü doğar. Bildirimin süresinde yapılmaması idari para cezası doğurur ve sigortalının hak kaybına yol açabilir. İş kazası/meslek hastalığı sigortası kapsamında sigortalıya geçici iş göremezlik ödeneği, sürekli iş göremezlik geliri veya (vefat halinde) hak sahiplerine gelir bağlanabilir. Anahtar sözcükler: iş kazası bildirimi, meslek hastalığı bildirimi, geçici iş göremezlik ödeneği, sürekli iş göremezlik geliri."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen SGK temel yapısı",
+  "section": "SGK prim borcu, gecikme cezası ve zammı",
+  "text": "Süresinde ödenmeyen SGK primi için, ödenmesi gereken sürenin bittiği tarihten ödemenin yapıldığı tarihe kadar gecikme cezası ve gecikme zammı işletilir; oran ve hesap yöntemi 6183 sayılı Amme Alacaklarının Tahsil Usulü Hakkında Kanun'a paralel olarak düzenlenir ve zaman içinde değişebileceğinden sabit yazılmaz. Prim borcu olan işveren teşviklerden yararlanamaz ve borç yapılandırma/taksitlendirme imkanlarından faydalanabilir. Anahtar sözcükler: SGK prim borcu, gecikme cezası, gecikme zammı, prim borcu yapılandırma."
+ }
+]

@@ -6,7 +6,7 @@ class KaizenLogger:
     def __init__(self):
         self.project_dir = Path(__file__).resolve().parent.parent
         self.log_dir = self.project_dir / "logs"
-        self.log_file = self.log_dir / "kazen.log"
+        self.log_file = self.log_dir / "kaizen.log"
 
         self.log_dir.mkdir(parents=True, exist_ok=True)
 

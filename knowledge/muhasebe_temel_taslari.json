@@ -1,0 +1,98 @@
+[
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Temel kavramlar (1/3): sosyal sorumluluk, kişilik, süreklilik, dönemsellik",
+  "text": "Muhasebenin temel kavramları, tüm muhasebe uygulamalarının dayandığı değişmez ilkelerdir. Sosyal sorumluluk kavramı, muhasebe bilgilerinin gerçeği yansıtacak şekilde, ilgili tarafların (ortak, kamu, çalışan, alacaklı) çıkarlarını gözeterek tutulmasını ister. Kişilik kavramı, işletmenin sahip veya ortaklarından ayrı bir muhasebe varlığı olduğunu, işletmeyle ilgili olmayan işlemlerin (ör. ortağın kişisel harcaması) işletme kayıtlarına girmemesi gerektiğini söyler. İşletmenin sürekliliği kavramı, işletmenin faaliyetini süresiz sürdüreceği varsayımıyla değerleme ve muhasebeleştirme yapılmasını, tasfiye değeri yerine işletme değerinin esas alınmasını sağlar. Dönemsellik kavramı, işletmenin sürekli ömrünün belirli dönemlere (genellikle 1 yıl, hesap dönemi) bölünmesini ve her dönemin gelir-giderinin kendi dönemine ait olmasını (tahakkuk esası) ister; bir gider veya gelir, parası o dönemde ödenmese/tahsil edilmese bile ait olduğu dönemde kayda alınır. Anahtar sözcükler: temel kavramlar, sosyal sorumluluk kavramı, kişilik kavramı, işletmenin sürekliliği, dönemsellik kavramı, tahakkuk esası."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Temel kavramlar (2/3): parayla ölçme, maliyet esası, tarafsızlık-belgelendirme, tutarlılık",
+  "text": "Parayla ölçme kavramı, işletmeyle ilgili tüm işlem ve olayların ortak bir para birimiyle (Türkiye'de TL) ifade edilip kaydedilmesini ister; parayla ölçülemeyen unsurlar muhasebeye konu olmaz. Maliyet esası kavramı, parayla ölçülebilen iktisadi kıymetlerin muhasebeleştirilmesinde elde etme maliyetinin (satın alma veya üretim maliyeti) esas alınmasını ister. Tarafsızlık ve belgelendirme kavramı, muhasebe kayıtlarının tarafsız ve doğrulanabilir belgelere (fatura, makbuz, sözleşme vb.) dayandırılmasını, kişisel yargı ve önyargıdan uzak tutulmasını ister. Tutarlılık kavramı, işletmenin seçtiği muhasebe politikalarını (değerleme yöntemi, amortisman yöntemi vb.) dönemler arasında değiştirmeden aynı biçimde uygulamasını; değişiklik gerekirse bunun mali tablo dipnotlarında açıklanmasını ister — böylece dönemler arası karşılaştırma anlamlı kalır. Anahtar sözcükler: temel kavramlar, parayla ölçme kavramı, maliyet esası kavramı, tarafsızlık ve belgelendirme, tutarlılık kavramı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Temel kavramlar (3/3): tam açıklama, ihtiyatlılık, önemlilik, özün önceliği, açıklık",
+  "text": "Tam açıklama kavramı, mali tabloların yararlanıcıların doğru karar vermesine yetecek ölçüde açık, anlaşılır ve yeterli bilgi (dipnotlar dahil) içermesini ister. İhtiyatlılık (muhafazakarlık) kavramı, muhasebe olaylarında temkinli davranılmasını; karşılaşılabilecek riskler için karşılık ayrılmasını (şüpheli alacak karşılığı gibi), henüz gerçekleşmemiş gelirlerin kayda alınmamasını ama olası gider ve zararların kayda alınmasını ister. Önemlilik kavramı, bir hesap kalemi veya olayın mali tabloları etkileme gücüne göre değerlendirilmesini; önemli kalemlerin mutlaka ayrı gösterilmesini ister. Özün önceliği kavramı, işlemlerin muhasebeleştirilmesinde hukuki biçimden çok ekonomik özünün esas alınmasını ister. Açıklık kavramı, muhasebe kayıt, süreç ve mali tablolarının anlaşılır, açık ve yanlış yorumlara meydan vermeyecek biçimde düzenlenmesini ister. Anahtar sözcükler: temel kavramlar, tam açıklama kavramı, ihtiyatlılık kavramı, önemlilik kavramı, özün önceliği kavramı, açıklık kavramı, 13 temel kavram."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Çift taraflı kayıt sistemi ve hesap mantığı",
+  "text": "Muhasebede her işlem en az iki hesabı etkiler ve toplam borç tutarı her zaman toplam alacak tutarına eşit olmalıdır (çift taraflı kayıt sistemi). Bir hesabın sol tarafı borç, sağ tarafı alacaktır. Aktif (varlık) hesaplar borç bakiyesi verir: artışlar borca, azalışlar alacağa yazılır (kasa, banka, alacaklar, stoklar, duran varlıklar). Pasif (yabancı kaynak ve özkaynak) hesaplar alacak bakiyesi verir: artışlar alacağa, azalışlar borca yazılır (borçlar, sermaye, yedekler). Gider hesapları borç bakiyesi verir, gelir hesapları alacak bakiyesi verir; dönem sonunda ikisi de kapatılır. Düzenleyici (indirim) hesaplar ait olduğu grubun tersi yönde bakiye verir ve o grubun net değerini gösterir (ör. 257 Birikmiş Amortismanlar aktifte olduğu halde alacak bakiyesi verir). Borç toplamı alacak toplamına eşit değilse kayıt hatalıdır. Anahtar sözcükler: çift taraflı kayıt, borç alacak mantığı, aktif pasif bakiye, düzenleyici hesap, bilanço eşitliği."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Tek Düzen Hesap Planı sınıf mantığı (1-9)",
+  "text": "Tek Düzen Hesap Planı hesapları bilanço ve gelir tablosu düzenine uyacak şekilde 1'den 9'a kadar ana sınıflara ayrılır. 1 Dönen Varlıklar: bir yıl içinde paraya çevrilecek/tüketilecek varlıklar (kasa, banka, alacaklar, stoklar). 2 Duran Varlıklar: bir yıldan uzun süre kullanılacak varlıklar. 3 Kısa Vadeli Yabancı Kaynaklar: bir yıl içinde ödenecek borçlar. 4 Uzun Vadeli Yabancı Kaynaklar: bir yıldan uzun vadeli borçlar. 5 Özkaynaklar: sermaye, yedekler, geçmiş yıl kâr/zararları, dönem net kâr/zararı. 6 Gelir Tablosu Hesapları: brüt satışlar, satış indirimleri, satışların maliyeti, faaliyet giderleri, finansman giderleri gibi dönemsel gelir-gider hesapları. 7 Maliyet Hesapları: üretim/hizmet maliyetlerinin izlendiği hesaplar (7/A veya 7/B seçeneği). 8 Serbest (Boş) Hesaplar: işletmenin ihtiyacına göre kullanabileceği, ayrılmış boş hesap grubu. 9 Nazım Hesaplar: işletmenin varlığı olmayan ama izlenmesi gereken teminat, taahhüt, kefalet gibi bilgiler; bilanço dışıdır. Hesap kodunun ilk rakamı sınıfını, sonraki rakamlar alt hesabını belirler. Anahtar sözcükler: tek düzen hesap planı, hesap sınıfları, TDHP mantığı, 1-9 hesap grupları, nazım hesaplar."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Yevmiye defteri, büyük defter (kebir) ve mizan akışı",
+  "text": "Muhasebe süreci belge (fatura, makbuz vb.) ile başlar. Her belge önce Yevmiye Defteri'ne madde (yevmiye kaydı) olarak, tarih sırasıyla, borçlu ve alacaklı hesaplar ve tutarlarıyla kaydedilir; bu ilk kayıt defteridir ve maddeler numaralandırılır. Yevmiye defterindeki her madde, ilgili hesaplara Büyük Defter'e (defter-i kebir) aktarılır; büyük defterde her hesabın kendi borç/alacak hareketleri ve bakiyesi ayrı ayrı izlenir. Belirli aralıklarla tüm hesapların borç toplamı, alacak toplamı ve bakiyeleri bir listede toplanır: Mizan. Mizanda toplam borç toplam alacağa eşit olmalıdır; tutmazsa kayıtlarda hata vardır. Dönem sonunda düzeltme ve kapanış kayıtlarından önceki mizana geçici mizan, düzeltme/kapanış sonrası mizana kesin mizan denir. Süreç özetle: Belge -> Yevmiye -> Büyük Defter -> Mizan -> Dönem Sonu İşlemleri -> Mali Tablolar. Anahtar sözcükler: yevmiye defteri, büyük defter, kebir, mizan, geçici mizan, kesin mizan, muhasebe süreci, kayıt akışı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Dönem sonu işlemleri: envanter ve değerleme",
+  "text": "Dönem sonunda işletme varlık ve borçlarının gerçek durumunu tespit etmek için envanter çıkarır. Kaydi envanter, muhasebe kayıtlarına göre hesaplanan miktar/tutardır; fiziki (sayım) envanter, fiilen sayarak/ölçerek/tartarak bulunan gerçek miktardır. İkisi arasında fark varsa (kasa noksanı/fazlası, stok sayım farkı gibi) düzeltme kaydı yapılır. Envanter sonrası, iktisadi kıymetler Vergi Usul Kanunu'nda sayılan değerleme ölçüleriyle değerlenir: maliyet bedeli, borsa rayici, tasarruf değeri, itibari değer, rayiç bedel, emsal bedel/ücret, alış bedeli, vergi değeri gibi. Hangi iktisadi kıymetin hangi ölçüyle değerleneceği VUK'ta ayrı ayrı belirlenmiştir. Değerleme sonucu ortaya çıkan farklar (kur farkı, değer artış/azalışı gibi) ilgili dönemin gelir veya gideri olarak kayda alınır. Anahtar sözcükler: envanter, kaydi envanter, fiziki envanter, değerleme ölçüleri, VUK değerleme, maliyet bedeli, emsal bedel."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Dönem sonu işlemleri: amortisman, reeskont, karşılıklar, kur farkı",
+  "text": "Amortisman: duran varlıkların (bina, taşıt, makine, maddi olmayan duran varlık) faydalı ömrü boyunca aşınma payının gider yazılmasıdır; normal (eşit tutarlı) veya azalan bakiyeler yöntemiyle hesaplanabilir, oran ve süre Maliye'nin yayınladığı amortisman listesine göre belirlenir (koda sabit yazılmaz, güncel liste sorulmalıdır). Reeskont: vadesi gelecek dönemlere sarkan senetli alacak/borçların dönem sonu itibarıyla bugünkü değerine indirgenmesidir; senet üzerindeki faiz gelir/gideri ilgili döneme ayrılır; ihtiyaridir ama seçilirse hem alacak hem borç senetlerine uygulanmalıdır. Şüpheli alacak karşılığı: tahsili şüpheli hale gelen (dava/icra safhasında veya yazıyla bir defadan fazla istenip tahsil edilememiş) ticari alacaklar için ayrılan karşılıktır; sonradan tahsil edilirse karşılık iptal edilip gelir yazılır. Kur farkı: yabancı para cinsinden varlık ve borçların dönem sonu kuruyla değerlenmesi sonucu ortaya çıkan farktır; kur yükselmişse borçlarda gider/alacaklarda gelir, kur düşmüşse tersi oluşur. Bu düzeltmeler yapılmadan mizan kesinleşmez. Anahtar sözcükler: amortisman, reeskont, şüpheli alacak karşılığı, kur farkı, dönem sonu düzeltme kayıtları."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Maliyet muhasebesi: 7/A seçeneği",
+  "text": "7/A seçeneği, maliyet hesaplarının fonksiyon esasına göre ayrıntılı izlendiği, orta ve büyük ölçekli işletmeler için önerilen yöntemdir. Giderler önce 7. sınıfta gider türüne göre toplanır (710 Direkt İlk Madde ve Malzeme, 720 Direkt İşçilik, 730 Genel Üretim Giderleri, 740 Hizmet Üretim Maliyeti, 750 Araştırma ve Geliştirme Giderleri, 760 Pazarlama Satış ve Dağıtım Giderleri, 770 Genel Yönetim Giderleri, 780 Finansman Giderleri), sonra dönem sonunda yansıtma hesapları (711, 721, 731...) aracılığıyla ilgili stok/maliyet hesaplarına (150, 151, 152, 622, 632 vb.) aktarılır. 7/A ayrıntılı maliyet analizi ve gider dağıtımı yapılmasını sağlar, bilgi ihtiyacı yüksek işletmelerde tercih edilir. Anahtar sözcükler: maliyet muhasebesi, 7/A seçeneği, yansıtma hesapları, direkt ilk madde malzeme, genel üretim giderleri, gider dağıtımı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Maliyet muhasebesi: 7/B seçeneği",
+  "text": "7/B seçeneği, maliyet hesaplarının gider çeşidi esasına göre daha basit ve toplu izlendiği, küçük ve orta ölçekli işletmeler için uygun bir yöntemdir. Giderler 790'lı hesaplarda (791 İlk Madde ve Malzeme Giderleri, 792 İşçi Ücret ve Giderleri, 793 Memur Ücret ve Giderleri, 794 Dışarıdan Sağlanan Fayda ve Hizmetler, 795 Çeşitli Giderler, 796 Vergi Resim ve Harçlar, 797 Amortisman ve Tükenme Payları, 798 Finansman Giderleri) gider çeşidine göre toplanır ve dönem sonunda 799 Üretim Maliyeti Hesabına aktarılıp oradan ilgili maliyet/gider hesaplarına dağıtılır. 7/B, 7/A'ya göre daha az ayrıntı sunar; işletme büyüklüğüne göre 7/A veya 7/B'den biri seçilir, ikisi birlikte kullanılmaz. Anahtar sözcükler: maliyet muhasebesi, 7/B seçeneği, gider çeşidi esası, üretim maliyeti hesabı, 790 hesaplar."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Mali tablolar: bilanço",
+  "text": "Bilanço, işletmenin belirli bir tarihteki (dönem sonu) varlık, borç ve özkaynaklarını gösteren mali tablodur; Varlıklar = Yabancı Kaynaklar + Özkaynaklar temel eşitliğine dayanır (aktif toplamı = pasif toplamı). Aktif tarafta dönen varlıklar (1) ve duran varlıklar (2) likidite sırasına göre; pasif tarafta kısa vadeli yabancı kaynaklar (3), uzun vadeli yabancı kaynaklar (4) ve özkaynaklar (5) vade sırasına göre yer alır. Bilanço, işletmenin belirli bir andaki mali durumunun fotoğrafını verir; gelir tablosu gibi bir dönemi değil bir anı gösterir. Anahtar sözcükler: bilanço, aktif pasif, dönen duran varlıklar, temel muhasebe eşitliği, mali tablo."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Mali tablolar: gelir tablosu, nakit akış ve özkaynak değişim tablosu",
+  "text": "Gelir tablosu, işletmenin belirli bir dönemdeki satış gelirleri, satışların maliyeti, faaliyet giderleri, diğer gelir/gider, finansman gideri ve vergi karşılığı sonrasında ulaştığı dönem net kârını/zararını basamak basamak gösterir (brüt satış kârı -> faaliyet kârı -> olağan kâr -> dönem kârı -> net kâr). Nakit akış tablosu, dönem içindeki nakit giriş ve çıkışlarını işletme, yatırım ve finansman faaliyetleri olarak üç grupta gösterir; kâr yüksek olsa bile nakit sıkıntısı olabileceğini görünür kılar. Özkaynaklar değişim tablosu, dönem başından dönem sonuna sermaye, yedekler ve kâr/zararlardaki değişimleri gösterir. Bu dört tablo (bilanço, gelir tablosu, nakit akış, özkaynak değişim) ve dipnotlar birlikte mali tablolar setini oluşturur. Anahtar sözcükler: gelir tablosu, nakit akış tablosu, özkaynak değişim tablosu, dönem net karı, mali tablo seti."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "VUK temel kavramları: defter tutma yükümlülüğü ve süreler",
+  "text": "Vergi Usul Kanunu'na göre ticari, sınai ve zirai kazanç sahipleri ile serbest meslek erbabı, kazançlarını tespit için defter tutmak zorundadır. İşletme hacmine göre bilanço esasına göre (Yevmiye Defteri, Büyük Defter, Envanter Defteri) veya işletme hesabı esasına göre defter tutulur; serbest meslek erbabı Serbest Meslek Kazanç Defteri tutar. Defterler hesap dönemi (genellikle takvim yılı, 1 Ocak-31 Aralık) itibarıyla tutulur, dönem kapanışında kapanış tasdiki yapılır. Defter ve belgelerin saklama süresi Türk Ticaret Kanunu ve VUK'a göre en az 5 yıldır; güncel süre mevzuattan teyit edilmelidir. Defter tutma yükümlülüğüne uyulmaması veya defterlerin usulüne uygun tutulmaması vergi ziyaı ve usulsüzlük cezalarına yol açar. Anahtar sözcükler: VUK, defter tutma, bilanço esası, işletme hesabı esası, hesap dönemi, saklama süresi, defter tasdiki."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "VUK temel kavramları: belge düzeni",
+  "text": "Vergi Usul Kanunu, ticari işlemlerin belgeye dayanmasını zorunlu kılar; belgesiz kayıt geçersizdir ve gider/KDV indirimi kabul edilmez. Başlıca belgeler: Fatura (belirli bir tutarı aşan veya para/mal alışverişini gösteren temel ticari belge; e-Fatura mükellefi olanlar için elektronik düzenlenir), İrsaliye (malın taşınması sırasında düzenlenen, malın cinsini/miktarını gösteren belge; fatura ile birlikte veya irsaliyeli fatura olarak da düzenlenebilir), Serbest Meslek Makbuzu (serbest meslek erbabının hizmet karşılığı düzenlediği belge, stopaj ve KDV ayrı gösterilir), Gider Pusulası (vergi mükellefi olmayanlardan yapılan alımlarda düzenlenen belge), Müstahsil Makbuzu (çiftçiden yapılan alımlarda). e-Dönüşüm kapsamında e-Fatura, e-Arşiv Fatura, e-İrsaliye, e-Defter gibi elektronik belge/defter uygulamaları belirli hadlerin üzerindeki mükellefler için zorunludur; güncel had mevzuattan teyit edilmelidir. Anahtar sözcükler: VUK belge düzeni, fatura, irsaliye, serbest meslek makbuzu, gider pusulası, müstahsil makbuzu, e-fatura, e-arşiv, e-defter."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Stok değerleme yöntemleri",
+  "text": "İşletmeler stoklarının (ticari mal, ilk madde malzeme, mamul) maliyetini birden fazla yöntemle hesaplayabilir; seçilen yöntem tutarlılık kavramı gereği dönemler arası değiştirilmeden uygulanır. İlk Giren İlk Çıkar (FIFO/İGİÇ): stoka ilk giren malın ilk satıldığı varsayılır; dönem sonu stok en son alınan/üretilen maliyetlerle değerlenir. Son Giren İlk Çıkar (LIFO/SGİÇ): stoka son giren malın ilk satıldığı varsayılır; Türk vergi mevzuatında sınırlı kullanılır. Ağırlıklı Ortalama Maliyet Yöntemi: dönem içindeki tüm alışların ağırlıklı ortalama birim maliyeti hesaplanıp satışlara ve dönem sonu stoğa bu ortalama uygulanır. Hangi yöntem seçilirse seçilsin, Sürekli Envanter Yöntemi (her hareket anında stok ve maliyet hesaplarının güncellenmesi) veya Aralıklı (Dönemsel) Envanter Yöntemi (stok maliyetinin yalnız dönem sonunda sayım ile belirlenmesi) ile birlikte uygulanır. Anahtar sözcükler: stok değerleme yöntemleri, FIFO İGİÇ, LIFO SGİÇ, ağırlıklı ortalama maliyet, sürekli envanter yöntemi, dönemsel envanter yöntemi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen muhasebe temel taşları",
+  "section": "Muhasebe hata düzeltme (tashih) kaydı",
+  "text": "Yevmiye defterine hatalı işlenmiş bir kayıt, defter üzerinde kazıntı/silinti yapılarak değil, tashih (düzeltme) kaydı ile giderilir; böylece kayıt izi korunur. İki yöntem yaygındır: Ters kayıt yöntemi, hatalı kayıt aynen ters çevrilerek iptal edilir, ardından doğru kayıt yeniden yapılır. Fark kaydı yöntemi, hatalı ve doğru tutar arasındaki fark tek bir düzeltme maddesiyle ilgili hesaplara işlenir; yalnızca tutar hatalarında pratik olur, hesap kodu hatalarında ters kayıt tercih edilir. Hangi yöntem kullanılırsa kullanılsın düzeltme kaydı da tarih, açıklama ve dayanağıyla (hangi maddeyi düzelttiği) yevmiye defterine kaydedilir. Anahtar sözcükler: tashih kaydı, düzeltme kaydı, hata düzeltme, ters kayıt, yevmiye hatası."
+ }
+]

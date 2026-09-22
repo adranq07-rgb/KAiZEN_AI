@@ -1,0 +1,260 @@
+[
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "TOPLA (SUM)",
+  "text": "Excel işlevi TOPLA (İngilizce: SUM). Söz dizimi: =TOPLA(sayı1;[sayı2];...). Verilen hücrelerin toplamını alır. Örnek: =TOPLA(B2:B10) B2'den B10'a kadar olan tutarları toplar. Alt+= ile otomatik toplam eklenir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ORTALAMA (AVERAGE)",
+  "text": "Excel işlevi ORTALAMA (İngilizce: AVERAGE). Söz dizimi: =ORTALAMA(sayı1;[sayı2];...). Sayıların aritmetik ortalamasını verir; boş ve metin hücreleri hesaba katmaz. Örnek: =ORTALAMA(C2:C13) aylık satışların ortalamasını verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "MİN / MAK (MIN / MAX)",
+  "text": "Excel işlevi MİN / MAK (İngilizce: MIN / MAX). Söz dizimi: =MİN(aralık)  ve  =MAK(aralık). En küçük ve en büyük değeri bulur. Örnek: =MAK(D2:D50) en yüksek fatura tutarını bulur."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "EĞER (IF)",
+  "text": "Excel işlevi EĞER (İngilizce: IF). Söz dizimi: =EĞER(mantıksal_sınama;doğruysa_değer;yanlışsa_değer). Koşula göre iki sonuçtan birini verir. İç içe kullanılabilir; çok koşulda ÇOKEĞER daha okunaklıdır. Örnek: =EĞER(B2>=10000;\"Büyük\";\"Küçük\") tutar 10.000 ve üzeriyse Büyük yazar. Anahtar sözcükler: koşul, şart, ise, mantıksal test."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "VE / VEYA / DEĞİL (AND / OR / NOT)",
+  "text": "Excel işlevi VE / VEYA / DEĞİL (İngilizce: AND / OR / NOT). Söz dizimi: =VE(koşul1;koşul2)  =VEYA(koşul1;koşul2)  =DEĞİL(koşul). Birden çok koşulu birleştirir; genellikle EĞER içinde kullanılır. Örnek: =EĞER(VE(B2>0;C2=\"Ödendi\");\"Kapalı\";\"Açık\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "EĞERHATA (IFERROR)",
+  "text": "Excel işlevi EĞERHATA (İngilizce: IFERROR). Söz dizimi: =EĞERHATA(değer;hata_ise_değer). Formül hata verirse yerine belirtilen değeri yazar (ör. DÜŞEYARA'da bulunamayan kayıtlar için). Örnek: =EĞERHATA(DÜŞEYARA(A2;Liste!A:C;3;YANLIŞ);\"Bulunamadı\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "EĞERYOKSA (IFNA)",
+  "text": "Excel işlevi EĞERYOKSA (İngilizce: IFNA). Söz dizimi: =EĞERYOKSA(değer;yok_ise_değer). Yalnızca #YOK hatasını yakalar; diğer hataları gizlemez, arama formüllerinde daha güvenlidir. Örnek: =EĞERYOKSA(ÇAPRAZARA(A2;Liste!A:A;Liste!C:C);\"Yok\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ÇOKEĞER (IFS)",
+  "text": "Excel işlevi ÇOKEĞER (İngilizce: IFS). Söz dizimi: =ÇOKEĞER(koşul1;değer1;koşul2;değer2;...;DOĞRU;varsayılan). Sırayla koşulları dener, ilk doğru olanın değerini verir (Excel 2019 ve sonrası). Örnek: =ÇOKEĞER(B2<1000;\"Düşük\";B2<10000;\"Orta\";DOĞRU;\"Yüksek\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "EĞERSAY (COUNTIF)",
+  "text": "Excel işlevi EĞERSAY (İngilizce: COUNTIF). Söz dizimi: =EĞERSAY(aralık;ölçüt). Ölçüte uyan hücre sayısını verir. Joker karakter (*, ?) kullanılabilir. Örnek: =EĞERSAY(A:A;\"320*\") 320 ile başlayan hesap kodlarının sayısını verir (kodlar metin olmalı)."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ÇOKEĞERSAY (COUNTIFS)",
+  "text": "Excel işlevi ÇOKEĞERSAY (İngilizce: COUNTIFS). Söz dizimi: =ÇOKEĞERSAY(aralık1;ölçüt1;aralık2;ölçüt2;...). Birden çok ölçütün hepsine uyan satırları sayar. Örnek: =ÇOKEĞERSAY(A:A;\"Kira\";B:B;\">=5000\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ETOPLA (SUMIF)",
+  "text": "Excel işlevi ETOPLA (İngilizce: SUMIF). Söz dizimi: =ETOPLA(ölçüt_aralığı;ölçüt;[toplam_aralığı]). Ölçüte uyan satırların tutarlarını toplar. Örnek: =ETOPLA(A2:A500;\"100*\";C2:C500) kodu 100 ile başlayan hesapların tutar toplamını verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ÇOKETOPLA (SUMIFS)",
+  "text": "Excel işlevi ÇOKETOPLA (İngilizce: SUMIFS). Söz dizimi: =ÇOKETOPLA(toplam_aralığı;ölçüt_aralığı1;ölçüt1;...). Birden çok ölçüte uyan tutarları toplar. ETOPLA'dan farklı olarak TOPLAM ARALIĞI ilk sırada yazılır. Örnek: =ÇOKETOPLA(D:D;A:A;\"Ocak\";B:B;\"Kira\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "TOPLA.ÇARPIM (SUMPRODUCT)",
+  "text": "Excel işlevi TOPLA.ÇARPIM (İngilizce: SUMPRODUCT). Söz dizimi: =TOPLA.ÇARPIM(dizi1;dizi2;...). Dizilerin karşılıklı çarpımlarının toplamını verir; miktar x birim fiyat toplamı için idealdir. Örnek: =TOPLA.ÇARPIM(B2:B20;C2:C20) toplam stok değerini verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "DÜŞEYARA (VLOOKUP)",
+  "text": "Excel işlevi DÜŞEYARA (İngilizce: VLOOKUP). Söz dizimi: =DÜŞEYARA(aranan;tablo;sütun_indis;[aralık_bak]). Tablonun ilk sütununda arar, aynı satırdaki belirtilen sütunun değerini getirir. Tam eşleşme için son bağımsız değişken YANLIŞ (0) olmalıdır; aranan değer tablonun İLK sütununda bulunmalıdır. Örnek: =DÜŞEYARA(A2;Hesaplar!A:C;2;YANLIŞ) hesap kodundan hesap adını getirir. Anahtar sözcükler: arama, eşleştirme, başka tablodan değer getirme, kod karşılığı bulma."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "YATAYARA (HLOOKUP)",
+  "text": "Excel işlevi YATAYARA (İngilizce: HLOOKUP). Söz dizimi: =YATAYARA(aranan;tablo;satır_indis;[aralık_bak]). DÜŞEYARA'nın yatay karşılığıdır; ilk satırda arar. Örnek: =YATAYARA(\"Mart\";A1:M5;3;YANLIŞ)"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ÇAPRAZARA (XLOOKUP)",
+  "text": "Excel işlevi ÇAPRAZARA (İngilizce: XLOOKUP). Söz dizimi: =ÇAPRAZARA(aranan;arama_dizisi;döndürülecek_dizi;[bulunamazsa];[eşleşme_modu];[arama_modu]). Solda veya sağda arama yapabilir, varsayılan tam eşleşmedir (Excel 365/2021). DÜŞEYARA'nın modern alternatifidir. Örnek: =ÇAPRAZARA(A2;Liste!A:A;Liste!C:C;\"Bulunamadı\")"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "İNDİS + KAÇINCI (INDEX + MATCH)",
+  "text": "Excel işlevi İNDİS + KAÇINCI (İngilizce: INDEX + MATCH). Söz dizimi: =İNDİS(dizi;satır;[sütun])  ve  =KAÇINCI(aranan;arama_dizisi;0). KAÇINCI aranan değerin sırasını bulur (0 = tam eşleşme), İNDİS o sıradaki değeri getirir. Sütun sırasından bağımsız, esnek arama sağlar. Örnek: =İNDİS(C:C;KAÇINCI(A2;A:A;0))"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "YUVARLA (ROUND)",
+  "text": "Excel işlevi YUVARLA (İngilizce: ROUND). Söz dizimi: =YUVARLA(sayı;basamak). Sayıyı belirtilen ondalık basamağa yuvarlar (5 ve üzeri yukarı). Kuruş hesabında YUVARLA(x;2) kullanılır; YUKARIYUVARLA ve AŞAĞIYUVARLA yönü zorlar. Örnek: =YUVARLA(B2*20%;2) KDV tutarını kuruşa yuvarlar."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "TAMSAYI / MUTLAK / MOD (INT / ABS / MOD)",
+  "text": "Excel işlevi TAMSAYI / MUTLAK / MOD (İngilizce: INT / ABS / MOD). Söz dizimi: =TAMSAYI(sayı)  =MUTLAK(sayı)  =MOD(sayı;bölen). Tam kısmı alır, işaretsiz değer verir, bölümden kalanı bulur. Örnek: =MUTLAK(B2-C2) iki tutar arasındaki farkı işaretsiz verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "BİRLEŞTİR / & (CONCATENATE / &)",
+  "text": "Excel işlevi BİRLEŞTİR / & (İngilizce: CONCATENATE / &). Söz dizimi: =BİRLEŞTİR(metin1;metin2;...)  veya  =A2&\" \"&B2. Metinleri uç uca ekler. & işareti aynı işi kısa yoldan yapar. Örnek: =A2&\".\"&B2 ile 153 ve 01 kodlarından 153.01 alt hesap kodu üretilir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "SOLDAN / SAĞDAN / PARÇAAL (LEFT / RIGHT / MID)",
+  "text": "Excel işlevi SOLDAN / SAĞDAN / PARÇAAL (İngilizce: LEFT / RIGHT / MID). Söz dizimi: =SOLDAN(metin;n)  =SAĞDAN(metin;n)  =PARÇAAL(metin;başlangıç;n). Metnin başından, sonundan veya ortasından karakter alır. Örnek: =SOLDAN(A2;3) hesap kodunun ilk 3 hanesini (ana hesabı) verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "UZUNLUK / KIRP / BÜYÜKHARF / KÜÇÜKHARF (LEN / TRIM / UPPER / LOWER)",
+  "text": "Excel işlevi UZUNLUK / KIRP / BÜYÜKHARF / KÜÇÜKHARF (İngilizce: LEN / TRIM / UPPER / LOWER). Söz dizimi: =UZUNLUK(A2)  =KIRP(A2)  =BÜYÜKHARF(A2). Karakter sayar, fazla boşlukları siler, harf büyüklüğünü değiştirir. KIRP, aktarılan verilerdeki gizli boşluklar yüzünden eşleşmeyen kayıtların ilk çaresidir. Örnek: =KIRP(A2)"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "BUL / MBUL / YERİNEKOY (FIND / SEARCH / SUBSTITUTE)",
+  "text": "Excel işlevi BUL / MBUL / YERİNEKOY (İngilizce: FIND / SEARCH / SUBSTITUTE). Söz dizimi: =BUL(aranan;metin)  =MBUL(aranan;metin)  =YERİNEKOY(metin;eski;yeni). BUL büyük/küçük harfe duyarlıdır, MBUL değildir ve joker karakter kabul eder. YERİNEKOY metin içindeki ifadeyi değiştirir. Örnek: =YERİNEKOY(B2;\".\";\"\") binlik noktalarını siler."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "METNEÇEVİR (TEXT)",
+  "text": "Excel işlevi METNEÇEVİR (İngilizce: TEXT). Söz dizimi: =METNEÇEVİR(değer;\"biçim\"). Sayı veya tarihi belirtilen biçimde metne çevirir. Örnek: =METNEÇEVİR(A2;\"GG.AA.YYYY\") tarihi 05.03.2026 biçiminde yazar; =METNEÇEVİR(B2;\"#.##0,00\") tutarı 1.234,50 biçiminde yazar."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "DEĞER (VALUE)",
+  "text": "Excel işlevi DEĞER (İngilizce: VALUE). Söz dizimi: =DEĞER(metin). Metin olarak duran sayıyı gerçek sayıya çevirir. Alternatif: hücreyi 1 ile çarpmak veya Metni Sütunlara Dönüştür. Örnek: =DEĞER(SAĞDAN(A2;5))"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "BUGÜN / ŞİMDİ (TODAY / NOW)",
+  "text": "Excel işlevi BUGÜN / ŞİMDİ (İngilizce: TODAY / NOW). Söz dizimi: =BUGÜN()  =ŞİMDİ(). Bugünün tarihini veya tarih-saati verir; her açılışta güncellenir. Örnek: =BUGÜN()-C2 vadesi C2'de olan alacağın kaç gün geçtiğini verir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "YIL / AY / GÜN / TARİH (YEAR / MONTH / DAY / DATE)",
+  "text": "Excel işlevi YIL / AY / GÜN / TARİH (İngilizce: YEAR / MONTH / DAY / DATE). Söz dizimi: =YIL(tarih)  =AY(tarih)  =GÜN(tarih)  =TARİH(yıl;ay;gün). Tarihin parçalarını alır veya parçalardan tarih üretir. Örnek: =TARİH(YIL(A2);AY(A2)+1;1) sonraki ayın ilk günü."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ETARİHLİ (DATEDIF)",
+  "text": "Excel işlevi ETARİHLİ (İngilizce: DATEDIF). Söz dizimi: =ETARİHLİ(başlangıç;bitiş;\"Y\" | \"M\" | \"D\"). İki tarih arasındaki tam yıl (Y), ay (M) veya gün (D) sayısını verir. Yardımda görünmez ama çalışır. Örnek: =ETARİHLİ(A2;BUGÜN();\"M\") Anahtar sözcükler: tarih farkı bulma, iki tarih arası gün/ay/yıl farkı, kaç gün geçti, vade farkı günü."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "ÖDEME (PMT)",
+  "text": "Excel işlevi ÖDEME (İngilizce: PMT). Söz dizimi: =ÖDEME(oran;taksit_sayısı;bd;[gd];[tür]). Eşit taksitli kredinin dönemlik ödemesini verir; sonuç negatiftir. Aylık taksitte oran da aylık olmalıdır (yıllık oran / 12). Örnek: =-ÖDEME(%2;12;100000) 100.000 TL'yi aylık %2 faizle 12 ayda geri ödemenin aylık taksitini pozitif olarak verir. Anahtar sözcükler: kredi taksiti hesaplama, aylık ödeme, eşit taksit."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "BD / GD / NBD / İÇ_VERİM_ORANI (PV / FV / NPV / IRR)",
+  "text": "Excel işlevi BD / GD / NBD / İÇ_VERİM_ORANI (İngilizce: PV / FV / NPV / IRR). Söz dizimi: =BD(oran;nper;ödeme)  =GD(...)  =NBD(oran;değer1;değer2;...)  =İÇ_VERİM_ORANI(değerler). Bugünkü değer, gelecek değer, net bugünkü değer ve iç verim oranı. NBD ilk nakit akışını 1. dönemin sonunda kabul eder; başlangıç yatırımı NBD'nin dışında eklenir. Örnek: =NBD(%10;C2:C6)+B2  (B2 = başlangıç yatırımı, negatif)"
+ },
+ {
+  "domain": "office",
+  "subject": "Excel işlevleri",
+  "section": "DAB (SLN)",
+  "text": "Excel işlevi DAB (İngilizce: SLN). Söz dizimi: =DAB(maliyet;hurda;ömür). Doğrusal (normal) amortismanın yıllık tutarını verir. Vergi Usul Kanunu uygulamasında hurda değeri sıfır alınır: =maliyet/ömür. Örnek: =DAB(120000;0;5) yıllık 24.000."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "KDV hesabı formülleri",
+  "text": "KDV hariç tutardan KDV'li tutar: =B2*(1+C2) (C2 = KDV oranı, ör. hücre biçimi yüzde). KDV tutarı: =YUVARLA(B2*C2;2). KDV dahil tutardan matrah: =YUVARLA(B2/(1+C2);2); KDV = dahil tutar - matrah. Oranı formülün içine sabit yazmak yerine ayrı bir hücreye koyup mutlak başvuruyla ($C$1) kullanın; oran değişince tek hücreyi güncellemek yeterli olur. Anahtar sözcükler: Excel'de KDV hesaplama, KDV dahil hariç, KDV ayırma."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Mizan kontrolü",
+  "text": "Mizanda toplam borç ile toplam alacak eşit olmalıdır: =TOPLA(C2:C300)-TOPLA(D2:D300) sonucu 0,00 çıkmalıdır; kuruş farkı görürseniz YUVARLA kullanın. Hesap kodu metin olarak tutulmuşsa ETOPLA(A:A;\"1*\";C:C) ile 1 ile başlayan tüm hesapların (dönen varlıklar) toplamı alınır. Ana hesaba göre özet için SOLDAN(A2;3) ile 3 haneli kod çıkarıp Pivot Tablo kullanılır. Anahtar sözcükler: mizan tutmuyor, borç alacak eşitliği, mizan farkı."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Cari hesap mutabakatı",
+  "text": "Müşteri/satıcı ekstresini defterle karşılaştırmak için iki listeyi de fatura numarasına göre eşleştirin: =EĞERHATA(DÜŞEYARA(A2;Defter!A:C;3;YANLIŞ);\"Defterde yok\"). Fark sütunu = defter tutarı - ekstre tutarı. Numaralar başında/sonunda boşluk içeriyorsa önce KIRP uygulayın; sayı-metin uyuşmazlığı için DEĞER veya *1 kullanın. Anahtar sözcükler: ekstre karşılaştırma, mutabakat, iki liste eşleştirme."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Amortisman tablosu (Excel)",
+  "text": "Normal amortisman yıllık tutar: =maliyet/faydalı_ömür (oran = 1/ömür). Kıst amortisman ilk yıl: =maliyet*oran*ay_sayısı/12. Azalan bakiyeler: oran = MİN(2/ömür;0,5); her yıl =net_kalan*oran; son yıl kalan tutarın tamamı yok yazılır. Birikmiş amortisman ve net defter değeri sütunlarını ayrı tutun; toplam amortisman maliyeti aşmamalıdır."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Faiz ve vade hesapları",
+  "text": "Basit faiz: =anapara*yıllık_oran*gün/365. Vade farkı, gecikme faizi ve gecikme zammı için gün veya ay sayısı =ETARİHLİ(vade;BUGÜN();\"D\") veya \"M\" ile bulunur. Yaşlandırma (alacak yaş analizi): =BUGÜN()-vade_tarihi sonucunu 0-30, 31-60, 61-90, 90+ gün aralıklarında EĞER/ÇOKEĞERSAY ile gruplayın."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Pivot Tablo kullanımı",
+  "text": "Ekle > Pivot Tablo ile veri tablosundan özet oluşturulur. Satırlara hesap kodu/müşteri, Değerlere tutar (Toplam) sürüklenir; tarih alanı sağ tıklayıp Grupla ile ay/çeyrek/yıl bazında özetlenebilir. Veri değişince Pivot Tabloya sağ tıklayıp Yenile demek gerekir. Kaynak veriyi Tablo (Ctrl+T) yapmak yeni satırların otomatik dahil olmasını sağlar. Boş satır ve birleştirilmiş hücre pivot hatalarının en sık nedenidir."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Veri temizleme",
+  "text": "Yinelenenleri kaldırmak için Veri > Yinelenenleri Kaldır; hangi sütunlara göre kontrol edileceğini seçin. Tek sütundaki birleşik veriyi bölmek için Veri > Metni Sütunlara Dönüştür. Banka ekstresinden gelen tarih/tutarlar metin olarak gelirse DEĞER, YERİNEKOY(\".\";\",\") veya Bul-Değiştir ile düzeltilir. Ondalık ayırıcı Türkiye'de virgül, liste ayırıcı noktalı virgüldür; İngilizce ayarlı dosyada formüller virgülle yazılır."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Hücre başvuruları",
+  "text": "Göreli başvuru (A1) kopyalanınca kayar; mutlak başvuru ($A$1) sabit kalır; karma başvuru ($A1 veya A$1) yalnızca satırı ya da sütunu sabitler. F4 tuşu seçili başvuruyu bu üç biçim arasında döndürür."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Excel kısayolları",
+  "text": "Ctrl+T tablo oluşturur; Ctrl+Shift+L filtreyi açar; Alt+= otomatik toplam ekler; F4 mutlak başvuru yapar (veya son işlemi tekrarlar); Ctrl+; bugünün tarihini yazar; Ctrl+1 hücre biçimi penceresini açar; Ctrl+Boşluk sütunu, Shift+Boşluk satırı seçer; Ctrl+Z geri alır; F2 hücreyi düzenler; Ctrl+Enter seçili tüm hücrelere aynı girişi yazar."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Excel hata değerleri",
+  "text": "#YOK: aranan bulunamadı (DÜŞEYARA/KAÇINCI). #BAŞV!: silinmiş hücre başvurusu. #DEĞER!: yanlış veri türü (metin ile sayı işlemi). #SAYI/0!: sıfıra bölme. #AD?: tanınmayan işlev veya ad. #SAYI!: geçersiz sayısal değer. Hataları gizlemek yerine EĞERHATA/EĞERYOKSA ile bilinçli yönetin; kaynağı önce Formüller > Formülü Değerlendir ile izleyin."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Formülden değere ve dosya biçimleri",
+  "text": "Formülü değere çevirmek için hücreleri kopyalayıp Özel Yapıştır > Değerler seçilir. Dosya biçimleri: .xlsx (makrosuz standart), .xlsm (makrolu), .csv (metin; Türkiye'de ayırıcı noktalı virgüldür, Türkçe karakter için UTF-8 seçilmelidir). Şablon paylaşırken formül hücrelerini korumak için Gözden Geçir > Sayfayı Koru kullanılır."
+ },
+ {
+  "domain": "office",
+  "subject": "Excel muhasebe uygulamaları",
+  "section": "Koşullu biçimlendirme ve veri doğrulama",
+  "text": "Giriş > Koşullu Biçimlendirme ile tutarı sınırı aşan, vadesi geçen veya yinelenen kayıtlar renklendirilir (ör. =$D2<BUGÜN() formülüyle vadesi geçmişler). Veri > Veri Doğrulama ile hücreye yalnızca listeden seçim, belirli aralıkta sayı veya tarih girilmesi sağlanır; hatalı hesap kodu girişini önler."
+ }
+]

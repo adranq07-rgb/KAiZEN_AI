@@ -3,7 +3,13 @@ __pycache__/
 *.pyc
 
 memory/kazen_memory.json
+memory/kaizen_memory.json
+data/accounting_learning.json
+data/kaizen_experiences.sqlite3*
+data/accounting_knowledge.sqlite3*
+data/kaizen_learning.sqlite3*
 
 logs/
 .env
 dev/workspace/
+data/cognee/

@@ -1,0 +1,104 @@
+[
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Ticari mal alışı (KDV'li, vadeli)",
+  "text": "Ticari mal alışında mal bedeli (matrah) 153 Ticari Mallar hesabına borç, KDV tutarı 191 İndirilecek KDV hesabına borç, fatura toplamı 320 Satıcılar hesabına alacak yazılır. Peşin ödemede 320 yerine 100 Kasa veya 102 Bankalar hesabı alacaklandırılır. Örnek: matrah 10.000 TL, KDV %20 ise 153 B 10.000; 191 B 2.000; 320 A 12.000. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Ticari mal satışı (KDV'li, vadeli)",
+  "text": "Satışta fatura toplamı 120 Alıcılar hesabına borç, satış bedeli (matrah) 600 Yurtiçi Satışlar hesabına alacak, hesaplanan KDV 391 Hesaplanan KDV hesabına alacak yazılır. Peşin tahsilatta 120 yerine 100 Kasa veya 102 Bankalar borçlandırılır. Sürekli envanter yönteminde ayrıca 621 Satılan Ticari Mallar Maliyeti hesabı borç, 153 Ticari Mallar hesabı alacak yazılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Satıştan iade",
+  "text": "Satılan mal iade edilirse iade edilen bedel 610 Satıştan İadeler hesabına, ilgili KDV 391 Hesaplanan KDV hesabına borç yazılır; iade fatura toplamı 120 Alıcılar hesabına (veya ilgili tahsilat hesabına) alacak yazılır. Malın stoka dönmesi halinde maliyet kaydı ters çevrilir: 153 B / 621 A. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Alıcıdan tahsilat / satıcıya ödeme",
+  "text": "Alıcıdan tahsilat: 100 Kasa veya 102 Bankalar borç, 120 Alıcılar alacak. Satıcıya ödeme: 320 Satıcılar borç, 100 Kasa veya 102 Bankalar alacak. Senetle tahsilat/ödemede 101 Alınan Çekler, 121 Alacak Senetleri veya 321 Borç Senetleri hesapları kullanılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Gider faturası (kira, elektrik vb.)",
+  "text": "Hizmet/gider faturasında matrah gider hesabına (7/A seçeneğinde 770 Genel Yönetim Giderleri; dönem sonunda 632 hesabına yansıtılır) borç, KDV 191 İndirilecek KDV hesabına borç, fatura toplamı 320 Satıcılar (veya ödeme hesabı 100/102) alacak yazılır. Gider yazılabilmesi için belgenin kanuni şartları taşıması ve işle ilgili olması gerekir. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Amortisman kaydı",
+  "text": "Yıllık amortisman gideri 770 Genel Yönetim Giderleri (veya ilgili gider/maliyet hesabı) hesabına borç, 257 Birikmiş Amortismanlar hesabına alacak yazılır. 257 düzenleyici hesaptır; alacak bakiyesi verir ve bilançoda maddi duran varlıklardan indirilir. Maddi olmayan duran varlıklarda birikmiş amortisman 268 hesabıdır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "KDV mahsubu (dönem sonu)",
+  "text": "Dönem sonunda 391 Hesaplanan KDV borçlandırılır, 191 İndirilecek KDV alacaklandırılır. Hesaplanan KDV fazlaysa fark 360 Ödenecek Vergi ve Fonlar hesabına alacak yazılır ve ödenir. İndirilecek KDV fazlaysa fark 190 Devreden KDV hesabına borç yazılarak sonraki döneme devredilir. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Ücret tahakkuku",
+  "text": "Brüt ücret gider hesabına (770 veya ilgili gider/maliyet hesabı) borç yazılır. Alacak tarafta işçi SGK kesintisi 361 Ödenecek Sosyal Güvenlik Kesintileri, gelir vergisi ve damga vergisi 360 Ödenecek Vergi ve Fonlar, net ücret 335 Personele Borçlar hesabına yazılır. İşveren SGK payı ayrıca gider hesabına borç, 361 hesabına alacak kaydedilir. Ücret ödendiğinde 335 borç, 100/102 alacak olur. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Sermaye ödemesi ve kredi kullanımı",
+  "text": "Ortakların sermaye ödemesi: 100 Kasa veya 102 Bankalar borç, 500 Sermaye alacak (ödenmemiş kısım için 501 Ödenmemiş Sermaye kullanılır). Banka kredisi kullanımı: 102 Bankalar borç, 300 Banka Kredileri (1 yıldan kısa vadeli) veya 400 Banka Kredileri (1 yıldan uzun vadeli) alacak. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Sabit kıymet alımı",
+  "text": "Demirbaş, taşıt, makine gibi kıymet alımında bedel ilgili 25x hesabına (255 Demirbaşlar, 254 Taşıtlar, 253 Tesis Makine ve Cihazlar) borç, KDV 191 İndirilecek KDV hesabına borç, fatura toplamı 320 Satıcılar (veya 100/102) alacak yazılır. Binek otomobillerde KDV indirimi ve gider/amortisman kısıtlamaları ayrıca değerlendirilir. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Dönem sonu: gelir tablosu hesaplarının kapanışı",
+  "text": "Dönem sonunda gelir hesapları (60, 64, 67 grubu) borçlandırılıp 690 Dönem Karı veya Zararı hesabına alacak, gider ve maliyet hesapları (61, 62, 63, 65, 66, 68 grubu) alacaklandırılıp 690 hesabına borç yazılır. 690 bakiyesi vergi karşılığı (691) düşüldükten sonra 692 Dönem Net Karı veya Zararı hesabına, oradan bilançoda 590 Dönem Net Karı (veya 591 Dönem Net Zararı) hesabına aktarılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Kayıt yaparken kontrol listesi",
+  "text": "Her yevmiye kaydında: (1) toplam borç = toplam alacak, (2) hesap kodu Tek Düzen Hesap Planı'na uygun, (3) tutarlar kuruşa yuvarlanmış, (4) belge tarihi ve numarası var, (5) KDV oranı belgeye uygun, (6) aktif hesaplar borç, pasif hesaplar alacak bakiye verir (düzenleyici hesaplar tersi), (7) gelir/gider hesapları dönem sonunda kapatılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Alıştan iade",
+  "text": "Alınan mal satıcıya iade edilirse satıcı hesabı (320) iade tutarı + KDV kadar borçlandırılır; 153 Ticari Mallar iade edilen mal bedeli kadar ve 191 İndirilecek KDV iade edilen mala ait KDV kadar alacaklandırılır (indirilen KDV geri alınır). Peşin alınmışsa 320 yerine 100 Kasa veya 102 Bankalar borçlandırılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır, mal alış iadesi, alınan malın iadesi, satıcıya iade."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Ortaklardan borç alınması ve geri ödenmesi",
+  "text": "Ortaktan borç alınınca 100 Kasa veya 102 Bankalar borç, 331 Ortaklara Borçlar alacak yazılır (uzun vadeli ise 431). Geri ödemede 331 borç, 100/102 alacak yazılır. Ortağa borç verilirse 131 Ortaklardan Alacaklar kullanılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır, ortaktan borç alındı, ortağa borç ödendi."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Kasa noksanı ve fazlası",
+  "text": "Kasa sayımında noksan çıkarsa 197 Sayım ve Tesellüm Noksanları borç, 100 Kasa alacak yazılır; sebebi bulunamazsa dönem sonunda 689 Diğer Olağan Gider ve Zararlar'a aktarılır. Fazla çıkarsa 100 Kasa borç, 397 Sayım ve Tesellüm Fazlaları alacak yazılır; sebebi bulunamazsa 679 Diğer Olağan Gelir ve Karlar'a aktarılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır, kasa sayımı, sayım noksanı, kasa açığı, kasa eksik çıktı, kasa fazla çıktı."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Kasadan bankaya para yatırma",
+  "text": "Kasadaki nakit bankaya yatırılınca 102 Bankalar borç, 100 Kasa alacak yazılır. Bankadan nakit çekilince tersi yazılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır, bankaya para yatırma, bankadan para çekme."
+ },
+ {
+  "domain": "accounting",
+  "subject": "Kaizen kayıt şablonları",
+  "section": "Ücret ve vergi/SGK ödemeleri",
+  "text": "Ücret tahakkukunda ödenecek net ücret 335 Personele Borçlar hesabında izlenir; ödenince 335 borç, 100/102 alacak yazılır. Ödenecek gelir vergisi ve damga vergisi 360, SGK primleri 361 hesabında izlenir; ödenince 360 veya 361 borç, 102 alacak yazılır. Anahtar sözcükler: yevmiye kaydı, muhasebe kaydı, kayıt nasıl yapılır, maaş ödemesi, ücret ödemesi, SGK ödemesi, muhtasar ödemesi."
+ }
+]
