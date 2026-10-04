@@ -1,0 +1,20 @@
+services:
+  kaizen:
+    build: .
+    ports:
+      - "127.0.0.1:8768:8768"
+    environment:
+      KAIZEN_API_TOKEN: ${KAIZEN_API_TOKEN:?Set a private API token in the deployment environment}
+      KAIZEN_PROVIDER: ${KAIZEN_PROVIDER:-offline}
+      KAIZEN_HYBRID: ${KAIZEN_HYBRID:-false}
+      KAIZEN_OLLAMA_URL: ${KAIZEN_OLLAMA_URL:-http://host.docker.internal:11434}
+      KAIZEN_SEARXNG_URL: ${KAIZEN_SEARXNG_URL:-http://host.docker.internal:8890}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - kaizen-data:/var/lib/kaizen/data
+      - kaizen-logs:/var/lib/kaizen/logs
+    restart: unless-stopped
+volumes:
+  kaizen-data:
+  kaizen-logs:

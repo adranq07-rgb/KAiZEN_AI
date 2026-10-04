@@ -68,7 +68,8 @@ def rebuild_only(store=None, registry=None, log=print):
     registry = registry or FactRegistry(store.db_path)
     facts = registry.rebuild(store)
     log(f"Süzgeç yeniden kuruldu: {facts['topics_found']} parametre ({facts['verified']} doğrulanmış, "
-        f"{facts['pending']} tek kaynak, {facts['conflict']} çelişkili)")
+        f"{facts['single_source']} tek kaynak, {facts['partially_verified']} kismen doğrulanmış, "
+        f"{facts['conflict']} çelişkili)")
     return facts
 
 

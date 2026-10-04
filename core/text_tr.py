@@ -20,8 +20,17 @@ def fold_tr(value):
     return " ".join(text.replace("̇", "").split())
 
 
+# '/' normalde bir kelime sınırı sayılır (ör. tarih "15/01/2026", kesir "1/5" -- ikisi de SAYI/
+# SAYI örüntüsü, ayrı tokenlara bölünmeye devam eder). Ama muhasebe/SGK/vergi mevzuatında '/'
+# aynı zamanda TEK bir kodun parçası olabilir: SGK sigortalılık rejim kodları ("4/a", "4/b",
+# "4/c") ve kanun madde/bent referansları ("7/A", "7/B"). Bu örüntü her zaman SAYI/HARF ya da
+# HARF/SAYI biçimindedir (SAYI/SAYI değil) -- bu yüzden aşağıdaki genel kural (yalnız SGK'ya
+# özel bir yama DEĞİL) tarih/kesir ifadelerini bozmadan bu kodları TEK token olarak korur.
+_SLASH_CODE_OR_WORD = re.compile(r"\d{1,4}/[a-z]{1,4}|[a-z]{1,4}/\d{1,4}|[a-z0-9]+")
+
+
 def tokens_tr(value):
-    return re.findall(r"[a-z0-9]+", fold_tr(value))
+    return re.findall(_SLASH_CODE_OR_WORD, fold_tr(value))
 
 
 _NUMBER = re.compile(r"[-+]?\d[\d.,]*")

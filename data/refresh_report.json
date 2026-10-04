@@ -1,13 +1,13 @@
 {
-  "run_at": "2026-09-22T01:41:06",
+  "run_at": "2026-09-22T23:18:06",
   "sources": [
     {
       "source": "Gelir Idaresi Baskanligi",
-      "mode": "reference_only",
-      "discovered": 0,
-      "fetched": 0,
+      "mode": "crawl",
+      "discovered": 1,
+      "fetched": 1,
       "new": 0,
-      "updated": 0,
+      "updated": 1,
       "unchanged": 0,
       "old_skipped": 0,
       "thin_skipped": 0,
@@ -15,46 +15,38 @@
       "blocked": [],
       "sitemaps": 0,
       "feeds": 0,
-      "stopped": null
+      "stopped": null,
+      "seconds": 11.3
     },
     {
       "source": "TURMOB",
       "mode": "crawl",
-      "discovered": 146,
+      "discovered": 136,
       "fetched": 60,
-      "new": 55,
+      "new": 56,
       "updated": 0,
-      "unchanged": 2,
+      "unchanged": 8,
       "old_skipped": 0,
       "thin_skipped": 3,
-      "errors": [
-        "https://finans.turmob.org.tr/yazarlardan/720a6d06-3418-44a0-ad31-8a451a016e50/yeni-yep’te-yeni-bir-sey-yok: network: 'ascii' codec can't encode character '\\u2019' in position 62: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Aralık: network: 'ascii' codec can't encode character '\\u0131' in position 29: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Ağustos: network: 'ascii' codec can't encode character '\\u011f' in position 26: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Eylül: network: 'ascii' codec can't encode character '\\xfc' in position 28: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Kasım: network: 'ascii' codec can't encode character '\\u0131' in position 28: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Mayıs: network: 'ascii' codec can't encode character '\\u0131' in position 28: ordinal not in range(128)",
-        "https://www.turmob.org.tr/AramizdanAyrilanlar/Şubat: network: 'ascii' codec can't encode character '\\u015e' in position 25: ordinal not in range(128)"
-      ],
+      "errors": [],
       "blocked": [
-        "https://ebirlik.turmob.org.tr/",
-        "https://ebirlik.turmob.org.tr/hr"
+        "https://ebirlik.turmob.org.tr/"
       ],
       "sitemaps": 0,
       "feeds": 0,
       "stopped": null,
-      "seconds": 117.4
+      "seconds": 100.3
     },
     {
       "source": "Muhasebe TR",
       "mode": "crawl",
-      "discovered": 233,
+      "discovered": 182,
       "fetched": 60,
-      "new": 51,
-      "updated": 0,
-      "unchanged": 2,
+      "new": 49,
+      "updated": 2,
+      "unchanged": 36,
       "old_skipped": 0,
-      "thin_skipped": 7,
+      "thin_skipped": 8,
       "errors": [],
       "blocked": [],
       "sitemaps": 3,
@@ -65,12 +57,12 @@
     {
       "source": "Alomaliye",
       "mode": "crawl",
-      "discovered": 15989,
+      "discovered": 15995,
       "fetched": 60,
       "new": 27,
-      "updated": 0,
-      "unchanged": 0,
-      "old_skipped": 15,
+      "updated": 1,
+      "unchanged": 41,
+      "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [
         "https://www.alomaliye.com/kategori/yonetmelikler/: 500"
@@ -79,16 +71,16 @@
       "sitemaps": 24,
       "feeds": 0,
       "stopped": null,
-      "seconds": 136.4
+      "seconds": 150.7
     },
     {
       "source": "PwC Turkiye",
       "mode": "crawl",
       "discovered": 3584,
-      "fetched": 24,
-      "new": 22,
+      "fetched": 4,
+      "new": 0,
       "updated": 0,
-      "unchanged": 2,
+      "unchanged": 24,
       "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [],
@@ -103,46 +95,40 @@
       "sitemaps": 1,
       "feeds": 0,
       "stopped": null,
-      "seconds": 44.6
+      "seconds": 15.4
     },
     {
       "source": "Vergiport",
       "mode": "crawl",
-      "discovered": 2087,
-      "fetched": 43,
-      "new": 31,
+      "discovered": 2205,
+      "fetched": 60,
+      "new": 59,
       "updated": 0,
-      "unchanged": 5,
-      "old_skipped": 2026,
+      "unchanged": 1,
+      "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [
-        "https://vergiport.com/blog/2026mayis-agustos-donemi-ozelgeleri: network: The read operation timed out",
-        "https://vergiport.com/blog/agustos-vergi-takvimi-1215: network: The read operation timed out",
-        "https://vergiport.com/blog/announcement-of-ministry-of-treasury-and-finance-on-communique-no-2022-3266-requiring-paymentcollection-obligation-in-turkish-liras-try-for-sales-of-securities-in-foreign-currency-or-indexed-to-foreign-currency: network: The read operation timed out",
-        "https://vergiport.com/blog/pratik-bilgiler.html?id=1&k=1: network: The read operation timed out",
-        "https://vergiport.com/blog/tag/eylul-ayinda-odenecek-vergiler: network: <urlopen error _ssl.c:1015: The handshake operation timed out>",
-        "https://vergiport.com/blog/tag/itr: network: <urlopen error _ssl.c:1015: The handshake operation timed out>",
-        "https://vergiport.com/blog/tag/resmi-gazete: network: The read operation timed out",
-        "https://vergiport.com/blog/tag/tax: network: The read operation timed out",
-        "https://vergiport.com/blog/tag/vergi-takvimi: network: The read operation timed out",
-        "https://vergiport.com/blog/uploads/files/2026-duyuru-22.pdf: network: The read operation timed out",
-        "https://vergiport.com/blog/we-are-honored-to-be-included-in-three-categories-for-turkey-in-the-worlds-best-tax-companies-research: network: The read operation timed out",
-        "https://vergiport.com/yayinlar/dergi/centrumtime-26.pdf: network: The read operation timed out"
+        "https://www.vergiport.com/blog/: network: The read operation timed out",
+        "https://www.vergiport.com/blog/1-seri-nolu-bazi-alacaklarin-yeniden-yapilandirilmasina-dair-7440-sayili-kanun-genel-tebligi-resmi-gazetede-yayimlanmistir: network: The read operation timed out",
+        "https://www.vergiport.com/blog/1-seri-nolu-ek-motorlu-tasitlar-vergisine-iliskin-genel-teblig-resmi-gazetede-yayimlanmistir: network: The read operation timed out",
+        "https://www.vergiport.com/blog/10-soruda-ic-kontrol: network: The read operation timed out",
+        "https://www.vergiport.com/blog/2021i-gecici-vergi-donemi-uygulamalari: network: <urlopen error _ssl.c:1015: The handshake operation timed out>",
+        "https://www.vergiport.com/blog/2022-i-gecici-vergi-donemine-ocak-subat-mart-ait-gelir-ve-kurum-gecici-vergi-beyannamelerinin-verilme-ve-odeme-sureleri-20-mayis-2022-cuma-gunu-sonuna-kadar-uzatilmistir: network: The read operation timed out"
       ],
       "blocked": [],
       "sitemaps": 3,
       "feeds": 0,
       "stopped": null,
-      "seconds": 429.1
+      "seconds": 250.1
     },
     {
       "source": "PKF Istanbul",
       "mode": "crawl",
-      "discovered": 1472,
+      "discovered": 1502,
       "fetched": 60,
-      "new": 60,
+      "new": 59,
       "updated": 0,
-      "unchanged": 0,
+      "unchanged": 60,
       "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [],
@@ -150,7 +136,7 @@
       "sitemaps": 11,
       "feeds": 0,
       "stopped": null,
-      "seconds": 110.0
+      "seconds": 112.0
     },
     {
       "source": "Roedl Turkiye",
@@ -180,103 +166,94 @@
       "sitemaps": 3,
       "feeds": 0,
       "stopped": null,
-      "seconds": 112.7
+      "seconds": 105.5
     },
     {
       "source": "Vergi Merkezi",
       "mode": "crawl",
-      "discovered": 815,
+      "discovered": 810,
       "fetched": 60,
-      "new": 53,
+      "new": 48,
       "updated": 0,
-      "unchanged": 0,
+      "unchanged": 53,
       "old_skipped": 0,
-      "thin_skipped": 0,
+      "thin_skipped": 1,
       "errors": [],
       "blocked": [],
       "sitemaps": 8,
       "feeds": 0,
       "stopped": null,
-      "seconds": 105.4
+      "seconds": 130.1
     },
     {
       "source": "Muhasebe Bilenler",
       "mode": "crawl",
-      "discovered": 3444,
+      "discovered": 3476,
       "fetched": 60,
-      "new": 43,
+      "new": 60,
       "updated": 0,
-      "unchanged": 0,
+      "unchanged": 43,
       "old_skipped": 0,
       "thin_skipped": 0,
-      "errors": [
-        "https://muhasebebilenler.com/: network: The read operation timed out",
-        "https://muhasebebilenler.com/destek-al-sistemi-ile-isverenler-icin-tesviklere-kolay-erisim-2/: network: The read operation timed out",
-        "https://muhasebebilenler.com/kategori/hap/hap-bunlari-biliyor-muydunuz/: network: The read operation timed out",
-        "https://muhasebebilenler.com/mesleki-yeterlilik-kurumu-tarafindan-ulusal-meslek-standartlari-hk/: network: The read operation timed out",
-        "https://muhasebebilenler.com/asit-test-hizli-likidite-orani-asit-test-orani/: network: The read operation timed out",
-        "https://muhasebebilenler.com/kategori/pratik-bilgiler/pratik-bilgiler-genel/: network: The read operation timed out"
-      ],
+      "errors": [],
       "blocked": [],
-      "sitemaps": 23,
+      "sitemaps": 21,
       "feeds": 0,
       "stopped": null,
-      "seconds": 344.1
+      "seconds": 242.1
     },
     {
       "source": "Muhasebe News",
       "mode": "crawl",
-      "discovered": 44118,
+      "discovered": 44134,
       "fetched": 60,
-      "new": 8,
-      "updated": 0,
-      "unchanged": 0,
-      "old_skipped": 52,
+      "new": 59,
+      "updated": 1,
+      "unchanged": 59,
+      "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [],
       "blocked": [],
       "sitemaps": 24,
       "feeds": 0,
       "stopped": null,
-      "seconds": 247.5
+      "seconds": 335.2
     },
     {
       "source": "Vertax",
       "mode": "crawl",
-      "discovered": 1132,
+      "discovered": 1614,
       "fetched": 60,
       "new": 59,
-      "updated": 0,
-      "unchanged": 0,
-      "old_skipped": 1,
+      "updated": 1,
+      "unchanged": 59,
+      "old_skipped": 0,
       "thin_skipped": 0,
       "errors": [],
       "blocked": [],
-      "sitemaps": 11,
+      "sitemaps": 13,
       "feeds": 0,
       "stopped": null,
-      "seconds": 110.9
+      "seconds": 115.5
     },
     {
       "source": "DergiPark",
       "mode": "crawl",
-      "discovered": 147,
-      "fetched": 43,
-      "new": 32,
-      "updated": 0,
-      "unchanged": 10,
+      "discovered": 332,
+      "fetched": 12,
+      "new": 5,
+      "updated": 3,
+      "unchanged": 9,
       "old_skipped": 0,
       "thin_skipped": 1,
-      "errors": [
-        "https://dergipark.org.tr/en/pub/page/about: 404"
-      ],
+      "errors": [],
       "blocked": [
-        "https://dergipark.org.tr/tr/download/article-file/4739251"
+        "https://dergipark.org.tr/en/download/article-file/2016618"
       ],
       "sitemaps": 0,
       "feeds": 0,
       "stopped": "site 429 döndürdü; bu koşuda durduruldu",
-      "seconds": 76.7
+      "seconds": 28.7
     },
     {
       "source": "Verginet",
@@ -303,22 +280,23 @@
     {
       "source": "Denge Akademi",
       "mode": "crawl",
-      "discovered": 589,
+      "discovered": 3537,
       "fetched": 60,
-      "new": 9,
+      "new": 28,
       "updated": 0,
       "unchanged": 0,
-      "old_skipped": 498,
-      "thin_skipped": 51,
+      "old_skipped": 0,
+      "thin_skipped": 32,
       "errors": [
-        "https://dengeakademi.com/FinancialCalendar_RSS.aspx: 500",
-        "https://dengeakademi.com/egitimler/denetim-ve-raporlama-egitimleri/4054/the-basic-differences-between-turkish-accounting-principles-and-ıfrs-for-expat-cfo-s: network: 'ascii' codec can't encode character '\\u0131' in position 116: ordinal not in range(128)"
+        "http://www.dengeakademi.com/FinancialCalendar_RSS.aspx: 500",
+        "http://www.dengeakademi.com/sirkulerler/vergi: too_large",
+        "http://www.dengeakademi.com/yeni-turk-ticaret-kanunu: network: <urlopen error [WinError 10060] Bağlanılan uygun olarak belli bir süre içinde yanıt vermediğinden veya kurulan\r\nbağlantı bağlanılan ana bilgisayar yanıt vermediğinden bir bağlantı kurulamadı>"
       ],
       "blocked": [],
       "sitemaps": 1,
       "feeds": 0,
       "stopped": null,
-      "seconds": 102.9
+      "seconds": 135.8
     },
     {
       "source": "Ozdogrular",
@@ -340,15 +318,15 @@
       "sitemaps": 0,
       "feeds": 0,
       "stopped": "robots.txt bu siteye erişime izin vermiyor",
-      "seconds": 0.5
+      "seconds": 0.6
     },
     {
       "source": "Musavirler Kulubu",
       "mode": "crawl",
-      "discovered": 9712,
+      "discovered": 9961,
       "fetched": 60,
-      "new": 60,
-      "updated": 0,
+      "new": 54,
+      "updated": 6,
       "unchanged": 0,
       "old_skipped": 0,
       "thin_skipped": 0,
@@ -361,68 +339,68 @@
     }
   ],
   "facts": {
-    "pages": 511,
-    "topics_found": 27,
-    "verified": 8,
-    "pending": 13,
-    "conflict": 6
+    "pages": 1075,
+    "topics_found": 36,
+    "verified": 14,
+    "pending": 18,
+    "conflict": 4
   },
   "stats": [
     {
       "source_name": "Alomaliye",
-      "pages": 43,
-      "with_content": 28,
+      "pages": 70,
+      "with_content": 55,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:11:11.955290+00:00"
+      "last_fetch": "2026-09-22T19:51:41.668009+00:00"
     },
     {
       "source_name": "Denge Akademi",
-      "pages": 10,
-      "with_content": 1,
+      "pages": 38,
+      "with_content": 29,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:38:01.908571+00:00"
+      "last_fetch": "2026-09-22T20:16:12.069519+00:00"
     },
     {
       "source_name": "DergiPark",
-      "pages": 33,
-      "with_content": 29,
+      "pages": 38,
+      "with_content": 34,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:37:32.206397+00:00"
+      "last_fetch": "2026-09-22T20:13:55.722265+00:00"
     },
     {
       "source_name": "Gelir Idaresi Baskanligi",
       "pages": 1,
-      "with_content": 0,
+      "with_content": 1,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:05:20.960292+00:00"
+      "last_fetch": "2026-09-22T19:45:53.271947+00:00"
     },
     {
       "source_name": "Muhasebe Bilenler",
-      "pages": 44,
-      "with_content": 44,
+      "pages": 104,
+      "with_content": 104,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:30:17.890283+00:00"
+      "last_fetch": "2026-09-22T20:05:56.772310+00:00"
     },
     {
       "source_name": "Muhasebe News",
-      "pages": 61,
-      "with_content": 9,
+      "pages": 120,
+      "with_content": 68,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:34:25.413925+00:00"
+      "last_fetch": "2026-09-22T20:11:32.031808+00:00"
     },
     {
       "source_name": "Muhasebe TR",
-      "pages": 52,
-      "with_content": 52,
+      "pages": 101,
+      "with_content": 101,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:08:55.573015+00:00"
+      "last_fetch": "2026-09-22T19:49:10.961787+00:00"
     },
     {
       "source_name": "Musavirler Kulubu",
-      "pages": 60,
-      "with_content": 60,
+      "pages": 114,
+      "with_content": 114,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:41:04.821601+00:00"
+      "last_fetch": "2026-09-22T20:18:00.954573+00:00"
     },
     {
       "source_name": "Ozdogrular",
@@ -433,17 +411,17 @@
     },
     {
       "source_name": "PKF Istanbul",
-      "pages": 61,
-      "with_content": 61,
+      "pages": 120,
+      "with_content": 120,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:20:55.676341+00:00"
+      "last_fetch": "2026-09-22T19:57:59.118196+00:00"
     },
     {
       "source_name": "PwC Turkiye",
       "pages": 22,
       "with_content": 22,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:11:56.102113+00:00"
+      "last_fetch": "2026-09-22T19:51:55.976494+00:00"
     },
     {
       "source_name": "Roedl Turkiye",
@@ -454,17 +432,17 @@
     },
     {
       "source_name": "TURMOB",
-      "pages": 56,
-      "with_content": 56,
+      "pages": 112,
+      "with_content": 111,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:07:18.356058+00:00"
+      "last_fetch": "2026-09-22T19:47:33.722750+00:00"
     },
     {
       "source_name": "Vergi Merkezi",
-      "pages": 54,
-      "with_content": 54,
+      "pages": 102,
+      "with_content": 102,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:24:33.773529+00:00"
+      "last_fetch": "2026-09-22T20:01:54.686451+00:00"
     },
     {
       "source_name": "Verginet",
@@ -475,17 +453,17 @@
     },
     {
       "source_name": "Vergiport",
-      "pages": 32,
-      "with_content": 31,
+      "pages": 91,
+      "with_content": 90,
       "latest_year": 2026,
-      "last_fetch": "2026-09-21T22:18:37.701176+00:00"
+      "last_fetch": "2026-09-22T19:56:07.156615+00:00"
     },
     {
       "source_name": "Vertax",
-      "pages": 61,
-      "with_content": 60,
+      "pages": 120,
+      "with_content": 120,
       "latest_year": 2027,
-      "last_fetch": "2026-09-21T22:36:16.318816+00:00"
+      "last_fetch": "2026-09-22T20:13:27.537310+00:00"
     }
   ]
 }

@@ -33,18 +33,29 @@ TRUSTED_SOURCES = (
     TrustedSource("PKF Istanbul", ("pkf.com.tr",), 2),
     TrustedSource("Roedl Turkiye", ("roedl.com.tr",), 2),
     TrustedSource("Vergi Merkezi", ("vergimerkezi.com.tr",), 2),
-    TrustedSource("Muhasebe Bilenler", ("muhasebebilenler.com",), 2,
+    TrustedSource("Muhasebe Bilenler", ("muhasebebilenler.com", "musavirlerkulubu.com.tr"), 2,
                   ("forum", "sorular", "yorum")),
     TrustedSource("Muhasebe News", ("muhasebenews.com",), 2),
     TrustedSource("Vertax", ("vertax.com.tr",), 2),
     TrustedSource("DergiPark", ("dergipark.org.tr",), 3),
     TrustedSource("Verginet", ("verginet.net",), 2),
     TrustedSource("Denge Akademi", ("dengeakademi.com",), 2),
-    TrustedSource("Ozdogrular", ("ozdogrular.com", "ozdogrular.com.tr"), 2),
-    # Kullanıcının eklediği araç/parametre sitesi: hesaplama araçları ve Parametre Merkezi
-    TrustedSource("Musavirler Kulubu", ("musavirlerkulubu.com.tr",), 2,
-                  ("forum", "yorum", "giris", "uye"),
-                  seed_urls=("https://musavirlerkulubu.com.tr/araclar",)),
+    TrustedSource("OZDOGRULAR", ("ozdogrular.com", "ozdogrular.com.tr"), 2),
+    
+    # UAT test domainleri artık production trusted source'ta yok -- madde 19:
+    # test-only config / fixture registry kullanılmalı. Müşavirler Kulübü
+    # artık trusted professional kaynağının parçası olarak musavirlerkulubu.com.tr eklenmiştir.
+    
+    # KAIZEN — BÜYÜK İŞ EMRİ #2, Faz 1 denetim bulgusu (madde 18): SGK/Resmî Gazete/
+    # Mevzuat Bilgi Sistemi resmî domain'leri EKSİKTİ -- bir vergi+SGK asistanı için bu,
+    # SGK/mevzuat sorularının hiçbir zaman TEK kaynakla (priority==1) "verified"
+    # olamaması, her zaman >=2 bağımsız İKİNCİL kaynak gerektirmesi anlamına geliyordu.
+    # SONA EKLENDİ (tuple ortasına değil) -- `tests/test_accounting_sources.py`'nin
+    # `TRUSTED_SOURCES[2]` INDEKS-TABANLI referansını KIRMAMAK için (madde 61: mevcut
+    # testler bozulmayacak).
+    TrustedSource("Sosyal Guvenlik Kurumu", ("sgk.gov.tr",), 1),
+    TrustedSource("Resmi Gazete", ("resmigazete.gov.tr",), 1),
+    TrustedSource("Mevzuat Bilgi Sistemi", ("mevzuat.gov.tr",), 1),
 )
 
 

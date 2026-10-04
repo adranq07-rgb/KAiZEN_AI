@@ -1,3 +1,6 @@
+> INACTIVE LEGACY — 2026-09-30: Cognee is removed from Kaizen-1.
+> The following documents historical integration, not current setup instructions.
+
 # Cognee Hafıza Entegrasyonu
 
 Modül: `memory/cognee_memory.py` · Test: `tests/test_cognee_memory.py` · Ayar: `config/Kaizen.json -> memory.cognee`

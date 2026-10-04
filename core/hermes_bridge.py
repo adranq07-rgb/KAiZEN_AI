@@ -13,10 +13,10 @@ from accounting.source_registry import trusted_source_for_url
 
 
 class HermesBridge:
-    def __init__(self):
+    def __init__(self, log_dir=None):
         self.project_dir = Path(__file__).resolve().parent.parent
         self.config = ConfigManager()
-        self.logger = KaizenLogger()
+        self.logger = KaizenLogger(log_dir=log_dir)
 
     def is_ready(self):
         provider = self.config.get(

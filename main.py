@@ -37,6 +37,8 @@ def main():
             )
             print(f"Kaizen: Beklenmeyen bir hata olustu: {error}")
 
+    Kaizen.shutdown()
+
 
 if __name__ == "__main__":
     main()

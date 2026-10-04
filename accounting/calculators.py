@@ -7,6 +7,7 @@ yüzünden yanlış sonuç üretilmez; güncel değerler `facts` kayıt defterin
 import re
 from decimal import Decimal, ROUND_HALF_UP, getcontext
 
+from accounting.natural_math import natural_math_answer
 from core.text_tr import fold_tr, format_number_tr, format_tl, parse_tr_number
 
 getcontext().prec = 40
@@ -387,6 +388,8 @@ class CalculatorRouter:
                 return oran
             if "gecikme zammi" in folded and info["amounts"]:
                 return self._gecikme(info)
+            if self._is_trade_discount(info):
+                return self._trade_discount(info)
             if "iskonto" in folded and info["amounts"]:
                 return self._iskonto(info)
             if any(w in folded for w in ("kredi", "taksit", "anuite")) and info["amounts"] and (
@@ -417,9 +420,38 @@ class CalculatorRouter:
                 or re.search(r"(?:nin|nun|in|un|'i)\s*(?:%|yuzde)", folded)
             ):
                 return self._percent(info)
+            natural = natural_math_answer(question, info["amounts"])
+            if natural:
+                return natural
         except CalculationError as exc:
             return f"Kaizen: Hesaplama yapılamadı: {exc}"
         return None
+
+    @staticmethod
+    def _is_trade_discount(info):
+        """'Yüzde 15 iskonto uyguladığım 2000 TL'lik ürün': vadesiz, oranı verilmiş, senet/
+        bono/vade kavramı olmayan iskonto bir TİCARİ İNDİRİMDİR (tutar - yüzde). Vadeli/senetli
+        iskonto (iç/dış iskonto) eski hesaplayıcıda kalır -- KÖK NEDEN: eskiden 'iskonto'
+        kelimesi her durumda vade/faiz hesaplayıcısına yönlendiriliyordu."""
+        folded = info["folded"]
+        if "iskonto" not in folded or not info["amounts"] or not info["rates"]:
+            return False
+        if info["days"] or info["months"] or info["years"] or info["rate_period"]:
+            return False
+        return not any(w in folded for w in (
+            "senet", "vade", "nominal", "bono", "police", "cek", "dis iskonto", "ic iskonto",
+            "ticari iskonto", "banka",
+        ))
+
+    @staticmethod
+    def _trade_discount(info):
+        amount, rate = info["amounts"][0], info["rates"][0]
+        part = percent_of(amount, rate)
+        folded = info["folded"]
+        if any(w in folded for w in ("iskonto tutari", "indirim tutari", "ne kadar iskonto", "kac tl iskonto", "kac tl indirim")):
+            return f"SONUÇ: {format_tl(part)}\nHESAP: {format_tl(amount)} x %{rate} / 100"
+        return (f"SONUÇ: {format_tl(amount - part)}\n"
+                f"HESAP: {format_tl(amount)} - %{rate} = {format_tl(amount)} - {format_tl(part)}")
 
     @staticmethod
     def _iban(text):
@@ -440,7 +472,7 @@ class CalculatorRouter:
         folded = info["folded"]
         kdv_rate, stopaj_rate = self._rate_after(folded, "kdv"), self._rate_after(folded, "stopaj")
         if kdv_rate is None or stopaj_rate is None:
-            return "Kaizen: Makbuz için KDV ve stopaj oranlarını ayrı ayrı yazın (ör. 'KDV %20, stopaj %20')."
+            return "Kaizen: Makbuz için KDV ve stopaj oranlarını ayrı ayrı yazın."
         amount = info["amounts"][0]
         from_net = _net_given(folded)
         r = serbest_meslek_makbuzu_netten(amount, kdv_rate, stopaj_rate) if from_net else serbest_meslek_makbuzu(amount, kdv_rate, stopaj_rate)
@@ -534,7 +566,7 @@ class CalculatorRouter:
 
     def _gecikme(self, info):
         if not info["rates"]:
-            return "Kaizen: Gecikme zammı oranını belirtmediniz (ör. aylık %4,5); güncel oran değişebileceği için tahmin etmem."
+            return "Kaizen: Gecikme zammı oranını belirtmediniz; güncel oran değişebileceği için tahmin etmem."
         rate, amount = info["rates"][0], info["amounts"][0]
         note = ""
         months = info["months"]
@@ -620,7 +652,7 @@ class CalculatorRouter:
     @staticmethod
     def _kdv(info):
         if not info["rates"]:
-            return "Kaizen: KDV oranını belirtmediniz (ör. %20). Oranı uydurmadan hesaplayamam."
+            return "Kaizen: KDV oranını belirtmediniz. Oranı uydurmadan hesaplayamam."
         rate, amount = info["rates"][0], info["amounts"][0]
         included = "dahil" in info["folded"] and "haric" not in info["folded"]
         result = kdv(amount, rate, included=included)
@@ -636,7 +668,7 @@ class CalculatorRouter:
     @staticmethod
     def _tevkifat(info):
         if not info["rates"]:
-            return "Kaizen: KDV oranını belirtmediniz (ör. %20)."
+            return "Kaizen: KDV oranını belirtmediniz."
         num, den = info["fraction"]
         result = kdv_tevkifat(info["amounts"][0], info["rates"][0], num, den)
         return (
@@ -649,7 +681,7 @@ class CalculatorRouter:
     @staticmethod
     def _stopaj(info):
         if not info["rates"]:
-            return "Kaizen: Stopaj oranını belirtmediniz (ör. %20). Oranı uydurmadan hesaplayamam."
+            return "Kaizen: Stopaj oranını belirtmediniz. Oranı uydurmadan hesaplayamam."
         net = _net_given(info["folded"])
         result = stopaj(info["amounts"][0], info["rates"][0], amount_is_net=net)
         return (f"SONUÇ: Brüt {format_tl(result['brut'])}, stopaj {format_tl(result['stopaj'])}, "

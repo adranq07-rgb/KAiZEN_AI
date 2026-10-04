@@ -25,6 +25,17 @@ class JournalLine:
     debit: Decimal = ZERO
     credit: Decimal = ZERO
     memo: str = ""
+    source_reference: str = ""
+
+    def __post_init__(self):
+        for name in ("debit", "credit"):
+            value = getattr(self, name)
+            if isinstance(value, (float, bool)):
+                raise JournalError("Para tutarı float olamaz; Decimal kullanın")
+            value = money(value)
+            if not value.is_finite():
+                raise JournalError("Para tutarı sonlu olmalı")
+            setattr(self, name, value)
 
 
 @dataclass
@@ -35,12 +46,16 @@ class JournalEntry:
     notes: list = field(default_factory=list)
 
     def debit(self, account, amount, memo=""):
+        if isinstance(amount, (float, bool)):
+            raise JournalError("Para tutarı float olamaz; Decimal kullanın")
         amount = money(amount)
         if amount:
             self.lines.append(JournalLine(account, debit=amount, memo=memo))
         return self
 
     def credit(self, account, amount, memo=""):
+        if isinstance(amount, (float, bool)):
+            raise JournalError("Para tutarı float olamaz; Decimal kullanın")
         amount = money(amount)
         if amount:
             self.lines.append(JournalLine(account, credit=amount, memo=memo))
@@ -59,6 +74,9 @@ class JournalEntry:
         if len(self.lines) < 2:
             raise JournalError("Yevmiye kaydı en az iki satır içermeli")
         for line in self.lines:
+            if any(not isinstance(v, Decimal) or not v.is_finite() or v != money(v)
+                   for v in (line.debit, line.credit)):
+                raise JournalError("Tutarlar sonlu, kuruş hassasiyetinde Decimal olmalı")
             if line.account not in chart:
                 raise JournalError(f"Hesap planında {line.account} kodlu hesap yok")
             if (line.debit > 0) == (line.credit > 0):
@@ -73,6 +91,7 @@ class JournalEntry:
 
     def render(self, chart=None, width=44):
         chart = chart or ChartOfAccounts()
+        self.validate(chart)
         header = f"{'HESAP':<{width}}{'BORÇ':>16}{'ALACAK':>16}"
         rows = [header]
         for line in sorted(self.lines, key=lambda l: (l.credit > 0)):
@@ -88,6 +107,17 @@ class JournalEntry:
         if self.notes:
             text += "\nNOT: " + " ".join(self.notes)
         return text
+
+    def to_dict(self, chart=None):
+        chart = chart or ChartOfAccounts()
+        self.validate(chart)
+        return {"description": self.description, "status": "PROPOSED",
+                "entry_date": self.entry_date.isoformat() if self.entry_date else None,
+                "lines": [{"account_code": l.account, "account_name": chart.get(l.account).clean_name(),
+                           "debit": str(l.debit), "credit": str(l.credit),
+                           "rationale": l.memo, "source_reference": l.source_reference} for l in self.lines],
+                "debit_total": str(self.total_debit), "credit_total": str(self.total_credit),
+                "notes": self.notes}
 
 
 # --- Şablonlar --------------------------------------------------------------------
@@ -291,12 +321,18 @@ def _mode(folded, default="vadeli"):
 class JournalRouter:
     """'10.000 TL + %20 KDV ile mal alındı, yevmiye kaydı nedir?' türü soruları cevaplar."""
 
-    def __init__(self, chart=None):
+    def __init__(self, chart=None, principle_registry=None):
         self.chart = chart or ChartOfAccounts()
+        self.principle_registry = principle_registry
+        self.last_result = None
 
     def answer(self, question):
+        self.last_result = None
         info = _extract(question)
         folded = info["folded"]
+        event_answer = self._event_answer(question, info)
+        if event_answer is not None:
+            return event_answer
         if not any(k in folded for k in ("yevmiye", "muhasebe kayd", "kaydi", "kayit", "hangi hesap", "borc", "alacak")):
             return None
         amounts, rates = info["amounts"], info["rates"]
@@ -308,7 +344,11 @@ class JournalRouter:
             return None
         if isinstance(entry, str):
             return entry
-        entry.validate(self.chart)
+        try:
+            entry.validate(self.chart)
+        except JournalError as exc:
+            self.last_result = {"status": "INVALID", "invariant_failures": [str(exc)]}
+            return f"Kaizen: Kayıt oluşturulamadı: {exc}"
         uses_kdv = any(line.account in ("191", "391") for line in entry.lines)
         basis = ("Tek Düzen Hesap Planı ve KDV Kanunu uygulaması (oran soruda verildiği gibi kullanıldı)."
                  if uses_kdv else "Tek Düzen Hesap Planı.")
@@ -323,7 +363,7 @@ class JournalRouter:
 
     def _build(self, folded, amounts, rates, info):
         need_amount = "Kaizen: Tutarı belirtmediniz; kaydı tutar uydurmadan oluşturamam."
-        need_rate = "Kaizen: KDV oranını belirtmediniz (ör. %20); oranı uydurmadan kayıt oluşturamam."
+        need_rate = "Kaizen: KDV oranını belirtmediniz; oranı uydurmadan kayıt oluşturamam."
         if "iade" in folded and any(k in folded for k in ("alis", "alim", "alinan")) and "satis" not in folded:
             if not amounts:
                 return need_amount
@@ -398,3 +438,166 @@ class JournalRouter:
         if "kredi" in folded and any(w in folded for w in ("kullan", "cekil", "alindi")):
             return bank_loan(amounts[0], long_term="uzun vadeli" in folded) if amounts else need_amount
         return None
+
+
+    def _event_answer(self, question, info):
+        """Resolve a single stated economic event before the legacy keyword router."""
+        text = info['folded']
+        event = None
+        acquire = bool(re.search(r"\b(?:aldim|aldik|aldi|alindi|alinmis|alim[ia]?|alis|aldigim|satin al\w*)\b", text))
+        negative = bool(re.search(r"\b(?:almad\w*|alinmad\w*|almay\w*)\b", text))
+        deposit = bool(re.search(r"\byatir\w*", text)) and 'banka' in text and 'kasa' in text
+        collection_event = bool(re.search(r"\b(?:tahsil\w*|tahsilat)\b", text))
+        payment_event = bool(re.search(r"\b(?:odedim|odedik|odendi|odeme|oduyorum)\b", text))
+        goods = bool(re.search(r"\b(?:mal[ıi]?|mallar\w*|emtia|stok\w*)\b", text))
+        asset = asset_account_for(text)
+        expense = bool(re.search(r"\b(?:gider\w*|elektrik|kira|hizmet|su faturasi)\b", text))
+        amounts = _extract(re.sub(r"\b7/[ab]\b", " ", question, flags=re.I))['amounts']
+        # Keep unquantified conceptual explanations in the existing source-backed solver.
+        if not amounts:
+            return None
+        if re.search(r"\b(?:ortak\w*|kredi)\b", text) and acquire and not goods and not asset:
+            return None  # Existing financing templates, not an acquisition of goods/services.
+        if deposit:
+            event = 'cash_deposit'
+        elif collection_event:
+            event = 'customer_collection' if re.search(r"\b(?:musteri\w*|alici\w*)\b", text) else 'unknown_collection'
+        elif payment_event and re.search(r"\b(?:satici\w*|tedarikci\w*)\b", text) and not acquire and not expense:
+            event = 'vendor_payment'
+        elif acquire and not negative and 'iade' not in text:
+            if re.search(r"\b(?:satmak|yeniden satis|satis amaciyla)\b", text):
+                event = 'purchase'
+            elif goods and asset:
+                event = 'ambiguous_acquisition'
+            elif goods:
+                event = 'purchase'
+            elif asset:
+                event = 'asset_purchase'
+            elif expense:
+                event = 'expense'
+            else:
+                event = 'ambiguous_acquisition'
+        elif expense and any(w in text for w in ('fatura', 'odedim', 'odendi')) and not any(w in text for w in ('amortisman', 'kisit', 'indir', 'stopaj', 'ne kadar', 'nedir')):
+            event = 'expense'
+        elif payment_event and 'borc' in text and not any(w in text for w in ('ortak', 'kredi', 'vergi', 'sgk')):
+            event = 'unknown_payment'
+        if event is None:
+            return None
+        state = {'event':event,'status':'CLARIFICATION','known_facts':{},'missing_information':[],
+                 'assumptions':[], 'principles':[], 'invariant_failures':[], 'journal':None,
+                 'knowledge_types':{'stable':['double_entry','TDHP'], 'context':['event','payment','amount_basis'],
+                                    'current':[]}}
+        self.last_result = state
+        def ask(fact, message):
+            state['missing_information'] = [fact]
+            return 'Kaizen: '+message
+        negated_event = (event == 'cash_deposit' and re.search(r"\byatir(?:ma|ilma|may)\w*", text)
+                         or event in ('customer_collection', 'unknown_collection') and re.search(r"\btahsil\s+(?:etme|edilme|edeme)\w*", text)
+                         or event in ('vendor_payment', 'unknown_payment') and re.search(r"\b(?:odemedi|odenmedi|odemeye)\w*", text))
+        if negated_event:
+            return ask('event_occurred', 'İşlemin gerçekleşmediğini belirtiyorsunuz. Gerçekleşen işlem nedir? Gerçekleşmemiş ödeme/tahsilat için kayıt oluşturmuyorum.')
+        if event == 'cash_deposit' and not ('kasadan' in text and 'bankaya' in text):
+            return ask('transfer_direction', 'Bu şablon kasadan bankaya yatırmayı destekliyor. Paranın hangi hesaptan hangi hesaba geçtiğini netleştirin; ters yönde kayıt oluşturamam.')
+        if event == 'ambiguous_acquisition':
+            return ask('transaction_nature','Alınan şey satılacak ticari mal mı, işletmede kullanılacak demirbaş mı, yoksa hizmet/gider mi?')
+        if event in ('unknown_payment','unknown_collection'):
+            return ask('counterparty_role','İşlem müşteriden alacak tahsilatı mı, satıcıya borç ödemesi mi? Karşı tarafı belirtin.')
+        if len(amounts) != 1:
+            return ask('single_amount','Bu tek işlem için esas alınacak tutar hangisi? Birden fazla tutar veya sayı var.')
+        amount=amounts[0]
+        if re.search(r"-\s*\d", text) or amount<=0:
+            state.update(status='INVALID',invariant_failures=['non_positive_amount'])
+            return 'Kaizen: Kayıt oluşturulamadı: işlem tutarı pozitif olmalı.'
+        state['known_facts']['amount']=str(amount)
+        if any(w in text for w in ('kismen', 'bir kismini', 'taksit', 'cek ile', 'senet', 'kredi kart')):
+            return ask('settlement_details','Kısmi ödeme, taksit, çek/senet veya kart için ödeme dağılımı ve ilgili hesap bilgilerini belirtin; tek ödeme hesabı varsayamam.')
+        if any(w in text for w in ('gecen ay', 'gelecek ay', 'gecen yil', 'gelecek yil')):
+            return ask('document_period','Belge tarihi ve malın teslim/hizmetin ait olduğu dönem nedir? Ödeme tarihi tek başına kayıt dönemini belirlemez.')
+        taxable = event in ('purchase','asset_purchase','expense')
+        rates=info['rates']
+        if taxable and not rates:
+            state['knowledge_types']['current']=['applicable_VAT_rate']
+            return ask('vat_rate','KDV oranını belirtmediniz; belgede yer alan KDV oranı nedir? Oranı doğrulamadan kayıt oluşturamam.')
+        if taxable and (len(rates)!=1 or rates[0]<0 or rates[0]>100):
+            return ask('single_vat_rate','Bu işlem için tek ve geçerli KDV oranını belirtin; farklı oranlı kalemler ayrı ele alınmalı.')
+        if taxable and any(w in text for w in ('tevkifat','istisna','muaf','indirilemez','indirilemeyen','binek','otomobil')):
+            state['knowledge_types']['current']=['VAT_deduction_or_special_treatment']
+            return ask('verified_tax_treatment','Bu işlemde KDV indirimi/istisna/tevkifat koşulları doğrulanmalı. Belgedeki uygulama ve işletmenin kullanım amacı nedir? Otomatik 191 kaydı oluşturmuyorum.')
+        cash=bool(re.search(r"\b(?:nakit|kasadan|kasaya|cash)\b",text))
+        bank=bool(re.search(r"\b(?:banka\w*|havale\w*|eft)\b",text))
+        deferred=bool(re.search(r"\b(?:vadeli|veresiye|odemedi\w*|odenmedi\w*)\b",text))
+        if event!='cash_deposit':
+            if cash and bank or deferred and (cash or bank or 'pesin' in text):
+                return ask('conflicting_payment','Ödeme bilgileri çelişiyor. İşlem vadeli mi, nakit mi, banka üzerinden mi?')
+            if not cash and not bank and not deferred:
+                return ask('payment_method','Ödeme nakit mi banka üzerinden mi yapıldı?' if 'pesin' in text or not taxable else 'Alış vadeli mi, nakit mi, banka üzerinden mi ödendi?')
+            if deferred and not taxable:
+                return ask('payment_method','Borç/alacak kapatma işlemi gerçekleşti mi? Tahsilat/ödeme nakit mi banka üzerinden mi?')
+        mode='nakit' if cash else 'banka' if bank else 'vadeli'
+        state['known_facts']['payment']=mode if event!='cash_deposit' else 'cash_to_bank'
+        included = 'kdv dahil' in text
+        excluded = bool(re.search(r"kdv haric|matrah|\+\s*(?:kdv|%)", text))
+        if taxable and (included == excluded):
+            return ask('amount_basis','Verdiğiniz tutar KDV dahil toplam mı, KDV hariç matrah mı?')
+        if event=='expense' and not ('7/a' in text and any(w in text for w in ('genel yonetim','yonetim gider','idari'))):
+            return ask('expense_function','Giderin işletmedeki amacı ve maliyet yöntemi nedir (üretim, pazarlama, genel yönetim; 7/A veya 7/B)? Otomatik 770 seçemem.')
+        state['principles']=self._accounting_principles()
+        if not state['principles']:
+            return ask('validated_principles','Yerel muhasebe ilkelerinin kaynağı doğrulanamadı; kayıt önerisini oluşturamıyorum.')
+        try:
+            tax=kdv(amount,rates[0],included='kdv dahil' in text) if taxable else None
+            if taxable:
+                state['known_facts'].update(vat_rate=str(rates[0]),net=str(tax['matrah']),vat=str(tax['kdv']),gross=str(tax['toplam']),rate_source='user_document_input')
+                constructors={'purchase':purchase_goods,'asset_purchase':fixed_asset_purchase,'expense':expense_invoice}
+                kwargs={'account':asset} if event=='asset_purchase' else {}
+                entry=constructors[event](tax['matrah'],rates[0],mode=mode,**kwargs)
+                # Use the original gross/net split: reverse VAT must not re-round the tax twice.
+                for line in entry.lines:
+                    if line.account=='191':line.debit=tax['kdv']
+                    elif line.credit:line.credit=tax['toplam']
+                if tax['matrah']+tax['kdv']!=tax['toplam']:raise JournalError('KDV + matrah toplamla eşleşmedi')
+                if entry.total_debit!=tax['toplam']:raise JournalError('Kayıt toplamı belge toplamıyla eşleşmedi')
+            else:
+                entry={'cash_deposit':lambda:cash_deposit(amount),'customer_collection':lambda:collection(amount,mode),'vendor_payment':lambda:payment(amount,mode)}[event]()
+            source='knowledge/muhasebe_kayit_sablonlari.json'
+            reasons={'purchase':'Stok artar; ödeme hesabı veya satıcı borcu karşılık oluşturur.',
+                     'asset_purchase':'İşletmede kullanılan sabit kıymet ilgili varlık hesabında izlenir.',
+                     'expense':'Belirtilen 7/A genel yönetim gideri giderleştirilir.',
+                     'cash_deposit':'Bankadaki varlık artar, kasadaki varlık azalır; gelir/gider veya mal alışı oluşmaz.',
+                     'customer_collection':'Kasa/banka artar; daha önce doğmuş müşteri alacağı kapanır. Yeni satış veya KDV oluşmaz.',
+                     'vendor_payment':'Satıcı borcu azalır; kasa/banka azalır. Yeni mal alışı veya KDV oluşmaz.'}
+            for line in entry.lines:
+                line.memo=reasons[event];line.source_reference=source
+            entry.validate(self.chart)
+            settlement = _SETTLEMENT[mode] or '320'
+            expected = ({'purchase':({'153','191'},{settlement}),
+                         'asset_purchase':({asset,'191'},{settlement}),
+                         'expense':({'770','191'},{settlement})}[event] if taxable else
+                        {'cash_deposit':({'102'},{'100'}),
+                         'customer_collection':({_SETTLEMENT[mode]},{'120'}),
+                         'vendor_payment':({'320'},{_SETTLEMENT[mode]})}[event])
+            if any(line.account not in expected[0 if line.debit else 1] for line in entry.lines):
+                raise JournalError('Hesap yönü işlem türü ve ödeme bilgisiyle uyuşmuyor')
+            state.update(status='VALID',journal=entry.to_dict(self.chart),invariants={'balanced':True,'positive_money':True,'chart_accounts':True,'account_side_compatible':True,'vat_reconciled':True if taxable else None})
+            explanation='OLAY: '+entry.description+'\nGEREKÇE: '+reasons[event]
+            if taxable:explanation+='\nHESAP: '+format_tl(tax['matrah'])+' + '+format_tl(tax['kdv'])+' KDV = '+format_tl(tax['toplam'])
+            explanation+='\n'+entry.render(self.chart)
+            if state['assumptions']:explanation+='\nVARSAYIM: '+' '.join(state['assumptions'])
+            explanation+='\nİLKELER: '+', '.join(p['name'] for p in state['principles'])
+            explanation+='\nKAYNAK: '+source+'; config/tdhp.json'
+            explanation+='\nNOT: Bu bir kayıt önerisidir; belge tarihi/numarası ve '+('KDV indirim koşulları ' if taxable else 'işlemin belgesi ')+'fiili kayıt öncesi kontrol edilmelidir.'
+            return 'SONUÇ:\n'+explanation
+        except (JournalError,CalculationError,ArithmeticError,ValueError) as exc:
+            state.update(status='INVALID',invariant_failures=[str(exc)],journal=None)
+            return 'Kaizen: Kayıt oluşturulamadı: '+str(exc)
+
+    def _accounting_principles(self):
+        from memory.principle_registry import PrincipleRegistry
+        if self.principle_registry is not None:
+            rows=[self.principle_registry.get(pid) for pid in ('borc_alacak','hesap_siniflandirma')]
+        else:
+            import json
+            from learning.principle_seed import PRINCIPLES_SEED_PATH
+            rows=[p for p in json.loads(PRINCIPLES_SEED_PATH.read_text(encoding='utf8')) if p['principle_id'] in ('borc_alacak','hesap_siniflandirma')]
+        if len(rows)!=2 or any(not r or r.get('status','active')!='active' or not r.get('source') for r in rows):return []
+        return [PrincipleRegistry.accounting_contract(r) for r in rows]

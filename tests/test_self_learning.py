@@ -5,8 +5,10 @@ from pathlib import Path
 from accounting.facts import FactRegistry
 from accounting.site_store import SiteStore
 from core.kaizen_brain import KaizenBrain
+from memory.brain_manager import BrainManager
 from memory.knowledge_cards import KnowledgeCardStore
 from memory.learning_store import LearningStore
+from tests.doubles import NullExperienceMemory
 
 
 class CountingAgent:
@@ -76,46 +78,89 @@ def test_knowledge_card_store_pending_confirm_and_contradiction():
     print("KAIZEN BILGI KARTI TESTI: BASARILI")
 
 
+def test_knowledge_card_store_same_source_repeat_does_not_confirm():
+    """DÜZELTME (2026-09-23): Kaizen şu an TEK bir araştırma sağlayıcısı (Hermes) kullanıyor.
+    Aynı sağlayıcının (aynı `source_label`) aynı soruyu ikinci kez benzer şekilde cevaplaması
+    "kendi kendini tekrar etmek"tir, bağımsız bir ikinci doğrulama DEĞİLDİR -- eskiden bu durum
+    da kartı kendiliğinden 'doğrulanmış'a yükseltiyordu ("tekrar edilmek, doğrulanmak değildir"
+    eleştirisi). Artık yalnızca GERÇEKTEN farklı bir `source_label` ile gelen ikinci benzer
+    cevap kartı doğrular."""
+    with tempfile.TemporaryDirectory() as folder:
+        cards = KnowledgeCardStore(Path(folder) / "cards.sqlite3")
+        same_source = "Kaizen araştırma zinciri (şu an Hermes; yalnız işçi, sağlayıcı değişebilir)"
+
+        status, hits = cards.remember(
+            "KDV oranı nedir", "accounting", "Genel KDV oranı yüzde yirmidir.",
+            source_label=same_source, topic="kdv",
+        )
+        assert status == "pending" and hits == 1
+
+        status, hits = cards.remember(
+            "KDV oranı nedir", "accounting", "Genel KDV oranı yüzde yirmi olarak uygulanır.",
+            source_label=same_source, topic="kdv",
+        )
+        assert status == "pending" and hits == 2  # HALA beklemede -- tek sağlayıcı kendini onaylayamaz
+
+        # gerçekten bağımsız (farklı) bir kaynak aynı şeyi doğrularsa kart artık doğrulanır
+        status, hits = cards.remember(
+            "KDV oranı nedir", "accounting", "Genel KDV oranı yüzde yirmi şeklinde uygulanmaktadır.",
+            source_label="ikinci bağımsız kaynak (test)", topic="kdv",
+        )
+        assert status == "confirmed" and hits == 3
+
+    print("KAIZEN AYNI KAYNAK TEKRARI ONAYLAMAZ TESTI: BASARILI")
+
+
 def test_brain_learns_from_research_and_avoids_repeat_calls():
     with tempfile.TemporaryDirectory() as folder:
         store = LearningStore(Path(folder) / "learning.sqlite3")
         cards = KnowledgeCardStore(Path(folder) / "learning.sqlite3")
         agent = CountingAgent("ARAŞTIRMA SONUCU: Bu konu hakkında ayrıntılı bilgi budur.")
         brain = KaizenBrain(
-            Offline(), agent, learning_store=store, cards=cards,
-            exam_candidates_path=Path(folder) / "auto_exam_candidates.jsonl",
+            Offline(), agent,
+            brain_manager=BrainManager(
+                learning_store=store, cards=cards,
+                exam_candidates_path=Path(folder) / "auto_exam_candidates.jsonl",
+                experience_memory=NullExperienceMemory(), log_dir=folder,
+            ),
         )
 
         question = "muhasebe: reeskont uygulaması nasıl işler"
 
-        first = brain.answer(question)
+        # Araştırmadan öğrenme sınırı: sabit bilgi sorusu kendiliğinden araştırma
+        # başlatmaz. Gerçek araştırma/öğrenme yolunu açıkça çağır, tekrar kullanımını
+        # normal answer() üzerinden doğrula.
+        first = brain._research_once(question)
         assert first == agent.reply
-        assert brain.last_route == "research"
         assert agent.calls == 1
+        assert agent.last_question == question
 
-        # kart beklemede olarak kaydedilmiş olmalı
+        # araştırma başarılı olur olmaz -beklemede olsa bile- kalıcı hafızaya (learning_store) yazılır:
+        # "Hermes yalnız işçi", Kaizen her şeyi kendi beynine işler, onaya kadar beklemez
         card = cards.recall("reeskont uygulaması nasıl işler")
         assert card is not None and card["status"] == "pending"
+        learned_rows = store.search("reeskont uygulaması", domain="accounting")
+        assert any(r["source_type"] == "learned" for r in learned_rows)
 
-        # aynı soru ikinci kez sorulunca artık araştırmaya gitmeden hafızadan cevap verir.
-        # Bekleyen kart da kalıcı hafızaya etiketiyle yazıldığı için (BrainManager._promote_card)
-        # cevap ders notu yolundan gelebilir; önemli olan onay uyarısının korunması.
+        # aynı soru ikinci kez sorulunca artık araştırmaya gitmeden kendi hafızasından (öğrenilen
+        # bilgi, onay bekliyor notuyla) cevap verir
         second = brain.answer(question)
         assert agent.calls == 1  # tekrar araştırma yapılmadı
-        assert brain.last_route in ("memory_card_pending", "memory_extractive")
-        assert "ikinci bağımsız doğrulama görmedi" in second
+        assert brain.last_route in ("memory_extractive", "memory_grounded", "memory_card_pending")
+        assert "onay bekliyor" in second or "ikinci bağımsız doğrulama görmedi" in second
         assert "Bu konu hakkında ayrıntılı bilgi budur" in second
 
-        # mali müşavir onaylayınca kart kalıcı hafızaya (learning_store) yazılır
+        # mali müşavir onaylayınca kart doğrulanmış olarak kalıcı hafızaya yeniden yazılır
         confirmed = brain.confirm_card("reeskont uygulaması nasıl işler")
         assert confirmed is not None and confirmed["status"] == "confirmed"
         learned_rows = store.search("reeskont uygulaması", domain="accounting")
         assert any(r["source_type"] == "learned" for r in learned_rows)
 
-        # onaydan sonra artık normal (doğrulanmış) hafıza yolundan, notsuz cevap verir
+        # onaydan sonra artık notsuz (doğrulanmış) cevap verir, araştırmaya hâlâ gidilmez
         third = brain.answer(question)
         assert agent.calls == 1
-        assert "ikinci bağımsız doğrulama görmedi" not in third
+        assert "onay bekliyor" not in third and "ikinci bağımsız doğrulama görmedi" not in third
+        assert "mali müşavir onayladı" in third
 
         # altın sınav önerisi dosyasına yazılmış olmalı
         exam_file = Path(folder) / "auto_exam_candidates.jsonl"
@@ -131,6 +176,7 @@ def test_brain_cross_checks_research_against_verified_facts():
         for url, source in (
             ("https://www.alomaliye.com/2026-asgari", "Alomaliye"),
             ("https://vergimerkezi.com.tr/2026-asgari", "Vergi Merkezi"),
+            ("https://www.muhasebetr.com/2026-asgari", "Muhasebe TR"),
         ):
             sites.upsert_page(
                 url=url, source_name=source, title="2026 asgari ücret",
@@ -145,8 +191,12 @@ def test_brain_cross_checks_research_against_verified_facts():
         cards = KnowledgeCardStore(Path(folder) / "learning.sqlite3")
         agent = CountingAgent()
         brain = KaizenBrain(
-            Offline(), agent, learning_store=store, facts=facts, cards=cards,
-            exam_candidates_path=Path(folder) / "auto_exam_candidates.jsonl",
+            Offline(), agent,
+            brain_manager=BrainManager(
+                learning_store=store, facts=facts, cards=cards,
+                exam_candidates_path=Path(folder) / "auto_exam_candidates.jsonl",
+                experience_memory=NullExperienceMemory(), log_dir=folder,
+            ),
         )
 
         # "asgari ücret" kelimesi soruda geçerse doğrudan parametre defterinden (facts) cevaplanır;
@@ -164,5 +214,6 @@ def test_brain_cross_checks_research_against_verified_facts():
 
 if __name__ == "__main__":
     test_knowledge_card_store_pending_confirm_and_contradiction()
+    test_knowledge_card_store_same_source_repeat_does_not_confirm()
     test_brain_learns_from_research_and_avoids_repeat_calls()
     test_brain_cross_checks_research_against_verified_facts()

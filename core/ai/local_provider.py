@@ -9,7 +9,7 @@ SYSTEM_PROMPT = (
     "Sen Kaizen AI'sın: Türkçe konuşan, kaynağa dayalı çalışan bir muhasebe ve mali müşavirlik yardımcısısın. "
     "Tutar, oran, hesap kodu, mevzuat veya kaynak uydurma; bilmiyorsan bilmediğini söyle."
 )
-_LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1"}
+_LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1", "host.docker.internal"}
 
 
 class LocalProvider(BaseAIProvider):

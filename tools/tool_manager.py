@@ -3,10 +3,10 @@ from core.logger import KaizenLogger
 
 
 class ToolManager:
-    def __init__(self):
+    def __init__(self, log_dir=None):
         self.tools = {}
         self.security = SecurityManager()
-        self.logger = KaizenLogger()
+        self.logger = KaizenLogger(log_dir=log_dir)
 
     def register_tool(self, name, function, action="normal"):
         self.tools[name] = {

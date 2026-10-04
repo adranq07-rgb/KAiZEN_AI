@@ -21,6 +21,21 @@ _STOP = {
 }
 _TRIGGERS = ("hesap", "hesab", "kodu", "kodlari", "nedir", "ne demek", "numara", "hs.", "tdhp")
 
+# DÜZELTME (2026-09-23, iş emri "RAG v2 - Faz 1" madde 11 -- kanıt: KAIZEN_HEDEF_VE_YOL_HARITASI.md
+# bölüm 4p, Bug C2/C3): iki hesap kodunu KARŞILAŞTIRAN doğal bir soru ("760 ile 770 arasındaki
+# fark ne?", "153 ile 150 hesap arasındaki fark nedir?") iki AYRI şekilde bozuluyordu --
+# (C2) `_TRIGGERS`'ta hiçbiri geçmeyebiliyordu (soru hiç denenmiyordu) ve (C3) trigger gate'i
+# geçse bile aşağıdaki kod-regex'i yalnız İLK kodu yakalayıp (`re.search`), ikinci kodu ve asıl
+# "fark ne" sorusunu sessizce yok sayıp yine de 'SONUÇ:' (VERIFIED) etiketiyle YARIM bir cevap
+# veriyordu. Bu iki dar sabit, yalnız İKİ (ya da daha fazla) GEÇERLİ hesap kodu bir KARŞILAŞTIRMA
+# kelimesiyle birlikte geçtiğinde `_TRIGGERS` kapısını atlayıp HER İKİ hesabı da açıklamayı
+# sağlar -- tek bir hesap kodundan bahseden sıradan sorularda (ör. '191 hesap neden borç
+# çalışıyor?') hiçbir şey değişmez, o yol aynen eskisi gibi `_TRIGGERS`'a bağlı kalır.
+_COMPARISON_HINTS = ("ile", "fark", "arasinda", "karsilastir", "veya", "ya da")
+_CODE_PATTERN = re.compile(
+    r"(?<![\d.,])(\d{3})(?:\.\d+)?(?![\d,]|\.\d{3}|\s*(?:tl|lira|yil|ay|gun|%))"
+)
+
 
 @dataclass(frozen=True)
 class Account:
@@ -116,12 +131,27 @@ class ChartOfAccounts:
     def answer(self, question):
         """Hesap kodu sorularını doğrudan cevaplar; ilgisiz soruda None döner."""
         folded = fold_tr(question)
+
+        # Çoklu-kod karşılaştırma yolu (bkz. yukarıdaki DÜZELTME notu): _TRIGGERS'tan BAĞIMSIZ,
+        # yalnız 2+ GEÇERLİ (self.accounts'ta var olan) hesap kodu bir karşılaştırma kelimesiyle
+        # birlikte geçtiğinde devreye girer.
+        code_matches = [m.group(1) for m in _CODE_PATTERN.finditer(folded)]
+        valid_codes, seen = [], set()
+        for code in code_matches:
+            if code in self.accounts and code not in seen:
+                seen.add(code)
+                valid_codes.append(code)
+        if len(valid_codes) >= 2 and any(hint in folded for hint in _COMPARISON_HINTS):
+            lines = "\n".join(f"- {self.accounts[c].describe()}" for c in valid_codes)
+            return (
+                f"SONUÇ: Karşılaştırma ({len(valid_codes)} hesap):\n{lines}\n"
+                "DAYANAK: Tek Düzen Hesap Planı (Muhasebe Sistemi Uygulama Genel Tebliği)."
+            )
+
         if not any(trigger in folded for trigger in _TRIGGERS):
             return None
 
-        code_match = re.search(
-            r"(?<![\d.,])(\d{3})(?:\.\d+)?(?![\d,]|\.\d{3}|\s*(?:tl|lira|yil|ay|gun|%))", folded
-        )
+        code_match = _CODE_PATTERN.search(folded)
         if code_match:
             account = self.accounts.get(code_match.group(1))
             if account:

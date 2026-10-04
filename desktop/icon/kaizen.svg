@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <!-- KAIZEN BUYUK GELISTIRME PAKETI #1, Faz G: marka/ikon kaynagi.
+       Kavram: "K" harfi + dogrulama/zeka/duzen hissi (bkz. is emri madde 19).
+       Geometrik, font'a bagimsiz K -- kucuk boyutlarda (16x16) da net kalir.
+       Ayni geometri desktop/icon/kaizen_{16,24,32,48,256}.png ve kaizen.ico icin
+       PIL ile de uretildi (bkz. desktop/build.ps1 ustundeki uretim notu) -- burada elle
+       SVG olarak tutulur (yuksek cozunurluklu, olceklenebilir kaynak). -->
+  <rect x="0" y="0" width="100" height="100" rx="22" ry="22" fill="#1a1b2e"/>
+  <rect x="32" y="20" width="15" height="60" rx="6.2" ry="6.2" fill="#ffffff"/>
+  <g stroke="#ffffff" stroke-width="12.3" stroke-linecap="round">
+    <line x1="40" y1="50" x2="80" y2="18"/>
+    <line x1="40" y1="50" x2="80" y2="82"/>
+  </g>
+  <circle cx="40" cy="50" r="7" fill="#a6e3a1"/>
+</svg>

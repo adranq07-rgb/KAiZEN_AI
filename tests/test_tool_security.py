@@ -1,3 +1,5 @@
+import tempfile
+
 from security.security_manager import SecurityManager
 from tools.tool_manager import ToolManager
 
@@ -9,7 +11,8 @@ def test_tool_security():
     assert security.check_action("delete_file", approved=True)[0] is True
     assert security.check_action("unexpected", approved=True)[0] is False
 
-    manager = ToolManager()
+    # log_dir: gercek logs/kaizen.log'a yazmadan izole bir gecici klasor kullanilir.
+    manager = ToolManager(log_dir=tempfile.mkdtemp())
     calls = []
     manager.register_tool("unsafe", lambda: calls.append(True), action="unexpected")
     assert "engellendi" in manager.run_tool("unsafe", approved=True)

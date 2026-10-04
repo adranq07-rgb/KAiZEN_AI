@@ -5,8 +5,7 @@ Neden bu sınıf var: Öncesinde `KaizenBrain` dört ayrı hafıza deposunu (lea
 site_store, facts, cards) doğrudan kendi içinde tutuyor, aramayı (Retriever), doğrulamayı
 (FactRegistry/AccountingConsensus) ve öğrenmeyi (KnowledgeCardStore + learning_store'a
 yazma) hepsini kendi metotlarının içine gömüyordu. Bu, hafıza altyapısı değiştiğinde
-(ör. ileride yerel bir LLM ile birlikte Cognee/Graphiti/bir embedding-vector veritabanı
-eklenirse) `KaizenBrain`'in karar mantığının da değişmesi gerekeceği anlamına geliyordu.
+(ör. ileride başka bir depolama sistemi eklenirse) `KaizenBrain`'in karar mantığının da değişmesi gerekeceği anlamına geliyordu.
 
 Bu sınıf, `KaizenBrain`'in (ve ileride başka çağıranların) hafızayla ilgili HER ŞEY için
 konuştuğu TEK arayüzdür. Ama kendisi dev bir sınıf DEĞİLDİR: aşağıdaki dört sorumluluk
@@ -42,10 +41,10 @@ from accounting.retriever import Retriever
 
 _DEFAULT_EXAM_PATH = Path(__file__).resolve().parent.parent / "data" / "auto_exam_candidates.jsonl"
 
-
 class BrainManager:
     def __init__(self, learning_store=None, site_store=None, facts=None, cards=None,
-                 exam_candidates_path=None):
+                 exam_candidates_path=None, experience_memory=None, log_dir=None,
+                 reflection_store=None, registry=None):
         # --- fiziksel depolama (mevcut, ayrı sınıflar; burada yeniden yazılmaz) ---
         from memory.learning_store import LearningStore
         self.learning_store = learning_store or LearningStore()
@@ -53,10 +52,14 @@ class BrainManager:
         self.facts = facts
         self.cards = cards
         self.exam_candidates_path = Path(exam_candidates_path) if exam_candidates_path else _DEFAULT_EXAM_PATH
+        self.refl_store = reflection_store
+        self.registry = registry
 
         # --- arama / retrieval ---
         self.accounting_brain = AccountingBrain(self.learning_store)
         self.retriever = Retriever(self.learning_store, self.site_store, self.accounting_brain)
+
+        # experience_memory/log_dir remain accepted for old callers; neither is used.
 
     # ------------------------------------------------------------------
     # Arama / retrieval (accounting/retriever.py::Retriever'a ince bir cephe)
@@ -76,11 +79,12 @@ class BrainManager:
     # ------------------------------------------------------------------
     # Doğrulama / yıllık parametre defteri (accounting/facts.py::FactRegistry'a cephe)
     # ------------------------------------------------------------------
-    def verified_fact_answer(self, question):
+    def verified_fact_answer(self, question, strict=False):
         if self.facts is None:
             return None
         try:
-            return self.facts.answer(question)
+            return (self.facts.answer(question, verified_only=True) if strict
+                    else self.facts.answer(question))
         except Exception:
             return None
 
@@ -97,7 +101,16 @@ class BrainManager:
         """Araştırma zincirinin (Hermes ya da yarın onun yerini alacak başka bir sağlayıcı)
         verdiği cevabı bilgi kartı olarak süzer, süzgeçten geçmiş parametre defteriyle
         çapraz kontrol eder, kalıcı ders notuna (learning_store) işler ve -doğrulanmışsa-
-        altın sınav önerisi bırakır. Oluşan/güncellenen kartı döner (yoksa None)."""
+        altın sınav önerisi bırakır. Oluşan/güncellenen kartı döner (yoksa None).
+
+        DÜZELTME (2026-09-23): Çapraz kontrol artık kartın DURUM KARARINDAN ÖNCE çalışıyor.
+        Eskiden `_cross_check(card)` -- ki `self.cards.remember(...)` zaten "confirmed" kararını
+        verip kaydettikten SONRA çağrılıyordu -- bu turda bulunan bir çelişki, aynı turun
+        kartı "doğrulanmış"a yükseltmesini artık engelleyemiyordu (çelişki kaydı düşse bile
+        kart çoktan "confirmed" olmuştu). Artık önce `_find_contradictions(answer_text)` ile
+        metin ham haliyle (henüz kart değilken) kontrol ediliyor; bulunursa
+        `cards.remember(..., block_confirm=True)` ile bu turun kendisi doğrulamayı engelliyor,
+        ardından bulunan çelişkiler karta işleniyor."""
         if self.cards is None:
             return None
         topic = None
@@ -106,31 +119,37 @@ class BrainManager:
             topic = matched.id if matched else None
         if topic is None:
             topic = self.accounting_brain.classify_topic(question)
+        contradictions = self._find_contradictions(answer_text)
         status, _ = self.cards.remember(
             question, "accounting", answer_text,
             source_label="Kaizen araştırma zinciri (şu an Hermes; yalnız işçi, sağlayıcı değişebilir)",
-            topic=topic,
+            topic=topic, block_confirm=bool(contradictions),
         )
         card = self.cards.recall(question)
         if card is None:
             return None
-        self._cross_check(card)
+        for detail in contradictions:
+            self.cards.flag_contradiction(card["id"], detail)
         self._promote_card(card)  # beklemede olsa bile kalıcı hafızaya (etiketiyle) yazılır
         if status == "confirmed":
             self._suggest_exam_question(card)
         return card
 
-    def _cross_check(self, card):
-        """Araştırmanın söylediği rakamı, süzgeçten geçmiş parametre defteriyle çapraz kontrol eder."""
+    def _find_contradictions(self, answer_text):
+        """Verilen ham araştırma metnindeki rakamları, süzgeçten geçmiş (doğrulanmış) parametre
+        defteriyle çapraz kontrol eder ve bulunan çelişkilerin açıklama metinlerini (henüz hiçbir
+        karta işlenmeden) bir liste olarak döner -- böylece çağıran, kart durumuna karar
+        VERİLMEDEN ÖNCE bu turda bir çelişki olup olmadığını bilebilir."""
         if self.facts is None:
-            return
+            return []
         try:
             from accounting.consensus import AccountingConsensus
             from accounting.facts import FactExtractor
         except ImportError:
-            return
+            return []
+        details = []
         extractor = FactExtractor(self.facts.topics)
-        page = {"content": card["answer"], "url": "kaizen://arastirma", "effective_year": None}
+        page = {"content": answer_text, "url": "kaizen://arastirma", "effective_year": None}
         for candidate in extractor.extract(page):
             verified = next(
                 (r for r in self.facts.rows(candidate.topic)
@@ -139,11 +158,11 @@ class BrainManager:
             if verified is None:
                 continue
             if AccountingConsensus._normalize_value(verified["value"]) != AccountingConsensus._normalize_value(candidate.value):
-                self.cards.flag_contradiction(
-                    card["id"],
+                details.append(
                     f"{candidate.topic} {candidate.effective_year}: araştırma '{candidate.value}' diyor, "
-                    f"parametre defteri (doğrulanmış) '{verified['value']}' diyor.",
+                    f"parametre defteri (doğrulanmış) '{verified['value']}' diyor."
                 )
+        return details
 
     def _promote_card(self, card):
         """Kartı (beklemede olsa da, doğrulanmış olsa da) kalıcı hafızaya (learning_store) yazar/günceller."""
@@ -186,3 +205,7 @@ class BrainManager:
             self._promote_card(card)
             self._suggest_exam_question(card)
         return card
+
+    def shutdown(self, timeout=5.0):
+        """Compatibility lifecycle hook; this coordinator owns no background workers."""
+        return True

@@ -1,0 +1,166 @@
+{
+  "model_pool": {
+    "verified": [
+      {
+        "model_id": "opencode/longcat-2.5-preview-free",
+        "provider": "opencode",
+        "enabled": true,
+        "priority": 1,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 1,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/poolside/laguna-xs-2.1",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 1,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      }
+    ],
+    "candidates": [
+      {
+        "model_id": "opencode/mimo-v2.6-flash-free",
+        "provider": "opencode",
+        "enabled": true,
+        "priority": 2,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "opencode/nemotron-3.5-lightning-free",
+        "provider": "opencode",
+        "priority": 3,
+        "enabled": true,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "opencode/nemotron-3-ultra-free",
+        "provider": "opencode",
+        "priority": 4,
+        "enabled": true,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/nvidia/nemotron-3-super-120b-a12b",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 5,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 6,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/qwen/qwen3-coder-480b-a35b-instruct",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 7,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/poolside/laguna-xs-2.1",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 7,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/deepseek-ai/deepseek-v4-pro",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 8,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      },
+      {
+        "model_id": "nvidia/nvidia/nemotron-3-ultra-550b-a55b",
+        "provider": "nvidia",
+        "enabled": true,
+        "priority": 9,
+        "consecutive_failures": 0,
+        "cooldown_until": null,
+        "last_result": null,
+        "last_latency": null
+      }
+    ],
+    "provider_domains": {
+      "opencode": {
+        "name": "OpenCode Provider",
+        "failure_count": 0,
+        "cooldown_until": null,
+        "max_consecutive_failures": 3,
+        "cooldown_minutes": 30
+      },
+      "nvidia": {
+        "name": "NVIDIA Provider",
+        "failure_count": 0,
+        "cooldown_until": null,
+        "max_consecutive_failures": 5,
+        "cooldown_minutes": 60
+      }
+    },
+    "failover_reasons": {
+      "infrastructure": [
+        "429",
+        "rate_limit",
+        "quota_exceeded",
+        "usage_limit",
+        "credits_exhausted",
+        "provider_unavailable",
+        "authentication_provider_error",
+        "persistent_api_timeout",
+        "5xx_threshold"
+      ],
+      "non_failover": [
+        "pytest_failure",
+        "assertion_error",
+        "syntax_error",
+        "lint_error",
+        "application_bug",
+        "wrong_implementation",
+        "test_regression"
+      ]
+    }
+  }
+}

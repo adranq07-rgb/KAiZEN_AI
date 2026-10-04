@@ -1,3 +1,5 @@
+# INACTIVE LEGACY: removed from Kaizen-1 production on 2026-09-30.
+# Preserved for historical evidence only; no runtime caller or package dependency.
 """Kaizen için Cognee (bilgi grafiği hafızası) entegrasyonu.
 
 Doğrulanan sürüm: cognee 1.6.0 (PyPI, Python >=3.10,<3.15).
@@ -16,12 +18,16 @@ Ayrıntılı gerekçe: memory/COGNEE.md
 import asyncio
 import json
 import os
+import hashlib
+import threading
+from collections import OrderedDict
 import urllib.error
 import urllib.request
 from pathlib import Path
 from urllib.parse import urlparse
 
 from config.config_manager import ConfigManager
+from security.redaction import redact
 
 _LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
@@ -56,6 +62,8 @@ class CogneeMemory:
         self.settings = {**DEFAULTS, **settings}
         self.storage_dir = Path(storage_dir) if storage_dir else project_dir / "data" / "cognee"
         self._cognee = None
+        self._write_lock = threading.Lock()
+        self._written_keys = OrderedDict()
 
     # --- yapılandırma -------------------------------------------------------
 
@@ -89,6 +97,8 @@ class CogneeMemory:
             # Ollama doğrulamaz ama cognee boş anahtarda LLMAPIKeyNotSetError verir.
             "LLM_API_KEY": "ollama",
             "LLM_TEMPERATURE": "0.0",
+            "LLM_MAX_COMPLETION_TOKENS": str(s.get("max_completion_tokens", 2048)),
+            "COGNEE_LOGS_DIR": str((self.storage_dir / "logs").resolve()),
             "EMBEDDING_PROVIDER": "ollama",
             "EMBEDDING_MODEL": s["embedding_model"],
             "EMBEDDING_ENDPOINT": s["embedding_endpoint"],
@@ -106,12 +116,22 @@ class CogneeMemory:
         env = self.build_env()
         # `import cognee` çalışma dizinindeki .env'i override=True ile yükler;
         # Kaizen ayarlarını içe aktarmadan sonra tekrar uygulayarak onu geçersiz kılarız.
-        cognee.config.set_llm_config({
+        llm_config = {
             "llm_provider": env["LLM_PROVIDER"],
             "llm_model": env["LLM_MODEL"],
             "llm_endpoint": env["LLM_ENDPOINT"],
             "llm_api_key": env["LLM_API_KEY"],
-        })
+            "llm_temperature": 0.0,
+            "llm_max_completion_tokens": int(env["LLM_MAX_COMPLETION_TOKENS"]),
+            "structured_output_framework": "litellm_native",
+        }
+        # All stages stay local even if another application's environment selects a cloud model.
+        for stage in ("extraction", "summarization", "query"):
+            llm_config.update({f"llm_{stage}_provider": "ollama",
+                f"llm_{stage}_model": env["LLM_MODEL"],
+                f"llm_{stage}_endpoint": env["LLM_ENDPOINT"],
+                f"llm_{stage}_api_key": "ollama"})
+        cognee.config.set_llm_config(llm_config)
         cognee.config.set_embedding_config({
             "embedding_provider": env["EMBEDDING_PROVIDER"],
             "embedding_model": env["EMBEDDING_MODEL"],
@@ -177,6 +197,8 @@ class CogneeMemory:
             query_type=cognee.SearchType[self.settings["recall_type"]],
             datasets=[dataset or self.settings["dataset"]],
             top_k=top_k or self.settings["top_k"],
+            # CHUNKS supplies memory context; session feedback generation is unnecessary.
+            only_context=self.settings["recall_type"] == "CHUNKS",
         )
         results = []
         for item in responses:
@@ -202,10 +224,35 @@ class CogneeMemory:
     # --- Kaizen'in eşzamanlı kodundan kullanım -----------------------------
 
     def remember(self, text, dataset=None):
-        return asyncio.run(self.aremember(text, dataset))
+        if not self.is_ready():
+            return {"ok": False, "error": self._not_ready_reason()}
+        text = redact(text)
+        key = hashlib.sha256(((dataset or self.settings["dataset"]) + "\n" + text).encode()).hexdigest()
+        if not self._write_lock.acquire(timeout=1):
+            return {"ok": False, "error": "Cognee busy"}
+        try:
+            if key in self._written_keys:
+                return {"ok": True, "status": "duplicate", "error": None}
+            async def bounded():
+                return await asyncio.wait_for(self.aremember(text, dataset), self.settings.get("write_timeout", 180))
+            result = asyncio.run(bounded())
+            if result.get("ok"):
+                self._written_keys[key] = True
+                if len(self._written_keys) > 512:
+                    self._written_keys.popitem(last=False)
+            return result
+        except Exception as exc:
+            return {"ok": False, "error": type(exc).__name__}
+        finally:
+            self._write_lock.release()
 
     def recall(self, query, dataset=None, top_k=None):
-        return asyncio.run(self.arecall(query, dataset, top_k))
+        async def bounded():
+            return await asyncio.wait_for(self.arecall(redact(query), dataset, top_k), self.settings.get("recall_timeout", 10))
+        try:
+            return asyncio.run(bounded())
+        except Exception as exc:
+            return {"ok": False, "error": type(exc).__name__, "results": []}
 
     def forget(self, dataset=None, confirmed=False):
         return asyncio.run(self.aforget(dataset, confirmed))

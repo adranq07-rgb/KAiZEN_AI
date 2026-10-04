@@ -8,6 +8,12 @@ python-docx==1.2.0
 pypdf==6.19.0
 pillow==12.3.0
 
-# Graf hafızası (memory/cognee_memory.py). Ayrıca yerel Ollama gerekir:
-# 'ollama pull llama3.2:3b' ve 'ollama pull bge-m3' (bkz. memory/COGNEE.md)
-cognee==1.6.0
+# OCR: taranmış PDF sayfaları ve fotoğraflanan belgeler (fatura/makbuz) için (tools/office_tools.py).
+# Kütüphaneler yeterli değil -- ayrıca Poppler ve Tesseract-OCR (Türkçe dil paketiyle) motorlarının
+# da kurulu olması gerekir; kurulu değilse Kaizen çökmez, açık bir kurulum notu döner
+# (bkz. config/Kaizen.json -> ocr bölümü).
+pdf2image==1.17.0
+pytesseract==0.3.13
+
+# Static HTTP/extraction only; optional at runtime, existing fetcher is fallback.
+scrapling[fetchers]==0.4.15

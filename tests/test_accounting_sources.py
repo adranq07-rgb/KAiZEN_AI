@@ -67,5 +67,27 @@ def test_accounting_sources():
     print("KAIZEN MUHASEBE KAYNAK TESTI: BASARILI")
 
 
+def test_accounting_sources_official_sgk_resmi_gazete_mevzuat_registered():
+    """KAIZEN — BÜYÜK İŞ EMRİ #2, Faz 1 denetim bulgusu (madde 18) düzeltmesi: SGK,
+    Resmî Gazete ve Mevzuat Bilgi Sistemi artık priority==1 (resmî) olarak kayıtlı --
+    böylece bir SGK/mevzuat sorusu artık TEK resmî kaynakla (>=2 ikincil kaynak
+    gerektirmeden) 'verified' olabilir (bkz. accounting/consensus.py::decide, madde
+    98-99: group['official'] or len(group['sources']) >= 2)."""
+    sgk = trusted_source_for_url("https://www.sgk.gov.tr/duyuru/2026-prim-tavani")
+    assert sgk is not None and sgk.priority == 1 and sgk.name == "Sosyal Guvenlik Kurumu"
+
+    rg = trusted_source_for_url("https://www.resmigazete.gov.tr/eskiler/2026/01/ornek.htm")
+    assert rg is not None and rg.priority == 1
+
+    mevzuat = trusted_source_for_url("https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=193")
+    assert mevzuat is not None and mevzuat.priority == 1
+
+    # mevcut sıraya bağımlı test (TRUSTED_SOURCES[2] == "Muhasebe TR") KIRILMADI --
+    # yeni satırlar tuple'ın SONUNA eklendi, ortasına değil.
+    assert TRUSTED_SOURCES[2].name == "Muhasebe TR"
+    print("KAIZEN RESMI KAYNAK EKLEME (SGK/RESMI GAZETE/MEVZUAT) TESTI: BASARILI")
+
+
 if __name__ == "__main__":
     test_accounting_sources()
+    test_accounting_sources_official_sgk_resmi_gazete_mevzuat_registered()

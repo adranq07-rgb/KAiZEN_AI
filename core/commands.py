@@ -15,6 +15,8 @@ HELP = """Kaizen komutları:
   öğrendiklerim          araştırmayla öğrendiğim, henüz onaylanmamış bilgi kartları ve çelişki uyarıları
   onayla: soru           bekleyen bir bilgi kartını onayla (kalıcı hafızaya işlenir, bir daha araştırmam)
   düzelt: soru => doğru cevap    yanlış cevabı öğret (bir dahaki sefere bu cevap verilir)
+  oku: dosya yolu        pdf/excel/word dosyasını okur (Excel'de belirli sayfa için: oku: dosya.xlsx | sayfa: Ocak)
+  doğrula: dosya yolu    excel/pdf'teki rakamları doğrulanmış parametre defterimle karşılaştırır (hesap/excel teyidi)
 Soru sorarken: 'muhasebe: ...' ya da 'matematik: ...' ön ekini kullanabilirsin; kullanmasan da anlarım."""
 
 
@@ -47,6 +49,10 @@ class CommandHandler:
             return self.learned()
         if head.startswith("onayla") and ":" in text:
             return self.approve(text)
+        if head.startswith("oku") and ":" in text:
+            return self.read_file(text)
+        if head.startswith("dogrula") and ":" in text:
+            return self.verify_file(text)
         return None
 
     # --- komutlar -------------------------------------------------------------------
@@ -75,9 +81,23 @@ class CommandHandler:
                 f"- Öğrenilen bilgi kartları: {stats.get('pending', 0)} beklemede, "
                 f"{stats.get('confirmed', 0)} onaylanmış, {stats.get('contradictions', 0)} çelişki uyarısı"
             )
-        provider = e.provider_manager.provider
+        runtime_learning = getattr(e, "runtime_learning", None)
+        if runtime_learning is not None:
+            try:
+                learned = runtime_learning.status()
+                lines.append(f"- Öğrenme döngüsü: {learned['episodes']} deneyim, {learned['reflections']} değerlendirme, "
+                             f"{learned['active_policies']} etkin süreç ilkesi")
+            except Exception:
+                lines.append("- Öğrenme deposu şu an okunamıyor.")
+        failures = getattr(e, "component_failures", {})
+        if failures:
+            lines.append("- Kullanılamayan bileşenler: " + ", ".join(sorted(failures)))
+        provider = getattr(e, "provider_observer", e.provider_manager).provider
         names = [type(p).__name__ for p in getattr(provider, "providers", [provider])]
         lines.append("- Model zinciri: " + " -> ".join(names))
+        from tools.subsystem_tools import capability_status
+        for name, info in capability_status().items():
+            lines.append(f"- {name}: {info['status']} ({info['role']})")
         return "\n".join(lines)
 
     def sources(self):
@@ -178,8 +198,79 @@ class CommandHandler:
             return "Kullanım: onayla: <soru>"
         card = e.brain.confirm_card(question)
         if card is None:
-            return f"Kaizen: '{question}' için bekleyen bir bilgi kartı bulamadım. 'öğrendiklerim' ile listeyi görebilirsin."
-        return f"Kaizen: Onaylandı, kalıcı hafızaya işlendi -> \"{card['question']}\""
+            return (f"Kaizen: '{question}' için bekleyen bir bilgi kartı bulamadım. 'öğrendiklerim' ile listeyi görebilirsin."
+                    + self._feedback_note(question, positive=True))
+        return (f"Kaizen: Onaylandı, kalıcı hafızaya işlendi -> \"{card['question']}\""
+                + self._feedback_note(question, positive=True))
+
+    def read_file(self, text):
+        """'oku: <dosya yolu>' -- pdf/excel/word dosyasını tools/office_tools.py üzerinden
+        sohbetten okur. Bu aracılar (pdf_oku, excel_oku, word_oku) daha önce tool_manager'a
+        kayıtlıydı ama sohbetten hiçbir yerden çağrılmıyordu; bu komut o boşluğu kapatır.
+        """
+        e = self.engine
+        _, _, body = text.partition(":")
+        body = body.strip()
+        if not body:
+            return "Kullanım: oku: <dosya yolu>  (pdf, excel veya word; Excel için: oku: dosya.xlsx | sayfa: Ocak)"
+        sheet = None
+        if "|" in body:
+            path_part, _, extra = body.partition("|")
+            body = path_part.strip()
+            extra = extra.strip()
+            if fold_tr(extra).startswith("sayfa:"):
+                sheet = extra.split(":", 1)[1].strip() or None
+        from pathlib import Path
+        suffix = Path(body).suffix.lower()
+        tool_name = {
+            ".pdf": "pdf_oku", ".xlsx": "excel_oku", ".xlsm": "excel_oku", ".docx": "word_oku",
+            ".jpg": "gorsel_oku", ".jpeg": "gorsel_oku", ".png": "gorsel_oku",
+        }.get(suffix)
+        if tool_name is None:
+            return f"Kaizen: '{suffix or body}' için okuma aracım yok. Desteklenen türler: .pdf, .xlsx, .xlsm, .docx, .jpg, .jpeg, .png"
+        if tool_name == "excel_oku" and sheet:
+            return e.tool_manager.run_tool(tool_name, body, sheet=sheet)
+        return e.tool_manager.run_tool(tool_name, body)
+
+    def verify_file(self, text):
+        """'doğrula: <dosya yolu>' -- kullanıcının kendi excel/pdf'indeki rakamları, Kaizen'in
+        doğrulanmış parametre defteriyle (facts) karşılaştırır. 'excel bilgisini teyit et' /
+        'hesaplarımı kontrol et' isteğini karşılar: bkz. accounting/accounting_agent.py::verify_document.
+
+        DÜZELTME (2026-09-23): '`oku:`' (yalnız okuma) varsayılan sınırlarla (Excel: ilk 50
+        satır, PDF: ilk 30 sayfa) çalışır -- bu, sohbette hızlı bir önizleme için yeterlidir.
+        Ama '`doğrula:`' bir DENETİMDİR; amacı belgenin TAMAMINI kontrol etmektir, bu yüzden
+        burada çok daha yüksek bir satır/sayfa sınırıyla okunuyor (Excel'in kendi MAX_CELLS
+        güvenlik supabı -- tools/office_tools.py -- yine de aşırı büyük dosyalarda devreye
+        girer). `facts_registry` de artık `accounting_agent.verify_document`'e veriliyor ki
+        kesin (kodla) karşılaştırma katmanı çalışabilsin (bkz. accounting/document_verifier.py).
+        """
+        e = self.engine
+        _, _, body = text.partition(":")
+        body = body.strip()
+        if not body:
+            return "Kullanım: doğrula: <dosya yolu>  (pdf veya excel)"
+        from pathlib import Path
+        suffix = Path(body).suffix.lower()
+        tool_name = {
+            ".pdf": "pdf_oku", ".xlsx": "excel_oku", ".xlsm": "excel_oku",
+            ".jpg": "gorsel_oku", ".jpeg": "gorsel_oku", ".png": "gorsel_oku",
+        }.get(suffix)
+        if tool_name is None:
+            return f"Kaizen: Doğrulama için .pdf, .xlsx, .xlsm, .jpg, .jpeg veya .png bekliyorum ('{suffix or body}' değil)."
+        verify_kwargs = {"excel_oku": {"max_rows": 5000}, "pdf_oku": {"max_pages": 200}}.get(tool_name, {})
+        content = e.tool_manager.run_tool(tool_name, body, **verify_kwargs)
+        if content.startswith("Kaizen:") and ("bulunamadı" in content or "Desteklenmeyen" in content or "yüklü değil" in content):
+            return content
+        facts_context = ""
+        facts_registry = getattr(e, "facts", None)
+        if facts_registry is not None:
+            rows = [r for r in facts_registry.rows() if r["status"] == "verified"]
+            titles = {t.id: t.title for t in facts_registry.topics}
+            facts_context = "\n".join(
+                f"- {titles.get(r['topic'], r['topic'])} ({r['year']}): {r['value']}" for r in rows[:40]
+            )
+        return e.accounting_agent.verify_document(content, facts_context, facts_registry=facts_registry)
 
     def correct(self, text):
         e = self.engine
@@ -188,4 +279,26 @@ class CommandHandler:
         question, correct = question.strip(), correct.strip()
         if not question or not correct:
             return "Kullanım: düzelt: soru => doğru cevap"
-        return e.accounting_agent.learn(question=question, wrong_answer="(kullanıcı düzeltmesi)", correct_answer=correct)
+        result = e.accounting_agent.learn(question=question, wrong_answer="(kullanıcı düzeltmesi)", correct_answer=correct)
+        return result + self._feedback_note(question, positive=False)
+
+    def _feedback_note(self, question, positive):
+        """Learning Loop: onayla:/düzelt: sonucunu ilgili STRATEJİ deneyimine bağlar (olumlu/
+        olumsuz sonuç). Mevcut onay/düzeltme davranışını DEĞİŞTİRMEZ; deneyim yoksa ya da
+        yaşam döngüsü kapalıysa '' döner (cevap metni eskisi gibi kalır). Kullanıcının verdiği
+        rakam/mevzuat buraya HİÇ aktarılmaz -- yalnız 'bu soruya verilen cevap doğru/yanlış'."""
+        brain = getattr(self.engine, "brain", None)
+        record = getattr(brain, "record_feedback", None)
+        if record is None:
+            return ""
+        try:
+            effect = record(question, positive)
+        except Exception:
+            return ""
+        if not effect or not effect.get("applied"):
+            return ""
+        if positive:
+            tail = "yeniden kullanılabilir strateji olarak işaretlendi" if effect.get("reusable") else "olumlu sonuç kaydedildi"
+        else:
+            tail = "strateji etkisi düşürüldü"
+        return f"\n(Öğrenme: {tail}; doğrulanmış bilgi/FACT olarak kaydedilmedi.)"

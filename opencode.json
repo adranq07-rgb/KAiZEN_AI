@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "prompts-chat": {
+        "type": "remote",
+        "url": "https://prompts.chat/api/mcp"
+      }
+    }
+  }
+}

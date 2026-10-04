@@ -1,0 +1,279 @@
+"""Lightweight registration in the existing ToolManager; no startup network work."""
+import json as _json
+import os
+import asyncio
+import subprocess
+import time
+from datetime import datetime, timezone
+from importlib.util import find_spec
+from pathlib import Path
+from core.trace import KaizenTrace
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+def capability_status():
+    return {
+        'Scrapling': {'role':'research_fetch_extract','status':'AVAILABLE' if find_spec('scrapling') else 'UNAVAILABLE'},
+        'Invisible Playwright MCP': {'role':'development_UAT_browser','status':'AVAILABLE','detail':'Production browser via uvx + stdio MCP'},
+        'Manus': {'role':'external_action','status':'AVAILABLE' if os.getenv('MANUS_API_KEY') else 'AUTH_REQUIRED'},
+        'Documenso': {'role':'approved_document_workflow','status':'AVAILABLE' if os.getenv('DOCUMENSO_API_KEY') and os.getenv('DOCUMENSO_BASE_URL') else 'AUTH_REQUIRED'},
+        'Coolify': {'role':'deployment_infrastructure','status':'AVAILABLE' if os.getenv('COOLIFY_URL') else 'HOST_REQUIRED'},
+        'codex-chatgpt-web': {'role':'development_tool','status':'DISABLED','detail':'No production dependency'},
+    }
+
+
+
+import threading
+
+
+class BrowserMCPClient:
+    """Persistent Invisible Playwright MCP session for synchronous ToolManager."""
+
+    def __init__(self):
+        self._loop = None
+        self._thread = None
+        self._ready = threading.Event()
+        self._stdio_cm = None
+        self._session = None
+        self._read = None
+        self._write = None
+
+    def _ensure_loop(self):
+        if self._thread and self._thread.is_alive():
+            return
+
+        self._ready.clear()
+        self._loop = asyncio.new_event_loop()
+
+        def runner():
+            asyncio.set_event_loop(self._loop)
+            self._ready.set()
+            self._loop.run_forever()
+
+        self._thread = threading.Thread(
+            target=runner,
+            name="kaizen-browser-mcp",
+            daemon=True,
+        )
+        self._thread.start()
+        self._ready.wait(timeout=5)
+
+    async def _connect(self):
+        if self._session is not None:
+            return
+
+        upload_dir = Path(__file__).resolve().parents[1] / "browser_uploads"
+        upload_dir.mkdir(parents=True, exist_ok=True)
+
+        server_env = os.environ.copy()
+        server_env["INVISIBLE_MCP_UPLOAD_DIRS"] = str(upload_dir)
+
+        server = StdioServerParameters(
+            command="uvx",
+            args=["invisible-playwright-mcp"],
+            env=server_env,
+        )
+
+        self._stdio_cm = stdio_client(server)
+        self._read, self._write = await self._stdio_cm.__aenter__()
+
+        self._session = ClientSession(self._read, self._write)
+        await self._session.__aenter__()
+        await self._session.initialize()
+
+    async def _call(self, operation, args):
+        await self._connect()
+
+        result = await self._session.call_tool(operation, args)
+
+        texts = [
+            getattr(item, "text", "")
+            for item in result.content
+            if hasattr(item, "text")
+        ]
+
+        return {
+            "ok": not bool(getattr(result, "isError", False)),
+            "status": (
+                "OK"
+                if not bool(getattr(result, "isError", False))
+                else "ERROR"
+            ),
+            "content": "\n".join(x for x in texts if x),
+        }
+
+    def call(self, operation, args=None, timeout=60):
+        self._ensure_loop()
+
+        future = asyncio.run_coroutine_threadsafe(
+            self._call(operation, args or {}),
+            self._loop,
+        )
+
+        try:
+            return future.result(timeout=timeout)
+        except Exception as exc:
+            return {
+                "ok": False,
+                "status": "ERROR",
+                "error_type": type(exc).__name__,
+                "error": str(exc),
+            }
+
+    async def _shutdown(self):
+        if self._session is not None:
+            try:
+                await self._session.__aexit__(None, None, None)
+            finally:
+                self._session = None
+
+        if self._stdio_cm is not None:
+            try:
+                await self._stdio_cm.__aexit__(None, None, None)
+            finally:
+                self._stdio_cm = None
+
+        self._read = None
+        self._write = None
+
+    def shutdown(self):
+        if not self._loop:
+            return
+
+        try:
+            future = asyncio.run_coroutine_threadsafe(
+                self._shutdown(),
+                self._loop,
+            )
+            future.result(timeout=10)
+        except Exception:
+            pass
+
+        self._loop.call_soon_threadsafe(self._loop.stop)
+
+        if self._thread:
+            self._thread.join(timeout=5)
+
+        self._loop = None
+        self._thread = None
+
+
+_browser_mcp = BrowserMCPClient()
+
+
+def _call_mcp_tool(operation, args):
+    return _browser_mcp.call(operation, args)
+
+
+def register(manager):
+    def call_external(system, operation, *args, **kwargs):
+        from tools.external_actions import ManusAdapter, DocumensoAdapter
+        start=time.perf_counter()
+        try:
+            adapter=ManusAdapter() if system=='Manus' else DocumensoAdapter()
+            result=getattr(adapter,operation)(*args,**kwargs)
+        except Exception as exc:
+            result={'ok':False,'status':'UNAVAILABLE','error_type':type(exc).__name__}
+        trace=KaizenTrace(route='external_action')
+        task=result.get('task', {})
+        trace.external_actions=[{'system':system,'operation':operation,
+            'status':result.get('status',task.get('status','OK' if result.get('ok') else 'UNKNOWN')),
+            'task_id':result.get('task_id',task.get('id',args[0] if system=='Manus' and args and operation in ('task_status','result','poll','follow_up') else None)),
+            'envelope_id':result.get('id',args[0] if system=='Documenso' and args and operation=='status' else None),
+            'observed_at':datetime.now(timezone.utc).isoformat(),
+            'endpoint': 'https://api.manus.ai/v2' if system=='Manus' else 'DOCUMENSO_BASE_URL',
+            'latency_ms':(time.perf_counter()-start)*1000}]
+        manager.last_trace=trace
+        return result
+
+    # Browser tools via invisible-playwright-mcp
+    def browser_open(**kwargs):
+        return call_browser('browser_open', kwargs)
+
+    def browser_navigate(url, **kwargs):
+        if not url:
+            return {'ok': False, 'status': 'ERROR', 'error': 'url_required'}
+        return call_browser('browser_navigate', {'url': url, **kwargs})
+
+    def browser_read_text(**kwargs):
+        return call_browser('browser_read_text', kwargs)
+
+    def browser_close(**kwargs):
+        return call_browser('browser_close', kwargs)
+
+    def browser_status(**kwargs):
+        return call_browser('browser_status', kwargs)
+
+    manager.register_tool('browser_open', browser_open, action='normal')
+    manager.register_tool('browser_navigate', browser_navigate, action='normal')
+    manager.register_tool('browser_read_text', browser_read_text, action='normal')
+    manager.register_tool('browser_close', browser_close, action='normal')
+    manager.register_tool('browser_status', browser_status, action='normal')
+
+    # Extended Invisible Playwright capabilities
+    def browser_list():
+        return call_browser('browser_list', {})
+
+    def browser_snapshot(**kwargs):
+        return call_browser('browser_snapshot', kwargs)
+
+    def browser_read_html(**kwargs):
+        return call_browser('browser_read_html', kwargs)
+
+    def browser_take_screenshot(**kwargs):
+        return call_browser('browser_take_screenshot', kwargs)
+
+    def browser_watch(**kwargs):
+        return call_browser('browser_watch', kwargs)
+
+    def browser_click(**kwargs):
+        return call_browser('browser_click', kwargs)
+
+    def browser_click_at(**kwargs):
+        return call_browser('browser_click_at', kwargs)
+
+    def browser_type(**kwargs):
+        return call_browser('browser_type', kwargs)
+
+    def browser_select_option(**kwargs):
+        return call_browser('browser_select_option', kwargs)
+
+    def browser_upload_files(**kwargs):
+        return call_browser('browser_upload_files', kwargs)
+
+    def browser_press_key(**kwargs):
+        return call_browser('browser_press_key', kwargs)
+
+    def browser_evaluate(**kwargs):
+        # Read-only use only. Do not use JS here to click, submit,
+        # mutate DOM/state, bypass authentication, CAPTCHA or restrictions.
+        return call_browser('browser_evaluate', kwargs)
+
+    # Observation/read-only tools
+    manager.register_tool('browser_list', browser_list, action='normal')
+    manager.register_tool('browser_snapshot', browser_snapshot, action='normal')
+    manager.register_tool('browser_read_html', browser_read_html, action='normal')
+    manager.register_tool('browser_take_screenshot', browser_take_screenshot, action='normal')
+    manager.register_tool('browser_watch', browser_watch, action='normal')
+    manager.register_tool('browser_evaluate', browser_evaluate, action='normal')
+
+    # Interactive/state-changing tools require approval for now.
+    manager.register_tool('browser_click', browser_click, action='system_change')
+    manager.register_tool('browser_click_at', browser_click_at, action='system_change')
+    manager.register_tool('browser_type', browser_type, action='system_change')
+    manager.register_tool('browser_select_option', browser_select_option, action='system_change')
+    manager.register_tool('browser_upload_files', browser_upload_files, action='system_change')
+    manager.register_tool('browser_press_key', browser_press_key, action='system_change')
+
+    specs={
+        'manus_health':('Manus','health',False),'manus_create_task':('Manus','create_task',True),
+        'manus_status':('Manus','task_status',False),'manus_result':('Manus','result',False),
+        'manus_poll':('Manus','poll',False),'manus_follow_up':('Manus','follow_up',True),
+        'documenso_health':('Documenso','health',False),'documenso_status':('Documenso','status',False),
+        'documenso_create_draft':('Documenso','create_draft',True)}
+    for name,(system,operation,approval) in specs.items():
+        def invoke(*args,_system=system,_operation=operation,_approval=approval,**kwargs):
+            if _approval:kwargs['approved']=True
+            return call(_system,_operation,*args,**kwargs)
+        manager.register_tool(name,invoke,action='system_change' if approval else 'normal')
+    manager.register_tool('subsystem_status',capability_status)

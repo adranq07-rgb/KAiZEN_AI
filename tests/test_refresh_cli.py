@@ -22,10 +22,13 @@ def test_rebuild_only_uses_stored_pages_without_crawling():
     db = workspace / f"rebuild_only_{uuid4().hex}.sqlite3"
     try:
         store = SiteStore(db)
+        # 3 sources needed for "verified" (3+ independent trusted sources)
         store.upsert_page(url="https://www.muhasebetr.com/a", source_name="Muhasebe TR",
                           title="A", content=PAGE, effective_year=2026)
         store.upsert_page(url="https://www.alomaliye.com/makaleler/b", source_name="Alomaliye",
                           title="B", content=PAGE, effective_year=2026)
+        store.upsert_page(url="https://www.vergiport.com/c", source_name="Vergiport",
+                          title="C", content=PAGE, effective_year=2026)
         registry = FactRegistry(db)
 
         logs = []

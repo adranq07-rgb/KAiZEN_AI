@@ -73,13 +73,30 @@ class KnowledgeCardStore:
         return hashlib.sha256(fold_tr(question).encode("utf-8")).hexdigest()[:24]
 
     # --- yazma ------------------------------------------------------------------
-    def remember(self, question, domain, answer, source_label, topic=None):
+    def remember(self, question, domain, answer, source_label, topic=None, block_confirm=False):
         """Araştırmadan gelen bir cevabı kart olarak kaydeder/günceller.
 
-        Aynı soru (birebir aynı şekilde sorulmuş) daha önce öğrenilmişse ve yeni cevap içerik
-        olarak örtüşüyorsa (>=0.5) bu bağımsız bir doğrulama turu sayılır; ikinci turda kart
-        kendiliğinden 'doğrulanmış'a yükselir. Örtüşmüyorsa (mevzuat değişmiş olabilir) yeni
-        bilgi öne alınır ve kart tekrar 'beklemede' sayılır. Kesin (elle) onay için `confirm()`.
+        Aynı soru (birebir aynı şekilde sorulmuş) daha önce öğrenilmişse, yeni cevap içerik
+        olarak örtüşüyorsa (>=0.5) VE bu turun kaynağı ÖNCEKİNDEN FARKLIYSA (`source_label`),
+        bu gerçekten bağımsız bir ikinci doğrulama sayılır; ancak o zaman kart kendiliğinden
+        'doğrulanmış'a yükselir. Örtüşmüyorsa (mevzuat değişmiş olabilir) yeni bilgi öne alınır
+        ve kart tekrar 'beklemede' sayılır. Kesin (elle) onay için `confirm()` (insan onayı
+        kaynak/çelişki kontrolünden bağımsız olarak her zaman geçerlidir).
+
+        DÜZELTME (2026-09-23), iki ayrı sorun için:
+        1. Eskiden `source_label` HİÇ kontrol edilmiyordu -- Kaizen şu an TEK bir araştırma
+           sağlayıcısı (Hermes) kullandığından, aynı sağlayıcının aynı soruyu iki kez benzer
+           şekilde cevaplaması ("kendi kendini tekrarlaması") yanlışlıkla "iki bağımsız kaynak
+           aynı şeyi söyledi" sayılıp kartı otomatik doğruluyordu. "Tekrar etmek, doğrulanmak
+           değildir" -- artık iki turun `source_label`'ı FARKLI olmadıkça otomatik doğrulama
+           olmaz (Kaizen tek sağlayıcılıyken bu, doğal olarak yalnız `confirm()` ile -mali
+           müşavir onayı- doğrulanabileceği anlamına gelir; ikinci bağımsız bir sağlayıcı
+           eklenince bu yol da gerçek anlamda çalışmaya başlar).
+        2. `block_confirm=True` (çağıran, bu turun cevabını doğrulanmış parametre defteriyle
+           çapraz kontrol edip bir çelişki bulduysa geçer) VEYA bu kart için daha önce
+           kapatılmamış bir çelişki kaydı VARSA, bu turda kart 'doğrulanmış'a YÜKSELTİLMEZ --
+           bir çelişki kaydının varlığı, tek başına, kartın sessizce onaylanmasını engellemeliydi
+           (eskiden engellemiyordu).
         """
         now = datetime.now(timezone.utc).isoformat()
         card_id = self._card_id(question)
@@ -98,7 +115,11 @@ class KnowledgeCardStore:
             status = existing["status"]
             hit_count = existing["hit_count"] + 1
             if similar:
-                if status == "pending" and hit_count >= 2:
+                independent_source = source_label != existing["source_label"]
+                has_open_contradiction = block_confirm or db.execute(
+                    "SELECT 1 FROM knowledge_card_contradictions WHERE card_id=? LIMIT 1", (card_id,)
+                ).fetchone() is not None
+                if status == "pending" and hit_count >= 2 and independent_source and not has_open_contradiction:
                     status = "confirmed"
             else:
                 status, hit_count = "pending", 1

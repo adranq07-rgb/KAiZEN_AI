@@ -75,6 +75,7 @@ def excel_yaz(path, rows, sheet="Sayfa1", header=True):
     """rows: satır listesi (her satır bir liste). '=TOPLA(B2:B9)' gibi metinler formül olarak yazılır.
 
     Var olan dosyanın üzerine yazmaz; yazılan gerçek yolu döndürür.
+    Dosya oluşmazsa hata mesajı döndürür (başarı uydurulmaz).
     """
     try:
         import openpyxl
@@ -95,11 +96,100 @@ def excel_yaz(path, rows, sheet="Sayfa1", header=True):
         ws.column_dimensions[column[0].column_letter].width = min(max(width + 2, 8), 60)
     target.parent.mkdir(parents=True, exist_ok=True)
     workbook.save(target)
+    # DOSYA GERÇEKLEN OLUŞMUŞ MU KONTROL ET
+    if not target.exists():
+        return f"Kaizen: HATA — Excel dosyası oluşturulamadı: {target}"
+    if target.stat().st_size == 0:
+        return f"Kaizen: HATA — Excel dosyası boş (0 bayt): {target}"
     return f"Kaizen: Excel dosyası oluşturuldu: {target}"
 
 
-def pdf_oku(path, max_pages=30):
-    """PDF'in metin katmanını sayfa sayfa okur (taranmış/resim PDF için OCR gerekir)."""
+_OCR_POPPLER_MISSING = (
+    "Kaizen: OCR için 'pdf2image' kütüphanesi kurulu ama Poppler (PDF sayfasını görsele "
+    "çeviren motor) bulunamadı.\nWindows için: "
+    "https://github.com/oschwartz10612/poppler-windows/releases adresinden indirip bir "
+    "klasöre çıkarın, sonra içindeki 'Library\\bin' klasörünün tam yolunu "
+    "config/Kaizen.json içindeki ocr.poppler_path alanına yazın (veya PATH'e ekleyin)."
+)
+
+_OCR_TESSERACT_MISSING = (
+    "Kaizen: OCR için 'pytesseract' kütüphanesi kurulu ama Tesseract OCR motoru bulunamadı.\n"
+    "Windows için: https://github.com/UB-Mannheim/tesseract/wiki adresinden kurulum "
+    "dosyasını indirip çalıştırın (Türkçe dil paketini de işaretleyin), sonra "
+    "tesseract.exe'nin tam yolunu config/Kaizen.json içindeki ocr.tesseract_cmd alanına "
+    "yazın (veya PATH'e ekleyin)."
+)
+
+
+def _ocr_settings():
+    """config/Kaizen.json içindeki isteğe bağlı 'ocr' bölümünü okur (poppler/tesseract yolları
+    PATH'te değilse, Türkçe dil paketi kurulu değilse ya da OCR kapatılmak istenirse)."""
+    try:
+        from config.config_manager import ConfigManager
+        manager = ConfigManager()
+        return {
+            "enabled": manager.get("ocr", "enabled", True),
+            "language": manager.get("ocr", "language", "tur+eng"),
+            "poppler_path": manager.get("ocr", "poppler_path", None),
+            "tesseract_cmd": manager.get("ocr", "tesseract_cmd", None),
+        }
+    except Exception:
+        return {"enabled": True, "language": "tur+eng", "poppler_path": None, "tesseract_cmd": None}
+
+
+def _ocr_image(image, settings):
+    """Tek bir görseli (PIL Image) OCR ile metne çevirir. Önce ayarlardaki dili (varsayılan
+    'tur+eng') dener; Türkçe dil paketi (tur.traineddata) kurulu değilse sessizce yalnız
+    İngilizce'ye ('eng') düşer -- Kaizen'in çevrimdışı çalışma ilkesi burada da geçerli:
+    OCR motoru eksikse çökmez, açık bir Türkçe kurulum talimatı döner."""
+    try:
+        import pytesseract
+    except ImportError:
+        return None, _missing("pytesseract")
+    tesseract_cmd = settings.get("tesseract_cmd")
+    if tesseract_cmd:
+        pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
+    language = settings.get("language") or "tur+eng"
+    try:
+        text = pytesseract.image_to_string(image, lang=language)
+    except pytesseract.TesseractNotFoundError:
+        return None, _OCR_TESSERACT_MISSING
+    except Exception:
+        # dil paketi (ör. tur.traineddata) kurulu değil olabilir -- İngilizce ile bir kez daha dene
+        try:
+            text = pytesseract.image_to_string(image, lang="eng")
+        except pytesseract.TesseractNotFoundError:
+            return None, _OCR_TESSERACT_MISSING
+        except Exception as exc:
+            return None, f"Kaizen: OCR okuma hatası: {exc}"
+    return text.strip(), None
+
+
+def _ocr_pdf_page(path, page_number, settings):
+    """Bir PDF sayfasını (metin katmanı boşsa, yani taranmış/resim PDF) görsele çevirip OCR ile
+    okur. pdf2image + Poppler ile sayfa render edilir, ardından _ocr_image ile metne çevrilir."""
+    try:
+        from pdf2image import convert_from_path
+    except ImportError:
+        return None, _missing("pdf2image")
+    try:
+        images = convert_from_path(
+            str(path), first_page=page_number, last_page=page_number,
+            poppler_path=settings.get("poppler_path") or None,
+        )
+    except Exception as exc:
+        if type(exc).__name__ == "PDFInfoNotInstalledError" or "poppler" in str(exc).lower():
+            return None, _OCR_POPPLER_MISSING
+        return None, f"Kaizen: PDF sayfası görsele çevrilemedi: {exc}"
+    if not images:
+        return None, "Kaizen: PDF sayfası görsele çevrilemedi."
+    return _ocr_image(images[0], settings)
+
+
+def pdf_oku(path, max_pages=30, ocr=True):
+    """PDF'in metin katmanını sayfa sayfa okur. Metin katmanı boş bir sayfa varsa (taranmış/
+    resim PDF) ve OCR kütüphaneleri/motoru kuruluysa, o sayfayı OCR ile okumayı dener --
+    kurulu değilse çökmez, tek seferlik bir kurulum notuyla birlikte normal şekilde döner."""
     path, error = _check_readable(path, (".pdf",))
     if error:
         return error
@@ -108,14 +198,49 @@ def pdf_oku(path, max_pages=30):
     except ImportError:
         return _missing("pypdf")
     reader = PdfReader(str(path))
+    settings = _ocr_settings() if ocr else {"enabled": False}
     out = []
+    ocr_note = None
     for number, page in enumerate(reader.pages, start=1):
         if number > max_pages:
             out.append(f"... ({len(reader.pages)} sayfanın ilk {max_pages} sayfası okundu)")
             break
         text = (page.extract_text() or "").strip()
-        out.append(f"## Sayfa {number}\n{text}" if text else f"## Sayfa {number}\n(metin yok - taranmış resim olabilir)")
+        if text:
+            out.append(f"## Sayfa {number}\n{text}")
+            continue
+        if ocr and settings.get("enabled", True):
+            ocr_text, ocr_error = _ocr_pdf_page(path, number, settings)
+            if ocr_text:
+                out.append(f"## Sayfa {number} (OCR)\n{ocr_text}")
+                continue
+            if ocr_error and ocr_note is None:
+                ocr_note = ocr_error  # aynı hatayı her sayfada tekrar etmeye gerek yok
+        out.append(f"## Sayfa {number}\n(metin yok - taranmış resim olabilir)")
+    if ocr_note:
+        out.append(ocr_note)
     return "\n\n".join(out)
+
+
+def gorsel_oku(path):
+    """Bir görseli (fotoğraflanmış fatura/makbuz, ekran görüntüsü...) OCR ile metne çevirir."""
+    path, error = _check_readable(path, (".jpg", ".jpeg", ".png"))
+    if error:
+        return error
+    try:
+        from PIL import Image
+    except ImportError:
+        return _missing("Pillow", "pillow")
+    settings = _ocr_settings()
+    if not settings.get("enabled", True):
+        return "Kaizen: OCR devre dışı (config/Kaizen.json -> ocr.enabled)."
+    image = Image.open(str(path)).convert("RGB")
+    text, error = _ocr_image(image, settings)
+    if error:
+        return error
+    if not text:
+        return "Kaizen: Görselde okunabilir metin bulunamadı."
+    return text
 
 
 def word_oku(path):
@@ -252,4 +377,5 @@ OFFICE_TOOLS = {
     "pdf_oku": pdf_oku,
     "word_oku": word_oku,
     "word_yaz": word_yaz,
+    "gorsel_oku": gorsel_oku,
 }

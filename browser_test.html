@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Kaizen Browser Test</title></head>
+<body>
+<h1>Kaizen Browser Interaction Test</h1>
+
+<input id="name" type="text" placeholder="Buraya yaz">
+
+<select id="city">
+  <option value="antalya">Antalya</option>
+  <option value="ankara">Ankara</option>
+  <option value="istanbul">Istanbul</option>
+</select>
+
+<button id="btn" onclick="document.getElementById('result').textContent='CLICK PASS'">
+Test Button
+</button>
+
+<p id="result">WAITING</p>
+
+<input id="keytest" type="text">
+
+<input id="upload" type="file">
+<p id="uploadResult">NO FILE</p>
+<script>
+document.querySelector('#upload').addEventListener('change', function() {
+    document.querySelector('#uploadResult').textContent =
+        this.files.length ? this.files[0].name : 'NO FILE';
+});
+</script>
+</body>
+
+</html>

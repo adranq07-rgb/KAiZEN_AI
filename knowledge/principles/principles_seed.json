@@ -1,0 +1,229 @@
+[
+  {
+    "principle_id": "donemsellik",
+    "name": "Dönemsellik (tahakkuk esası)",
+    "description": "Gelir ve gider, tahsil/ödeme tarihine değil, ekonomik olarak ait olduğu faaliyet dönemine göre kayda alınır.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "TEMPORAL_MISMATCH",
+      "veto_signals": [
+        "ACCOUNT_CLASS_QUERY",
+        "RATE_QUERY"
+      ]
+    },
+    "applicability": [
+      "donem",
+      "tahakkuk",
+      "ait oldugu donem",
+      "hangi ayin defterine"
+    ],
+    "non_applicability": [
+      "Sorunun asıl konusu hangi hesaba/sınıfa kaydedileceğiyse (hesap sınıflandırması), iki farklı ay geçse bile dönemsellik tetiklenmemeli.",
+      "Güncel bir oran/tutar (FACT) sorusuna dönemsellik ile cevap üretilmez (madde 16)."
+    ],
+    "examples": [
+      "Kasım ayına ait kira gideri faturası Aralık ayında elimize ulaştı; hangi ayın gideri sayılır?",
+      "Ekim hizmetinin bedeli Kasım ayında tahsil edildi; gelir hangi aya yazılır?"
+    ],
+    "counter_examples": [
+      "İki farklı ay adı geçse bile soru 'hangi hesaba/hangi hesap sınıfına' ise (bkz. hesap_siniflandirma) dönemsellik yanlış transfer olur."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Temel kavramlar (1/3): sosyal sorumluluk, kişilik, süreklilik, dönemsellik"
+  },
+  {
+    "principle_id": "borc_alacak",
+    "name": "Çift taraflı kayıt / borç-alacak mantığı",
+    "description": "Borç/alacak yönü hesabın niteliğine göre belirlenir: aktif hesaplarda artış borca, pasif hesaplarda artış alacağa yazılır; toplam borç toplam alacağa eşit olmalıdır.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "DIRECTION_QUERY",
+      "veto_signals": [
+        "ACCOUNT_CLASS_QUERY"
+      ],
+      "accounting_effect": {
+        "active_increase": "debit",
+        "active_decrease": "credit",
+        "liability_increase": "credit",
+        "liability_decrease": "debit",
+        "invariant": "sum_debit_equals_sum_credit"
+      },
+      "required_facts": [
+        "economic_event",
+        "amount",
+        "affected_accounts"
+      ]
+    },
+    "applicability": [
+      "borc",
+      "alacak",
+      "hangi tarafa",
+      "aktif pasif bakiye"
+    ],
+    "non_applicability": [
+      "Soru 'hangi hesap sınıfına/grubuna kaydedilir' ise (hesap_siniflandirma), yön (borç mu alacak mı) sorulmuyor demektir; borç/alacak mantığı tetiklenmemeli."
+    ],
+    "examples": [
+      "İşletme ortaklarından nakit borç aldığında bu tutar hangi tarafa (borç/alacak) yazılır?",
+      "Bankadan alınan kredi kullanıldığında hangi taraf hareket eder?"
+    ],
+    "counter_examples": [
+      "'Hangi hesap sınıfına/grubuna kaydedilir' sorusu yön değil sınıflandırma istiyor (bkz. hesap_siniflandirma); borç/alacak mantığı yanlış transfer olur."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Çift taraflı kayıt sistemi ve hesap mantığı"
+  },
+  {
+    "principle_id": "hesap_siniflandirma",
+    "name": "Hesap sınıflandırma mantığı (Tek Düzen Hesap Planı)",
+    "description": "Tek Düzen Hesap Planı'nda hesaplar 1'den 9'a kadar ana sınıflara ayrılır (dönen varlıklar, duran varlıklar, kısa/uzun vadeli yabancı kaynaklar, özkaynaklar, gelir tablosu, maliyet, nazım hesaplar); hangi işlem hangi sınıfa aittir sorusu bu mantıkla cevaplanır.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "ACCOUNT_CLASS_QUERY",
+      "veto_signals": [
+        "RATE_QUERY"
+      ],
+      "accounting_effect": "İşlemin niteliği ve ödeme şekli açıklandıktan sonra kod/ad Tek Düzen Hesap Planından alınır.",
+      "required_facts": [
+        "economic_nature",
+        "payment_method",
+        "counterparty_role"
+      ]
+    },
+    "applicability": [
+      "hesap sinifi",
+      "hangi hesaba",
+      "hangi grupta",
+      "ana grup",
+      "hesap plani"
+    ],
+    "non_applicability": [
+      "Sorunun asıl konusu şüpheli alacak karşılığı/reeskont gibi bir dönem sonu işlemiyse, yalnızca 'alacak' kelimesi geçmesi sınıflandırma sorusu yaptığı anlamına gelmez."
+    ],
+    "examples": [
+      "Bir yıldan uzun sürede tahsil edilecek alacak bilançoda hangi ana grupta gösterilir?",
+      "Peşin ödenen ama gelecek yılın giderine ait bir tutar hangi hesap sınıfında izlenir?"
+    ],
+    "counter_examples": [
+      "Aynı 'alacak' kelimesi geçen ama karşılık/ihtiyatlılık konusu olan bir soru (şüpheli alacak) hesap sınıflandırması değildir."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Tek Düzen Hesap Planı sınıf mantığı (1-9)"
+  },
+  {
+    "principle_id": "ozun_onceligi",
+    "name": "Özün önceliği / işlemin ekonomik niteliği",
+    "description": "İşlemlerin muhasebeleştirilmesinde hukuki biçimden çok ekonomik özü esas alınır.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "LEGAL_VS_ECONOMIC_QUERY",
+      "veto_signals": [
+        "RATE_QUERY"
+      ]
+    },
+    "applicability": [
+      "ozun onceligi",
+      "ekonomik oz",
+      "kimin varligi",
+      "mulkiyet"
+    ],
+    "non_applicability": [
+      "Aynı sözleşme/kiralama konusuyla ilgili ama sadece ZAMANLAMA (KDV'nin hangi ayda indirileceği gibi) soran bir soru özün önceliği değil dönemsellik konusudur."
+    ],
+    "examples": [
+      "Finansal kiralama ile kullanılan ve sözleşme sonunda mülkiyeti kiracıya geçecek bir varlık, kirası ödendiği sürece kimin aktifinde gösterilir?",
+      "Bir taşınmazın hukuki tapu devri gecikse de fiilen kullanım ve riskler devredildiyse kimin varlığı sayılır?"
+    ],
+    "counter_examples": [
+      "Aynı kiralama/sözleşme konusu ama soru yalnızca bir ödemenin/indirimin HANGİ AYDA yapılacağını soruyorsa (dönemsellik) özün önceliği yanlış transfer olur."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Temel kavramlar (3/3): tam açıklama, ihtiyatlılık, önemlilik, özün önceliği, açıklık"
+  },
+  {
+    "principle_id": "maliyet_ilkesi",
+    "name": "Maliyet esası ilkesi",
+    "description": "Parayla ölçülebilen iktisadi kıymetler elde etme maliyeti (satın alma/üretim maliyeti) üzerinden kayda alınır; sonraki piyasa değeri değişimiyle güncellenmez.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "VALUATION_VS_COST_QUERY",
+      "veto_signals": [
+        "ACCOUNT_CLASS_QUERY",
+        "RATE_QUERY"
+      ]
+    },
+    "applicability": [
+      "maliyet esasi",
+      "elde etme maliyeti",
+      "piyasa degeri",
+      "hangi tutarla"
+    ],
+    "non_applicability": [
+      "Aynı varlık (ör. arsa) konu olsa da soru hangi HESABA aktarılacağını soruyorsa (hesap sınıflandırması), maliyet ilkesi değil sınıflandırma sorusudur."
+    ],
+    "examples": [
+      "Yıllar önce alınan bir varlığın bugünkü piyasa değeri yükseldi; defterde hangi tutar esas alınır?",
+      "Üretimde kullanılan bir malzemenin güncel alım fiyatı değişti; stok maliyeti nasıl hesaplanır?"
+    ],
+    "counter_examples": [
+      "Aynı varlıktan bahseden ama hangi HESABA aktarılacağını soran bir soru (hesap sınıflandırması) maliyet ilkesiyle karıştırılmamalı."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Temel kavramlar (2/3): parayla ölçme, maliyet esası, tarafsızlık-belgelendirme, tutarlılık"
+  },
+  {
+    "principle_id": "amortisman",
+    "name": "Amortisman mantığı",
+    "description": "Duran varlığın faydalı ömrü boyunca aşınma payı gider olarak dönemlere yayılır; fayda tek seferde değil zaman içinde tüketilir.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "BENEFIT_SPREAD_QUERY",
+      "veto_signals": [
+        "RATE_QUERY"
+      ]
+    },
+    "applicability": [
+      "amortisman",
+      "faydali omur",
+      "yillara yayarak",
+      "tek seferde"
+    ],
+    "non_applicability": [
+      "Aynı duran varlıkla ilgili ama sorunun konusu bir işlemin/indirim hakkının HANGİ AYDA doğduğuysa (dönemsellik/KDV zamanı), amortisman mantığı yanlış transfer olur."
+    ],
+    "examples": [
+      "Uzun yıllar kullanılacak bir varlığın bedelini alındığı yıl tek seferde mi gider yazmalıyım, yoksa yıllara mı yaymalıyım?",
+      "Bir binanın maliyeti faydalı ömrü boyunca nasıl gider yazılır?"
+    ],
+    "counter_examples": [
+      "Aynı varlıktan bahseden ama yalnızca bir verginin hangi ayda indirileceğini soran bir soru (dönemsellik) amortismanla karıştırılmamalı."
+    ],
+    "source": "knowledge/muhasebe_temel_taslari.json — Kaizen muhasebe temel taşları — Dönem sonu işlemleri: amortisman, reeskont, karşılıklar, kur farkı"
+  },
+  {
+    "principle_id": "sgk_statu",
+    "name": "SGK statüsü için yapısal sınıflandırma",
+    "description": "SGK sigortalılık statüsü çalışma biçimine göre yapısal olarak sınıflandırılır: hizmet akdiyle bağımlı çalışan 4/a, kendi nam ve hesabına bağımsız çalışan 4/b, memur 4/c.",
+    "domain": "accounting",
+    "problem_structure": {
+      "primary_signal": "STATUS_CLASSIFICATION_QUERY",
+      "veto_signals": [
+        "RATE_QUERY"
+      ]
+    },
+    "applicability": [
+      "sigortalilik",
+      "hangi statude",
+      "4/a",
+      "4/b",
+      "4/c",
+      "bagimsiz calisan"
+    ],
+    "non_applicability": [
+      "Aynı meslek grubundan (ör. doktor) bahseden ama güncel bir vergi/prim ORANINI soran bir soru (FACT) SGK statü mantığıyla cevaplanmaz (madde 16)."
+    ],
+    "examples": [
+      "Kendi işyerini açan bir serbest meslek erbabı SGK'ya hangi statüde bildirilir?",
+      "Bir kamu kurumunda memur olarak çalışan kişi hangi sigortalılık statüsündedir?"
+    ],
+    "counter_examples": [
+      "Aynı meslek grubu (ör. doktor) hakkında güncel bir stopaj/prim ORANI sorulursa bu bir FACT sorusudur; SGK statü ilkesiyle 'VERIFIED' cevap üretilmez."
+    ],
+    "source": "knowledge/sgk_temel_yapi.json — Kaizen SGK temel yapısı — SGK nedir ve sigortalılık halleri (4/a, 4/b, 4/c)"
+  }
+]

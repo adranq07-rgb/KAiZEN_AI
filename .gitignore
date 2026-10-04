@@ -13,3 +13,52 @@ logs/
 .env
 dev/workspace/
 data/cognee/
+# === KAZEN local environments ===
+.venv*/
+venv/
+env/
+
+# === Secrets / credentials ===
+.env
+.env.*
+*.key
+*.pem
+secrets/
+credentials/
+
+# === Runtime databases / caches ===
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+data/*cache*
+.cache/
+.pytest_cache/
+
+# === Runtime / generated outputs ===
+logs/
+outputs/
+artifacts/
+browser_uploads/
+graphify-out/
+
+# === Temporary / debug files ===
+temp_*
+debug_*
+*.tmp
+*.log
+
+# === Python generated files ===
+__pycache__/
+*.py[cod]
+*.pyo
+
+# === IDE / OS ===
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# === Local agent/runtime state ===
+.serena/
+.nightshift/

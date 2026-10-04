@@ -153,7 +153,13 @@ class UrllibFetcher:
             entry["parser"] = parser
             entry["delay"] = parser.crawl_delay(ROBOT_TOKEN) or parser.crawl_delay("*")
             entry["sitemaps"] = parser.site_maps() or []
-        elif result.status in (401, 403):
+        elif result.status in (401, 403, 429):
+            # 429 (Too Many Requests): robots.txt isteğinin KENDİSİ hız sınırına takıldı --
+            # bu "robots.txt yok, engel yok" demek DEĞİLDİR, tam tersine "zaten çok istek
+            # attın, geri çekil" demektir. Diğer sayfa çekmelerinde 429 zaten "blocked"
+            # sayılıyor (bkz. FetchResult.blocked) ve AGENTS.md'nin "403/429 asilmaz" kuralı
+            # burada da geçerli olmalı; önceden yalnızca 401/403 reddediliyor, 429 aşağıdaki
+            # genel "4xx -> allow" dalına düşüp yanlışlıkla izin verilmiş sayılıyordu.
             entry["mode"] = "deny"
         elif result.status == 404 or 400 <= result.status < 500:
             entry["mode"] = "allow"

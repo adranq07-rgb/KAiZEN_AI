@@ -1,53 +1,69 @@
 {
-    "app": {
-        "name": "Kaizen AI",
-        "language": "tr"
+  "app": {
+    "name": "Kaizen AI",
+    "language": "tr"
+  },
+  "runtime": {
+    "local_first": true,
+    "cloud_allowed": true,
+    "general_accounting_model_answer": true
+  },
+  "model": {
+    "provider": "nemotron",
+    "model_name": "nvidia/nemotron-3-ultra-550b-a55b",
+    "base_url": "https://integrate.api.nvidia.com/v1",
+    "fallback": [
+      "local",
+      "offline"
+    ],
+    "local": {
+      "base_url": "http://localhost:11434/v1",
+      "model_name": "llama3.2:3b",
+      "timeout": 180
     },
-    "runtime": {
-        "local_first": true,
-        "cloud_allowed": true
-    },
-    "model": {
-        "provider": "hermes",
-        "model_name": "upstage/solar-pro4:free",
-        "base_url": "",
-        "fallback": [
-            "offline"
-        ],
-        "local": {
-            "base_url": "http://localhost:11434/v1",
-            "model_name": "",
-            "timeout": 180
-        },
-        "_not": "provider: hermes|local|offline. Hermes gecici. Yerel model kurulunca provider='local', fallback=['offline'] yap; model.local.model_name doldur."
-    },
-    "security": {
-        "require_approval_for_protected_actions": true
-    },
-    "logging": {
-        "enabled": true
-    },
-    "crawler": {
-        "daily_max_pages_per_source": 60,
-        "since_years": 2,
-        "min_delay_seconds": 1.5,
-        "hermes_fallback": false
-    },
-    "memory": {
-        "cognee": {
-            "enabled": true,
-            "dataset": "kaizen",
-            "llm_model": "llama3.2:3b",
-            "llm_endpoint": "http://localhost:11434",
-            "embedding_model": "bge-m3",
-            "embedding_endpoint": "http://localhost:11434/api/embed",
-            "embedding_dimensions": 1024,
-            "huggingface_tokenizer": "BAAI/bge-m3",
-            "embedding_batch_size": 5,
-            "recall_type": "CHUNKS",
-            "top_k": 10,
-            "self_improvement": false,
-            "_not": "LLM saglayicisi daima yerel Ollama (Hermes degil). Acmak icin: Ollama kur, 'ollama pull llama3.2:3b' ve 'ollama pull bge-m3', '.venv pip install cognee==1.6.0', sonra enabled=true. Gerekce: memory/COGNEE.md"
-        }
+    "nemotron": {
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "model_name": "nvidia/nemotron-3-ultra-550b-a55b",
+      "api_key_env": "NGC_API_KEY",
+      "timeout": 180
     }
+  },
+  "security": {
+    "require_approval_for_protected_actions": true
+  },
+  "logging": {
+    "enabled": true
+  },
+  "crawler": {
+    "daily_max_pages_per_source": 60,
+    "since_years": 2,
+    "min_delay_seconds": 1.5,
+    "hermes_fallback": false
+  },
+  "ocr": {
+    "enabled": true,
+    "language": "tur+eng",
+    "poppler_path": null,
+    "tesseract_cmd": "C:/Program Files/Tesseract-OCR/tesseract.exe",
+    "_not": "Taranmis PDF ve fotograflanan belgeleri (fatura/makbuz) okumak icin: 'pip install pdf2image pytesseract'. Windows'a ayrica Poppler (https://github.com/oschwartz10612/poppler-windows/releases) ve Tesseract-OCR (https://github.com/UB-Mannheim/tesseract/wiki, kurulumda Turkce dil paketini de secin) kurulmali. PATH'e eklemediyseniz poppler_path / tesseract_cmd alanlarina tam yolu yazin (ornek: 'C:\\\\Program Files\\\\Tesseract-OCR\\\\tesseract.exe'). Kutuphaneler/motor kurulu degilse Kaizen cokmez, acik bir kurulum notu doner."
+  },
+  "learning": {
+    "learning_brain_enabled": true,
+    "_not": "KAIZEN BUYUK GELISTIRME PAKETI #1, Faz C (madde 13/C4): true yaparsan Learning Brain (Principle Layer) YALNIZCA domain=='accounting' + zaten yerel hafizada kanit bulunan (grounded, model devrede) sorularda modele YARDIMCI baglam ekler -- hicbir zaman VERIFIED/FACT uretmez, hicbir zaman tek basina cevap KAYNAGI olmaz, dogrulama/kesin arac/parametre defteri yollarina hic dokunmaz (onlar principle katmanindan ONCE calisir). LOW/NONE guvenli ilke adayi cevabi ASLA etkilemez. false yaparsan (varsayilan) mevcut sistem birebir eskisi gibi calisir -- geri donus tek satirlik bu config degisikligi.",
+    "experience_lifecycle_enabled": true,
+    "experience_advice_enabled": true,
+    "runtime_learning_enabled": true,
+    "principle_discovery_enabled": true,
+    "principle_discovery_min_support": 3
+  },
+  "research": {
+    "research_engine_enabled": true,
+    "_not": "KAIZEN BUYUK IS EMRI #2, Faz 28-31 (madde 28-31): true yaparsan, domain=='accounting' + guncel arastirma gerektiren (ve yerel hafizada kanit bulunamayan) sorularda, Hermes'e gitmeden ONCE Research Engine (search/searxng_provider.py + research/ paketi) denenir -- ama YALNIZ SUPPORTED (resmi VEYA 2+ bagimsiz kaynagin uzlastigi, donemi uyusan) bir sonuc bulursa onu kullanir; aksi halde (PARTIAL/CONFLICTED/INSUFFICIENT/arama basarisiz) HICBIR SEY DEGISMEDEN Hermes fallback'e duser. SearXNG (localhost:8890) calismiyorsa Kaizen cokmez, sessizce Hermes'e duser. false yaparsan (varsayilan) mevcut sistem birebir eskisi gibi calisir -- geri donus tek satirlik bu config degisikligi."
+  },
+  "retrieval": {
+    "hybrid_enabled": true,
+    "model_name": "bge-m3",
+    "base_url": "http://localhost:11434",
+    "timeout": 90
+  }
 }

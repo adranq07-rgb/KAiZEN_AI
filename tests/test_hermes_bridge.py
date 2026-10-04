@@ -1,11 +1,17 @@
 from core.hermes_bridge import HermesBridge
 import json
+import tempfile
 from unittest.mock import patch
 from types import SimpleNamespace
 
 
 def test_hermes_bridge_lock():
-    bridge = HermesBridge()
+    with tempfile.TemporaryDirectory() as log_dir:
+        _run_hermes_bridge_lock(log_dir)
+
+
+def _run_hermes_bridge_lock(log_dir):
+    bridge = HermesBridge(log_dir=log_dir)
     bridge.config.cloud_allowed = lambda: False
 
     assert bridge.is_ready() is False
@@ -21,7 +27,8 @@ def test_hermes_bridge_lock():
 
 
 def test_hermes_research_sources():
-    bridge = HermesBridge()
+    # log_dir: gercek logs/kaizen.log yerine izole bir gecici klasor (bkz. test_hermes_bridge_lock).
+    bridge = HermesBridge(log_dir=tempfile.mkdtemp())
     bridge.config.cloud_allowed = lambda: True
 
     trusted_url = "https://www.gib.gov.tr/ornek"

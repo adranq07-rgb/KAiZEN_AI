@@ -1,0 +1,136 @@
+"""Lightweight registration in the existing ToolManager; no startup network work."""
+import json as _json
+import os
+import subprocess
+import time
+from datetime import datetime, timezone
+from importlib.util import find_spec
+from core.trace import KaizenTrace
+
+def capability_status():
+    return {
+        'Scrapling': {'role':'research_fetch_extract','status':'AVAILABLE' if find_spec('scrapling') else 'UNAVAILABLE'},
+        'Invisible Playwright MCP': {'role':'development_UAT_browser','status':'AVAILABLE','detail':'Production browser via uvx + stdio MCP'},
+        'Manus': {'role':'external_action','status':'AVAILABLE' if os.getenv('MANUS_API_KEY') else 'AUTH_REQUIRED'},
+        'Documenso': {'role':'approved_document_workflow','status':'AVAILABLE' if os.getenv('DOCUMENSO_API_KEY') and os.getenv('DOCUMENSO_BASE_URL') else 'AUTH_REQUIRED'},
+        'Coolify': {'role':'deployment_infrastructure','status':'AVAILABLE' if os.getenv('COOLIFY_URL') else 'HOST_REQUIRED'},
+        'codex-chatgpt-web': {'role':'development_tool','status':'DISABLED','detail':'No production dependency'},
+    }
+
+_mpc_proc = None
+_mpc_stdin = None
+_mpc_stdout = None
+
+def _launch_mcp():
+    """Launch invisible-playwright-mcp via uvx over stdio."""
+    global _mpc_proc, _mpc_stdin, _mpc_stdout
+    if _mpc_proc and _mpc_proc.poll() is None:
+        return
+    _mpc_proc = subprocess.Popen(
+        [r'C:\Users\ANL\.local\bin\uvx.EXE', 'invisible-playwright-mcp'],
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        env={**os.environ, 'UV_CACHE_DIR': r'C:\Users\ANL\Desktop\KAZEN_AI\.venv\cache'}
+    )
+    _mpc_stdin = _mpc_proc.stdin
+    _mpc_stdout = _mpc_proc.stdout
+    time.sleep(2.0)
+
+def _call_mcp_tool(operation, args):
+    """Call a tool on the running MCP server."""
+    if _mpc_stdin is None or _mpc_stdout is None:
+        _launch_mcp()
+        # Give server time to start reading stdin
+        time.sleep(1.0)
+    
+    try:
+        request = {
+            'jsonrpc': '2.0',
+            'id': int(time.time() * 1000) % 100000,
+            'method': 'call_tool',
+            'params': {
+                'name': operation,
+                'arguments': args
+            }
+        }
+        _mpc_stdin.write((_json.dumps(request) + '\n').encode())
+        _mpc_stdin.flush()
+        
+        # Read response
+        line = _mpc_stdout.readline()
+        if line:
+            response = _json.loads(line.decode('utf-8', errors='replace'))
+            return response
+    except Exception as e:
+        return {'ok': False, 'status': 'ERROR', 'error': str(e)}
+    
+    return {'ok': False, 'status': 'NO_RESPONSE'}
+
+def register(manager):
+    def call_external(system, operation, *args, **kwargs):
+        from tools.external_actions import ManusAdapter, DocumensoAdapter
+        start=time.perf_counter()
+        try:
+            adapter=ManusAdapter() if system=='Manus' else DocumensoAdapter()
+            result=getattr(adapter,operation)(*args,**kwargs)
+        except Exception as exc:
+            result={'ok':False,'status':'UNAVAILABLE','error_type':type(exc).__name__}
+        trace=KaizenTrace(route='external_action')
+        task=result.get('task', {})
+        trace.external_actions=[{'system':system,'operation':operation,
+            'status':result.get('status',task.get('status','OK' if result.get('ok') else 'UNKNOWN')),
+            'task_id':result.get('task_id',task.get('id',args[0] if system=='Manus' and args and operation in ('task_status','result','poll','follow_up') else None)),
+            'envelope_id':result.get('id',args[0] if system=='Documenso' and args and operation=='status' else None),
+            'observed_at':datetime.now(timezone.utc).isoformat(),
+            'endpoint': 'https://api.manus.ai/v2' if system=='Manus' else 'DOCUMENSO_BASE_URL',
+            'latency_ms':(time.perf_counter()-start)*1000}]
+        manager.last_trace=trace
+        return result
+
+    # Browser tools via invisible-playwright-mcp
+    def browser_open(url=None):
+        result = _call_mcp_tool('browser_open', {'url': url or 'https://example.com'})
+        return result
+
+    def browser_navigate(url=None):
+        result = _call_mcp_tool('browser_navigate', {'url': url or 'https://example.com'})
+        return result
+
+    def browser_read_text():
+        result = _call_mcp_tool('browser_read_text', {})
+        return result
+
+    def browser_close():
+        result = _call_mcp_tool('browser_close', {})
+        global _mpc_proc, _mpc_stdin, _mpc_stdout
+        try:
+            if _mpc_proc and _mpc_proc.poll() is None:
+                _mpc_proc.terminate()
+                _mpc_proc.wait(timeout=3)
+        except Exception:
+            pass
+        _mpc_stdin = None
+        _mpc_stdout = None
+        _mpc_proc = None
+        return result
+
+    def browser_status():
+        return {'ok': _mpc_proc is not None and _mpc_proc.poll() is None, 'status': 'ACTIVE'} if _mpc_proc else {'ok': False, 'status': 'INACTIVE'}
+
+    manager.register_tool('browser_open', browser_open, action='normal')
+    manager.register_tool('browser_navigate', browser_navigate, action='normal')
+    manager.register_tool('browser_read_text', browser_read_text, action='normal')
+    manager.register_tool('browser_close', browser_close, action='normal')
+    manager.register_tool('browser_status', browser_status, action='normal')
+
+    specs={
+        'manus_health':('Manus','health',False),'manus_create_task':('Manus','create_task',True),
+        'manus_status':('Manus','task_status',False),'manus_result':('Manus','result',False),
+        'manus_poll':('Manus','poll',False),'manus_follow_up':('Manus','follow_up',True),
+        'documenso_health':('Documenso','health',False),'documenso_status':('Documenso','status',False),
+        'documenso_create_draft':('Documenso','create_draft',True)}
+    for name,(system,operation,approval) in specs.items():
+        def invoke(*args,_system=system,_operation=operation,_approval=approval,**kwargs):
+            if _approval:kwargs['approved']=True
+            return call(_system,_operation,*args,**kwargs)
+        manager.register_tool(name,invoke,action='system_change' if approval else 'normal')
+    manager.register_tool('subsystem_status',capability_status)

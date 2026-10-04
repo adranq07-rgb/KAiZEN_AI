@@ -97,6 +97,53 @@ def test_fetcher_encodes_turkish_characters_in_url():
     print("KAIZEN TURKCE URL KODLAMA TESTI: BASARILI")
 
 
+def test_robots_429_is_treated_as_blocked_not_allowed():
+    """DÜZELTME (2026-09-23): robots.txt isteğinin KENDİSİ "429 Too Many Requests" dönerse
+    (site zaten hız sınırına takıldığımızı söylüyor), eski kod bunu 401/403 dışındaki HER
+    4xx gibi "robots.txt yok say, izin ver" olarak ele alıyordu -- yani sitenin "yavaşla"
+    uyarısını "istediğin gibi tara" diye yanlış okuyordu. AGENTS.md kuralı ("403/429 aşılmaz")
+    ve `FetchResult.blocked`'ın normal sayfa çekmelerinde 429'u zaten engelli sayması ile
+    tutarsızdı. Artık robots.txt'teki 429 da 401/403 gibi "deny" (erişilemedi, izin verildiği
+    varsayılmaz) sayılıyor."""
+    hits = []
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_GET(self):
+            hits.append(self.path)
+            if self.path == "/robots.txt":
+                self.send_response(429)
+                self.send_header("Retry-After", "60")
+                self.end_headers()
+                return
+            body = "<html><body>gercek sayfa</body></html>".encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+    server = HTTPServer(("127.0.0.1", 0), Handler)
+    port = server.server_address[1]
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        fetcher = UrllibFetcher(min_delay=0, timeout=5)  # respect_robots=True (varsayılan)
+        url = f"http://127.0.0.1:{port}/haber/gercek-sayfa"
+        assert fetcher.robots_allows(url) is False
+
+        result = fetcher.get(url)
+        assert result.blocked and result.error == "robots"
+        # sayfanın kendisine hiç istek atılmadı -- yalnızca /robots.txt'e gidildi
+        assert "/haber/gercek-sayfa" not in hits
+    finally:
+        server.shutdown()
+
+    print("KAIZEN ROBOTS 429 ENGEL TESTI: BASARILI")
+
+
 def test_crawler():
     hits = []
     holder = {}
@@ -186,4 +233,5 @@ def test_crawler():
 
 if __name__ == "__main__":
     test_fetcher_encodes_turkish_characters_in_url()
+    test_robots_429_is_treated_as_blocked_not_allowed()
     test_crawler()

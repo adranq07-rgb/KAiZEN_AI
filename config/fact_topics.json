@@ -87,7 +87,8 @@
         "gider yaz"
       ],
       "avoid": [
-        "binek"
+        "binek",
+        "otv"
       ],
       "question_terms": [
         "amortisman siniri",
@@ -166,7 +167,7 @@
     },
     {
       "id": "asgari_ucret_brut",
-      "title": "Asgari ücret (brüt)",
+      "title": "Asgari ücret (brüt aylık)",
       "unit": "tl",
       "anchors": [
         "brut asgari ucret",
@@ -177,6 +178,57 @@
       "require": [
         "asgari"
       ],
+      "avoid": [
+        "gunluk",
+        "yillik",
+        "onda bir",
+        "saatlik",
+        "haftalik",
+        "gunluk brüt",
+        "gunluk brut",
+        "saatlik brut",
+        "saatlik ucret",
+        "haftalik brut",
+        "haftalik ucret",
+        "yillik brut",
+        "yillik ucret",
+        "günlük brüt",
+        "günlük brut",
+        "saatlik brüt",
+        "saatlik brüt",
+        "haftalık brüt",
+        "yıllık brüt",
+        "yıllık brut",
+        "eski",
+        "önceki yil",
+        "geçen yil",
+        "eski donem",
+        "minimum",
+        "maksimum",
+        "orta",
+        "ortalama",
+        "eski donem",
+        "özel",
+        "ozel",
+        "istisna",
+        "örnek",
+        "ornek",
+        "örnek hesaplama",
+        "ornek hesaplama",
+        "varsayımsal",
+        "varsayimsel",
+        "hesaplama örneği",
+        "hesaplama ornegi",
+        "örnek hesap",
+        "ornek hesap",
+        "örnekte",
+        "ornege",
+        "örnekleme",
+        "ornekleme",
+        "hesaplama",
+        "örnek hesaplamada",
+        "ornek hesaplamada"
+      ],
       "question_terms": [
         "brut asgari ucret",
         "asgari ucret brut",
@@ -185,7 +237,7 @@
     },
     {
       "id": "asgari_ucret_net",
-      "title": "Asgari ücret (net)",
+      "title": "Asgari ücret (net aylık)",
       "unit": "tl",
       "anchors": [
         "net asgari ucret",
@@ -195,6 +247,37 @@
       ],
       "require": [
         "asgari"
+      ],
+      "avoid": [
+        "gunluk",
+        "yillik",
+        "onda bir",
+        "saatlik",
+        "haftalik",
+        "gunluk net",
+        "gunluk net",
+        "saatlik net",
+        "saatlik ucret",
+        "haftalik net",
+        "haftalik ucret",
+        "yillik net",
+        "yillik ucret",
+        "günlük net",
+        "saatlik net",
+        "haftalık net",
+        "yıllık net",
+        "eski",
+        "önceki yil",
+        "geçen yil",
+        "eski donem",
+        "minimum",
+        "maksimum",
+        "orta",
+        "ortalama",
+        "eski donem",
+        "özel",
+        "ozel",
+        "istisna"
       ],
       "question_terms": [
         "net asgari ucret",
@@ -266,10 +349,15 @@
     },
     {
       "id": "yeniden_degerleme_orani",
-      "title": "Yeniden değerleme oranı",
+      "title": "Yeniden değerleme oranı (yıllık)",
       "unit": "percent",
       "anchors": [
         "yeniden degerleme orani"
+      ],
+      "avoid": [
+        "gecici vergi",
+        "motorlu tasit",
+        "mtv"
       ],
       "question_terms": [
         "yeniden degerleme orani"
@@ -277,12 +365,39 @@
     },
     {
       "id": "kidem_tazminati_tavani",
-      "title": "Kıdem tazminatı tavanı",
+      "title": "Kıdem tazminatı tavanı (2. dönem)",
       "unit": "tl",
       "anchors": [
         "kidem tazminati tavani",
         "kidem tazminati tavan",
-        "kidem tavani"
+        "kidem tavani",
+        "ust sinir hazine maliye",
+        "hazine ve maliye bakanligi tarafindan",
+        "hazine maliye bakanligi tarafindan",
+        "ikinci donem",
+        "2. donem",
+        "ikinci donem",
+        "2. donem",
+        "hazine ve maliye bakanligi tarafindan aciklandi",
+        "hazine maliye bakanligi tarafindan aciklandi"
+      ],
+      "require": [
+        "kidem"
+      ],
+      "avoid": [
+        "birinci donem",
+        "ilk donem",
+        "1. donem",
+        "1.donem",
+        "ocak",
+        "subat",
+        "mart",
+        "nisan",
+        "mayis",
+        "haziran",
+        "1. yar",
+        "1.yari",
+        "birinci yar"
       ],
       "question_terms": [
         "kidem tazminati tavani",
@@ -368,7 +483,7 @@
     },
     {
       "id": "sgk_isveren_prim_orani",
-      "title": "SGK primi işveren payı oranı",
+      "title": "SGK primi işveren payı oranı (genel; teşvik/indirim hariç)",
       "unit": "percent",
       "anchors": [
         "isveren prim orani",
@@ -379,6 +494,17 @@
         "sgk",
         "prim",
         "isveren"
+      ],
+      "avoid": [
+        "tesvik",
+        "indirim",
+        "arge",
+        "ar-ge",
+        "teknopark",
+        "hazine",
+        "istisna",
+        "fon",
+        "senaryo"
       ],
       "question_terms": [
         "sgk isveren prim orani",

@@ -7,8 +7,10 @@ import tempfile
 from pathlib import Path
 
 from core.kaizen_brain import KaizenBrain
+from memory.brain_manager import BrainManager
 from memory.learning_store import LearningStore
 from memory.seed_loader import load_seeds
+from tests.doubles import NullExperienceMemory
 
 
 class Offline:
@@ -17,6 +19,9 @@ class Offline:
 
 
 EXAM = [
+    ("1000 TL için %20 KDV hesapla", ["200,00", "1.200,00"], "calculator"),
+    ("Vadeli mal aldım. Muhasebe açısından ne oldu?", ["153 Ticari Mallar hesabına borç", "320 Satıcılar hesabına alacak"], "memory_grounded"),
+    ("12 + 7", ["SONUÇ: 19"], "arithmetic"),  # learned strategies must retain Decimal priority
     # --- matematik ---
     ("matematik: 0,1 + 0,2", ["SONUÇ: 0,3"], "arithmetic"),
     ("(1.500 + 2.500) / 4", ["SONUÇ: 1.000"], "arithmetic"),
@@ -50,13 +55,20 @@ EXAM = [
     ("Satıcılar hesabı kaç numara", ["320 Satıcılar"], "chart"),
     ("70 hesap grubu nedir", ["Maliyet Muhasebesi"], "chart"),
     # --- yevmiye kayıtları ---
-    ("10.000 TL + %20 KDV ile mal alındı, yevmiye kaydı nedir?", ["153 Ticari Mallar", "191 İndirilecek KDV", "320 Satıcılar", "12.000,00"], "journal"),
+    # Payment must be supplied: absence of payment information does not imply 320.
+    ("10.000 TL + %20 KDV ile vadeli mal alındı, yevmiye kaydı nedir?", ["153 Ticari Mallar", "191 İndirilecek KDV", "320 Satıcılar", "12.000,00"], "journal"),
     ("20.000 TL + %20 KDV mal sattık yevmiye", ["120 Alıcılar", "600", "391 Hesaplanan KDV", "24.000,00"], "journal"),
-    ("5.000 TL tutarındaki bir bilgisayarı %20 KDV ile peşin aldım kayıt nedir", ["255 Demirbaşlar", "100 Kasa", "6.000,00"], "journal"),
+    ("KDV hariç 5.000 TL tutarındaki bir bilgisayarı %20 KDV ile nakit aldım kayıt nedir", ["255 Demirbaşlar", "100 Kasa", "6.000,00"], "journal"),
     ("Ortaklardan borç alındı 10.000 TL kaydı", ["331 Ortaklara Borçlar", "102 Bankalar"], "journal"),
     ("Kasada 250 TL noksan çıktı kayıt", ["197", "689"], "journal"),
     ("Ticari mal alış iadesi kaydı 1.000 TL %20 KDV", ["320 Satıcılar", "1.200,00", "191"], "journal"),
-    ("10.000 TL mal alındı yevmiye kaydı", ["KDV oranını belirtmediniz"], "journal"),
+    ("10.000 TL mal alındı yevmiye kaydı", ["KDV oranını belirtmediniz"], "accounting_clarification"),
+    ("Peşin 1.000 TL + %10 KDV mal aldım.", ["nakit mi banka"], "accounting_clarification"),
+    ("Vadeli 10.000 TL mal aldım KDV %10.", ["KDV dahil toplam mı"], "accounting_clarification"),
+    ("Kasadan bankaya 5.000 TL yatırdım.", ["102 Bankalar", "100 Kasa", "5.000,00"], "journal"),
+    ("Müşteriden 3.000 TL nakit tahsil ettim.", ["120 Alıcılar", "100 Kasa", "3.000,00"], "journal"),
+    ("Satıcıya 8.000 TL borcumu bankadan ödedim.", ["320 Satıcılar", "102 Bankalar", "8.000,00"], "journal"),
+    ("7/A genel yönetim elektrik faturası 1.000 TL + %10 KDV bankadan ödendi.", ["770", "191", "102", "1.100,00"], "journal"),
     # --- ofis bilgisi (öğretilmiş) ---
     ("Excel'de DÜŞEYARA nasıl kullanılır?", ["DÜŞEYARA", "YANLIŞ"], "memory_extractive"),
     ("ÇOKETOPLA formülü", ["ÇOKETOPLA", "TOPLAM ARALIĞI"], "memory_extractive"),
@@ -106,7 +118,16 @@ def test_golden_exam():
     with tempfile.TemporaryDirectory() as folder:
         store = LearningStore(Path(folder) / "exam.sqlite3")
         load_seeds(store)
-        brain = KaizenBrain(Offline(), Offline(), store)
+        # experience_memory=NullExperienceMemory(): bu sınav 70 soruyu art arda brain.answer()
+        # ile soruyor -- enjekte edilmezse varsayılan GERÇEK CogneeMemory() kullanılır ve
+        # kullanıcının kendi bilgisayarında (cognee kurulu) her sınav koşusu 70 test
+        # soru-cevabını kalıcı kişisel hafızaya yazardı.
+        brain = KaizenBrain(
+            Offline(), Offline(),
+            brain_manager=BrainManager(
+                learning_store=store, experience_memory=NullExperienceMemory(), log_dir=folder,
+            ),
+        )
         failures = []
         for question, needles, route in EXAM:
             answer = brain.answer(question)

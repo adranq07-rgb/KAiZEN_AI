@@ -3,6 +3,15 @@ from datetime import date
 from accounting.knowledge_store import AccountingKnowledgeStore
 from accounting.source_registry import search_domains
 
+# Kaizen'in TÜM cevap yollarında (yerel hafıza, araştırma, süzgeç) aynı ses: Türkiye'de
+# çalışan bir mali müşavir gibi düşünüp cevap vermek. accounting/retriever.py::build_prompt
+# yerel hafıza yolunda bunu zaten söylüyordu; araştırma zincirinin (bu dosya) prompt'larında
+# yalnızca "araştırmacı" kimliği vardı, mali müşavir çerçevesi eksikti -- burada eklendi.
+_ADVISOR_VOICE = (
+    "Sen Kaizen AI'sın: Türkiye'de çalışan bir mali müşavir gibi düşünüp cevap veriyorsun. "
+    "Kuruşu kuruşuna doğru, kaynağını gösteren, bilmediğini uydurmayan bir mali müşavir üslubu kullan.\n"
+)
+
 
 class AccountingResearcher:
     def __init__(self, provider, knowledge_store=None):
@@ -30,7 +39,8 @@ class AccountingResearcher:
                 f"KAYNAK: {row['url']}\n{row['content'][:6000]}"
                 for row in local_pages
             )
-            local_prompt = f"""Kaizen'in yerel muhasebe bilgi deposunu kullan.
+            local_prompt = f"""{_ADVISOR_VOICE}
+Kaizen'in yerel muhasebe bilgi deposunu kullan.
 Soru: {question}
 Yalniz asagidaki metinlere dayanarak net ve kisa cevap ver. Bilgi yoksa
 "yerel bilgide bulunamadi" de. Oran veya tutar uydurma. Kaynak URL'yi yaz.
@@ -47,7 +57,8 @@ Yalniz asagidaki metinlere dayanarak net ve kisa cevap ver. Bilgi yoksa
         official_domains = ", ".join(all_domains[:2])
         professional_domains = ", ".join(all_domains[2:])
 
-        prompt = f"""Sen Kaizen AI'nin Turkiye muhasebe, vergi ve SGK arastirmacisisin.
+        prompt = f"""{_ADVISOR_VOICE}
+Şu an Türkiye muhasebe, vergi ve SGK konusunda araştırma yapıyorsun.
 Bugun: {today.isoformat()}. Soru: {question}
 
 1. web_search ile once {two_years_ago.isoformat()} ve sonrasi kaynaklari ara.
@@ -77,7 +88,8 @@ Bugun: {today.isoformat()}. Soru: {question}
         if not isinstance(result, dict):
             return result
         if not result.get("verified"):
-            professional_prompt = f"""Soru: {question}
+            professional_prompt = f"""{_ADVISOR_VOICE}
+Soru: {question}
 Bugun: {today.isoformat()}. Son iki yilda su mesleki alan adlarinda ara:
 {professional_domains}
 Forum, soru-cevap ve yorum kullanma. web_search sonucundan en ilgili sayfayi
@@ -89,7 +101,8 @@ kaynaktan aynen KANIT:. Kaynak acilmazsa veya tarih yoksa kesin cevap verme.
             if not isinstance(result, dict):
                 return result
         if isinstance(result, dict) and not result.get("verified"):
-            deep_prompt = f"""DERIN ARASTIRMA: {question}
+            deep_prompt = f"""{_ADVISOR_VOICE}
+DERIN ARASTIRMA: {question}
 Bugun {today.isoformat()}. Oncelikli kaynak katalogunda sonuc bulunamadi.
 Web genelinde ara; en az iki bagimsiz kaynagi web_extract ile ac.
 Iki kaynak ayni sonucu desteklemiyorsa kesin cevap verme.
